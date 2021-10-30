@@ -8,7 +8,7 @@
           <b-col md="3">
             <p class="text-muted mt-2 mb-0">Vessel Name</p>
             <p class="text-primary text-24 line-height-1 mb-2">
-              {{ vessel.vessel_name }}
+              {{ vessel.name }}
             </p>
           </b-col>
           <b-col md="3">
@@ -38,70 +38,7 @@
         <b-card>
           <b-form @submit.prevent="submit">
             <b-row>
-              <b-col md="6">
-                <b-form-group label="Port">
-                  <vue-tags-input
-                    v-model="searchPort"
-                    :tags="selectedPort"
-                    :max-tags="1"
-                    class="tag-custom text-15 mb-2"
-                    :autocomplete-items="filteredPortItems"
-                    :add-only-from-autocomplete="true"
-                    @tags-changed="(newTags) => (selectedPort = newTags)"
-                    placeholder="Type Port"
-                  />
-                </b-form-group>
-              </b-col>
-              <b-col md="6">
-                <b-form-group label="Country">
-                  <vue-tags-input
-                    v-model="searchCountry"
-                    :tags="selectedCountry"
-                    :max-tags="1"
-                    class="tag-custom text-15 mb-2"
-                    :autocomplete-items="filteredCountryItems"
-                    :add-only-from-autocomplete="true"
-                    @tags-changed="(newTags) => (selectedCountry = newTags)"
-                    placeholder="Type Country"
-                  />
-                </b-form-group>
-              </b-col>
-            </b-row>
-            <b-row>
-              <b-col md="6">
-                <b-form-group label="Deficiency">
-                  <vue-tags-input
-                    v-model="searchDeficiency"
-                    :tags="selectedDeficiency"
-                    :max-tags="1"
-                    class="tag-custom text-15 mb-2"
-                    :autocomplete-items="filteredDeficiencyItems"
-                    :add-only-from-autocomplete="true"
-                    @tags-changed="(newTags) => (selectedDeficiency = newTags)"
-                    placeholder="Type Deficiency"
-                  />
-                </b-form-group>
-              </b-col>
-              <b-col md="6">
-                <b-form-group label="Is Detained">
-                  <b-row>
-                    <b-col md="8">
-                      <span>Yes</span>
-                      <label class="switch switch-success mr-3 ml-3">
-                        <input
-                          type="checkbox"
-                          checked="checkbox"
-                          v-model="form.is_detained"
-                        /><span class="slider"></span>
-                      </label>
-                      <span>No</span>
-                    </b-col>
-                  </b-row>
-                </b-form-group>
-              </b-col>
-            </b-row>
-            <b-row>
-              <b-col md="6">
+              <b-col md="4">
                 <b-form-group label="Date">
                   <b-form-datepicker
                     id="date"
@@ -118,7 +55,79 @@
                   >
                 </b-form-group>
               </b-col>
-              <b-col md="6">
+              <b-col md="4">
+                <b-form-group label="Port">
+                  <vue-tags-input
+                    v-model="searchPort"
+                    :tags="selectedPort"
+                    :max-tags="1"
+                    class="tag-custom text-15 mb-2"
+                    :autocomplete-items="filteredPortItems"
+                    :add-only-from-autocomplete="true"
+                    @tags-changed="(newTags) => (selectedPort = newTags)"
+                    placeholder="Type Port"
+                  />
+                </b-form-group>
+              </b-col>
+              <b-col md="4">
+                <b-form-group label="Country">
+                  <vue-tags-input
+                    v-model="searchCountry"
+                    :tags="selectedCountry"
+                    :max-tags="1"
+                    class="tag-custom text-15 mb-2"
+                    :autocomplete-items="filteredCountryItems"
+                    :add-only-from-autocomplete="true"
+                    @tags-changed="(newTags) => (selectedCountry = newTags)"
+                    placeholder="Type Country"
+                  />
+                </b-form-group>
+              </b-col>
+            </b-row>
+            <b-row>
+              <b-col md="4">
+                <b-form-group label="No. Of Deficiency">
+                  <b-form-input
+                    class="mb-2"
+                    label="No. Of Deficiency"
+                    placeholder="Enter No. Of Deficiency"
+                    v-model.trim="$v.form.no_of_deficiency.$model"
+                  >
+                  </b-form-input>
+                  <b-alert
+                    show
+                    variant="danger"
+                    class="error mt-1"
+                    v-if="!$v.form.no_of_deficiency.required"
+                    >Field is required</b-alert
+                  >
+                  <b-alert
+                    show
+                    variant="danger"
+                    class="error mt-1"
+                    v-if="!$v.form.no_of_deficiency.numeric"
+                    >Only Numeric Value</b-alert
+                  >
+                </b-form-group>
+              </b-col>
+              <b-col md="4">
+                <b-form-group label="Is Detained">
+                  <b-row>
+                    <b-col md="8">
+                      <span>No</span>
+                      <label class="switch switch-success mr-3 ml-3">
+                        <input
+                          type="checkbox"
+                          checked="checkbox"
+                          v-model="form.is_detained"
+                        /><span class="slider"></span>
+                      </label>
+                      <span>Yes</span>
+                    </b-col>
+                  </b-row>
+                </b-form-group>
+              </b-col>
+              <b-col md="4">
                 <b-form-group label="Report">
                   <b-form-file
                     id="file-default"
@@ -130,10 +139,10 @@
             </b-row>
             <b-row>
               <b-col md="6">
-                <b-form-group label="Is Deficiency Closed">
+                <b-form-group label="Is Deficieny Closed">
                   <b-row>
                     <b-col md="8">
-                      <span>Yes</span>
+                      <span>No</span>
                       <label class="switch switch-success mr-3 ml-3">
                         <input
                           type="checkbox"
@@ -141,12 +150,14 @@
                           v-model="form.is_deficiency_closed"
                         /><span class="slider"></span>
                       </label>
-                      <span>No</span>
+                      <span>Yes</span>
                     </b-col>
                   </b-row>
                 </b-form-group>
               </b-col>
-              <b-col md="6" v-if="form.is_deficiency_closed == 0">
+            </b-row>
+            <b-row v-if="form.is_deficiency_closed == 1">
+              <b-col md="4">
                 <b-form-group label="Date Of Closure">
                   <b-form-datepicker
                     id="date"
@@ -156,7 +167,18 @@
                   ></b-form-datepicker>
                 </b-form-group>
               </b-col>
-              <b-col md="6">
+              <b-col md="4">
+                <b-form-group label="Details">
+                  <b-form-input
+                    class="mb-2"
+                    label="Details"
+                    placeholder="Enter Details"
+                    v-model.trim="form.details"
+                  >
+                  </b-form-input>
+                </b-form-group>
+              </b-col>
+              <b-col md="4">
                 <b-form-group label="Evidence">
                   <b-form-file
                     id="file-default"
@@ -192,7 +214,7 @@
 
 <script>
 import axios from "axios";
-import { required } from "vuelidate/lib/validators";
+import { numeric, required } from "vuelidate/lib/validators";
 export default {
   metaInfo: {
     // if no subcomponents specify a metaInfo.title, this title will be used
@@ -203,114 +225,21 @@ export default {
       form: {
         vessel_id: "",
         date: "",
-        is_detained: "",
-        is_deficiency_closed: "",
+        no_of_deficiency: "",
+        is_detained: 0,
+        is_deficiency_closed: 0,
         date_of_closure: "",
       },
+      portItems: [],
       searchPort: "",
       selectedPort: [],
-      PortItems: [
-        {
-          text: "China",
-        },
-        {
-          text: "Japan",
-        },
-        {
-          text: "India",
-        },
-        {
-          text: "Hongkong",
-        },
-        {
-          text: "Siveria",
-        },
-        {
-          text: "Dubai",
-        },
-        {
-          text: "Russia",
-        },
-      ],
-      searchDeficiency: "",
-      selectedDeficiency: [],
-      DeficiencyItems: [
-        {
-          text: "China",
-        },
-        {
-          text: "Japan",
-        },
-        {
-          text: "India",
-        },
-        {
-          text: "Hongkong",
-        },
-        {
-          text: "Siveria",
-        },
-        {
-          text: "Dubai",
-        },
-        {
-          text: "Russia",
-        },
-      ],
 
       searchCountry: "",
       selectedCountry: [],
-      countryItems: [
-        {
-          text: "China",
-        },
-        {
-          text: "Japan",
-        },
-        {
-          text: "India",
-        },
-        {
-          text: "Hongkong",
-        },
-        {
-          text: "Siveria",
-        },
-        {
-          text: "Dubai",
-        },
-        {
-          text: "Russia",
-        },
-      ],
+      countryItems: [],
 
       submitStatus: null,
-      vessel: {
-        id: "1",
-        serial_no: "123",
-        vessel_name: "Vessel 1",
-        imo_no: "6781230",
-        built_date: "05-08-1865",
-        dwt: "120000",
-        remark: "Remarks",
-        management_in_date: "05-04-1965",
-        management_out_date: "25-08-1997",
-        deck_officier: "25",
-        engine_officier: "85",
-        deck_rating: "",
-        engine_rating: "",
-        galley_rating: "",
-        vessel_type_id: "1",
-        vessel_type: {
-          id: 1,
-          description: "Oil Tanker",
-        },
-        built_place_id: 1,
-        built_place: {
-          id: 1,
-          name: "India",
-        },
-      },
+      vessel: {},
     };
   },
   validations: {
@@ -318,20 +247,42 @@ export default {
       date: {
         required,
       },
+      no_of_deficiency: {
+        required,
+        numeric,
+      },
     },
   },
   mounted() {
-    // this.form.program_id = this.$route.params.program_id;
-    // this.form.site_id = this.site.id;
+    this.form.vessel_id = this.vessel.id;
+    this.form.site_id = this.site.id;
+    this.getMasters();
     this.getData();
   },
   methods: {
+    async getMasters() {
+      this.isLoading = true;
+      let masters = await axios.get("psc_inspections/masters");
+      masters = masters.data;
+      masters.ports.forEach((port) => {
+        this.portItems.push({
+          id: port.id,
+          text: port.description,
+        });
+      });
+
+      masters.countries.forEach((country) => {
+        this.countryItems.push({
+          id: country.id,
+          text: country.description,
+        });
+      });
+      this.isLoading = false;
+    },
     async getData() {
       this.isLoading = true;
-      let program = await axios.get(
-        `/programs/${this.$route.params.program_id}`
-      );
-      this.program = program.data.data;
+      let vessel = await axios.get(`/vessels/${this.$route.params.vessel_id}`);
+      this.vessel = vessel.data.data;
       this.isLoading = false;
     },
     //   validate form
@@ -385,7 +336,7 @@ export default {
   },
   computed: {
     filteredPortItems() {
-      return this.PortItems.filter((c) => {
+      return this.portItems.filter((c) => {
         return (
           c.text.toLowerCase().indexOf(this.searchPort.toLowerCase()) !== -1
         );
@@ -395,14 +346,6 @@ export default {
       return this.countryItems.filter((c) => {
         return (
           c.text.toLowerCase().indexOf(this.searchCountry.toLowerCase()) !== -1
-        );
-      });
-    },
-    filteredDeficiencyItems() {
-      return this.DeficiencyItems.filter((c) => {
-        return (
-          c.text.toLowerCase().indexOf(this.searchDeficiency.toLowerCase()) !==
-          -1
         );
       });
     },
