@@ -23,6 +23,13 @@
                     v-if="!$v.form.serial_no.required"
                     >Field is required</b-alert
                   >
+                  <b-alert
+                    show
+                    variant="danger"
+                    class="error mt-1"
+                    v-if="!$v.form.serial_no.numeric"
+                    >Only Numeric Value</b-alert
+                  >
                 </b-form-group>
               </b-col>
               <b-col md="6">
@@ -91,7 +98,7 @@
                     :autocomplete-items="filteredVesselTypeItems"
                     :add-only-from-autocomplete="true"
                     @tags-changed="(newTags) => (selectedVesselType = newTags)"
-                    placeholder="Type Vessel Type"
+                    placeholder="Search Vessel Type..."
                   />
                 </b-form-group>
               </b-col>
@@ -118,7 +125,7 @@
                     :autocomplete-items="filteredBuiltPlaceItems"
                     :add-only-from-autocomplete="true"
                     @tags-changed="(newTags) => (selectedBuiltPlace = newTags)"
-                    placeholder="Type Place Of Built"
+                    placeholder="Search Place Of Built..."
                   />
                 </b-form-group>
               </b-col>
@@ -197,7 +204,9 @@
                         v-model.trim="$v.form.no_of_deck_officers.$model"
                       >
                       </b-form-input>
-
+                      <b-form-text id="input-live-help"
+                        >No. Of Deck Officers</b-form-text
+                      >
                       <b-alert
                         show
                         variant="danger"
@@ -221,7 +230,9 @@
                         v-model.trim="$v.form.no_of_engine_officers.$model"
                       >
                       </b-form-input>
-
+                      <b-form-text id="input-live-help"
+                        >No. Of Engine Officers</b-form-text
+                      >
                       <b-alert
                         show
                         variant="danger"
@@ -251,7 +262,9 @@
                         v-model.trim="$v.form.no_of_deck_rating.$model"
                       >
                       </b-form-input>
-
+                      <b-form-text id="input-live-help"
+                        >No. Of Deck Rating</b-form-text
+                      >
                       <b-alert
                         show
                         variant="danger"
@@ -275,7 +288,9 @@
                         v-model.trim="$v.form.no_of_engine_rating.$model"
                       >
                       </b-form-input>
-
+                      <b-form-text id="input-live-help"
+                        >No. Of Engine Rating</b-form-text
+                      >
                       <b-alert
                         show
                         variant="danger"
@@ -299,7 +314,9 @@
                         v-model.trim="$v.form.no_of_galley_rating.$model"
                       >
                       </b-form-input>
-
+                      <b-form-text id="input-live-help"
+                        >No. Of Galley Rating</b-form-text
+                      >
                       <b-alert
                         show
                         variant="danger"
@@ -331,7 +348,7 @@
                     @tags-changed="
                       (newTags) => (selectedOfficerNationality = newTags)
                     "
-                    placeholder="Type Nationality Of Officer"
+                    placeholder="Search Nationality Of Officer..."
                   />
                 </b-form-group>
               </b-col>
@@ -346,7 +363,7 @@
                     @tags-changed="
                       (newTags) => (selectedRatingNationality = newTags)
                     "
-                    placeholder="Type Nationality Of Rating"
+                    placeholder="Search Nationality Of Rating..."
                   />
                 </b-form-group>
               </b-col>
@@ -435,6 +452,7 @@ export default {
     form: {
       serial_no: {
         required,
+        numeric,
       },
       dwt: {
         required,
