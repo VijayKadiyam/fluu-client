@@ -18,19 +18,18 @@
         :rows="vessels"
       >
         <div slot="table-actions" class="mb-3">
-          <b-button
-            variant="primary"
-            class="btn-rounded d-none d-sm-block"
-            to="/app/vessels/create"
-            ><i class="i-Add text-white mr-2"> </i>Add Vessel
-          </b-button>
+          <router-link to="/app/vessels/create">
+            <b-button variant="primary" class="btn-rounded d-none d-sm-block"
+              ><i class="i-Add text-white mr-2"> Add Vessel</i>
+            </b-button>
+          </router-link>
         </div>
 
         <template slot="table-row" slot-scope="props">
           <div v-if="props.column.field == 'button'">
-            <a :href="'/app/vessels/' + props.row.id">
+            <router-link :to="'/app/vessels/' + props.row.id">
               <i class="i-Eraser-2 text-25 text-success mr-2"></i>
-              {{ props.row.button }}</a
+              {{ props.row.button }}</router-link
             >
             <!-- <a :href="'/app/vessels/' + props.row.id +'/psc-inspections'">
               <i class="i-Add text-25 text-success mr-2"></i>
@@ -42,16 +41,19 @@
               text="Inspections"
               class="mb-2"
             >
-              <b-dropdown-item
-                :href="'/app/vessels/' + props.row.id + '/psc-inspections'"
-              >
-                PSC Inspection
+              <b-dropdown-item>
+                <router-link
+                  :to="'/app/vessels/' + props.row.id + '/psc-inspections'"
+                >
+                  PSC Inspection
+                </router-link>
               </b-dropdown-item>
               <b-dropdown-item
-                :href="'/app/vessels/' + props.row.id + '/sire-inspections'"
-                >SIRE / CDI Inspection
+                 >
+                 <router-link :to="'/app/vessels/' + props.row.id + '/sire-inspections'">
+                 SIRE / CDI Inspection
+                 </router-link>
               </b-dropdown-item>
-              <b-dropdown-item>Third Action</b-dropdown-item>
             </b-dropdown>
           </div>
           <span v-if="props.column.field == 'serial_no'">
