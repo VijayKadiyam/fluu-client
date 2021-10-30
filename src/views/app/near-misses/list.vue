@@ -37,17 +37,22 @@
               </a
             > -->
           </div>
-          <span v-else-if="props.column.field == 'location'">
-            {{ props.row.location.description }}
+          <span v-if="props.column.field == 'number_reported' && props.row.number_reported">
+            {{ props.row.number_reported || "" }}
           </span>
-          <span v-else-if="props.column.field == 'category'">
-            {{ props.row.category.description }}
+          <span v-if="props.column.field == 'location' && props.row.location">
+            {{ props.row.location.description || "" }}
           </span>
-          <span v-else-if="props.column.field == 'activity'">
-            {{ props.row.activity.description }}
+          <span v-if="props.column.field == 'category' && props.row.category">
+            {{ props.row.category.description || "" }}
           </span>
-          <span v-else-if="props.column.field == 'basic_cause'">
-            {{ props.row.basic_cause.description }}
+          <span v-if="props.column.field == 'activity' && props.row.activity">
+            {{ props.row.activity.description || "" }}
+          </span>
+          <span
+            v-if="props.column.field == 'basic_cause' && props.row.basic_cause"
+          >
+            {{ props.row.basic_cause.description || "" }}
           </span>
         </template>
       </vue-good-table>
