@@ -541,16 +541,25 @@ export default {
     //   validate form
     async submit() {
       console.log("submit!");
-      this.form.vessel_type_id = this.selectedVesselType[0].id;
-      this.form.built_place = this.selectedBuiltPlace[0].id;
+      if (this.selectedVesselType[0]) {
+        this.form.vessel_type_id = this.selectedVesselType[0].id;
+      }
+      if (this.selectedBuiltPlace[0]) {
+        this.form.built_place = this.selectedBuiltPlace[0].id;
+      }
       this.form.officer_nationalities = [];
-      this.selectedOfficerNationality.forEach((selected) => {
-        this.form.officer_nationalities.push(selected.id);
-      });
+      if (this.selectedOfficerNationality) {
+        this.selectedOfficerNationality.forEach((selected) => {
+          this.form.officer_nationalities.push(selected.id);
+        });
+      }
       this.form.rating_nationalities = [];
-      this.selectedRatingNationality.forEach((selected) => {
-        this.form.rating_nationalities.push(selected.id);
-      });
+      if (this.selectedRatingNationality) {
+        this.selectedRatingNationality.forEach((selected) => {
+          this.form.rating_nationalities.push(selected.id);
+        });
+      }
+
       this.$v.$touch();
       if (this.$v.$invalid) {
         console.log(this.$v.$invalid);
