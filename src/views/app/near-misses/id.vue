@@ -40,7 +40,7 @@
                     :tags="selectedLocation"
                     :max-tags="1"
                     class="tag-custom text-15 mb-2"
-                    :autocomplete-items="filteredLocationItems"
+                    :autocomplete-items="filteredlocationItems"
                     :add-only-from-autocomplete="true"
                     @tags-changed="(newTags) => (selectedLocation = newTags)"
                     placeholder="Type Location"
@@ -56,7 +56,7 @@
                     :tags="selectedCategory"
                     :max-tags="1"
                     class="tag-custom text-15 mb-2"
-                    :autocomplete-items="filteredCategoryItems"
+                    :autocomplete-items="filteredcategoryItems"
                     :add-only-from-autocomplete="true"
                     @tags-changed="(newTags) => (selectedCategory = newTags)"
                     placeholder="Type Category"
@@ -72,7 +72,7 @@
                     :tags="selectedActivity"
                     :max-tags="1"
                     class="tag-custom text-15 mb-2"
-                    :autocomplete-items="filteredActivityItems"
+                    :autocomplete-items="filteredactivityItems"
                     :add-only-from-autocomplete="true"
                     @tags-changed="(newTags) => (selectedActivity = newTags)"
                     placeholder="Type Activity"
@@ -88,7 +88,7 @@
                     :tags="selectedBasicCause"
                     :max-tags="1"
                     class="tag-custom text-15 mb-2"
-                    :autocomplete-items="filteredBasicCauseItems"
+                    :autocomplete-items="filteredbasic_causeItems"
                     :add-only-from-autocomplete="true"
                     @tags-changed="(newTags) => (selectedBasicCause = newTags)"
                     placeholder="Type Basic Cause"
@@ -131,124 +131,24 @@ export default {
   data() {
     return {
       form: {
-        number_reported: "150",
+        number_reported: "",
       },
 
       searchLocation: "",
-      selectedLocation: [
-        {
-          text: "Desk",
-        },
-      ],
-      LocationItems: [
-        {
-          text: "China",
-        },
-        {
-          text: "Japan",
-        },
-        {
-          text: "India",
-        },
-        {
-          text: "Hongkong",
-        },
-        {
-          text: "Siveria",
-        },
-        {
-          text: "Dubai",
-        },
-        {
-          text: "Russia",
-        },
-      ],
+      selectedLocation: [],
+      locationItems: [],
 
       searchCategory: "",
-      selectedCategory: [
-        {
-          text: "Navigation",
-        },
-      ],
-      CategoryItems: [
-        {
-          text: "China",
-        },
-        {
-          text: "Japan",
-        },
-        {
-          text: "India",
-        },
-        {
-          text: "Hongkong",
-        },
-        {
-          text: "Siveria",
-        },
-        {
-          text: "Dubai",
-        },
-        {
-          text: "Russia",
-        },
-      ],
+      selectedCategory: [],
+      categoryItems: [],
 
       searchActivity: "",
-      selectedActivity: [
-        {
-          text: "Maintenance",
-        },
-      ],
-      ActivityItems: [
-        {
-          text: "China",
-        },
-        {
-          text: "Japan",
-        },
-        {
-          text: "India",
-        },
-        {
-          text: "Hongkong",
-        },
-        {
-          text: "Siveria",
-        },
-        {
-          text: "Dubai",
-        },
-        {
-          text: "Russia",
-        },
-      ],
+      selectedActivity: [],
+      activityItems: [],
 
       searchBasicCause: "",
-      selectedBasicCause: [{ text: "Lack Of Self Awareness" }],
-      BasicCauseItems: [
-        {
-          text: "China",
-        },
-        {
-          text: "Japan",
-        },
-        {
-          text: "India",
-        },
-        {
-          text: "Hongkong",
-        },
-        {
-          text: "Siveria",
-        },
-        {
-          text: "Dubai",
-        },
-        {
-          text: "Russia",
-        },
-      ],
+      selectedBasicCause: [],
+      basic_causeItems: [],
 
       submitStatus: null,
     };
@@ -263,31 +163,33 @@ export default {
   },
   mounted() {
     this.form.site_id = this.site.id;
+    this.getMasters();
+    this.getData();
   },
   computed: {
-    filteredLocationItems() {
-      return this.LocationItems.filter((c) => {
+    filteredlocationItems() {
+      return this.locationItems.filter((c) => {
         return (
           c.text.toLowerCase().indexOf(this.searchLocation.toLowerCase()) !== -1
         );
       });
     },
-    filteredCategoryItems() {
-      return this.CategoryItems.filter((c) => {
+    filteredcategoryItems() {
+      return this.categoryItems.filter((c) => {
         return (
           c.text.toLowerCase().indexOf(this.searchCategory.toLowerCase()) !== -1
         );
       });
     },
-    filteredActivityItems() {
-      return this.ActivityItems.filter((c) => {
+    filteredactivityItems() {
+      return this.activityItems.filter((c) => {
         return (
           c.text.toLowerCase().indexOf(this.searchActivity.toLowerCase()) !== -1
         );
       });
     },
-    filteredBasicCauseItems() {
-      return this.BasicCauseItems.filter((c) => {
+    filteredbasic_causeItems() {
+      return this.basic_causeItems.filter((c) => {
         return (
           c.text.toLowerCase().indexOf(this.searchBasicCause.toLowerCase()) !==
           -1
@@ -296,26 +198,94 @@ export default {
     },
   },
   methods: {
+    async getMasters() {
+      this.isLoading = true;
+      let masters = await axios.get("near_misses/masters");
+      masters = masters.data;
+      masters.locations.forEach((location) => {
+        this.locationItems.push({
+          id: location.id,
+          text: location.description,
+        });
+      });
+
+      masters.categories.forEach((category) => {
+        this.categoryItems.push({
+          id: category.id,
+          text: category.description,
+        });
+      });
+
+      masters.activities.forEach((activity) => {
+        this.activityItems.push({
+          id: activity.id,
+          text: activity.description,
+        });
+      });
+      masters.basic_causes.forEach((basic_cause) => {
+        this.basic_causeItems.push({
+          id: basic_cause.id,
+          text: basic_cause.description,
+        });
+      });
+      this.isLoading = false;
+    },
+    async getData() {
+      this.isLoading = true;
+      let form = await axios.get(`/near_misses/${this.$route.params.id}`);
+      this.form = form.data.data;
+      this.location = this.form.location;
+      this.category = this.form.category;
+      this.activity = this.form.activity;
+      this.basic_cause = this.form.basic_cause;
+
+      this.selectedLocation.push({
+        id: this.location.id,
+        text: this.location.description,
+      });
+      this.selectedCategory.push({
+        id: this.category.id,
+        text: this.category.description,
+      });
+      this.selectedActivity.push({
+        id: this.activity.id,
+        text: this.activity.description,
+      });
+      this.selectedBasicCause.push({
+        id: this.basic_cause.id,
+        text: this.basic_cause.description,
+      });
+      this.isLoading = false;
+    },
     //   validate form
     async submit() {
       console.log("submit!");
-
+      if (this.selectedLocation[0]) {
+        this.form.location_id = this.selectedLocation[0].id;
+      }
+      if (this.selectedCategory[0]) {
+        this.form.category_id = this.selectedCategory[0].id;
+      }
+      if (this.selectedActivity[0]) {
+        this.form.activity_id = this.selectedActivity[0].id;
+      }
+      if (this.selectedBasicCause[0]) {
+        this.form.basic_cause_id = this.selectedBasicCause[0].id;
+      }
       this.$v.$touch();
       if (this.$v.$invalid) {
         this.submitStatus = "ERROR";
       } else {
         try {
           this.isLoading = true;
-          this.current_vessel = await axios.post("/vessels", this.form);
+          await axios.patch(`/near_misses/${this.$route.params.id}`, this.form);
           this.isLoading = false;
         } catch (e) {
           this.isLoading = false;
         }
         this.submitStatus = "PENDING";
-        // setTimeout(() => {
         this.submitStatus = "OK";
-        this.$router.push("/app/vessels");
-        // }, 1000);
+        this.$router.push("/app/near-misses");
       }
     },
     makeToast(variant = null) {
@@ -333,8 +303,7 @@ export default {
       });
     },
 
-    inputSubmit() {
-    },
+    inputSubmit() {},
   },
 };
 </script>

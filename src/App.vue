@@ -31,9 +31,9 @@ export default {
   metaInfo() {
     return {
       // if no subcomponents specify a metaInfo.title, this title will be used
-      title: "LBSM",
+      title: "VES KPI",
       // all titles will be injected into this template
-      titleTemplate: "%s | LBSM",
+      titleTemplate: "%s | VES KPI",
       bodyAttrs: {
         class: [this.themeName, "text-left"]
       },

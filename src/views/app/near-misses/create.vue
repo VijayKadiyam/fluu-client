@@ -233,10 +233,18 @@ export default {
     //   validate form
     async submit() {
       console.log("submit!");
-      this.form.location_id = this.selectedLocation[0].id;
-      this.form.category_id = this.selectedCategory[0].id;
-      this.form.activity_id = this.selectedActivity[0].id;
-      this.form.basic_cause_id = this.selectedBasicCause[0].id;
+      if (this.selectedLocation[0]) {
+        this.form.location_id = this.selectedLocation[0].id;
+      }
+      if (this.selectedCategory[0]) {
+        this.form.category_id = this.selectedCategory[0].id;
+      }
+      if (this.selectedActivity[0]) {
+        this.form.activity_id = this.selectedActivity[0].id;
+      }
+      if (this.selectedBasicCause[0]) {
+        this.form.basic_cause_id = this.selectedBasicCause[0].id;
+      }
 
       this.$v.$touch();
       if (this.$v.$invalid) {
