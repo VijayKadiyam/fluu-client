@@ -22,6 +22,13 @@
                     v-if="!$v.form.serial_no.required"
                     >Field is required</b-alert
                   >
+                  <b-alert
+                    show
+                    variant="danger"
+                    class="error mt-1"
+                    v-if="!$v.form.serial_no.numeric"
+                    >Only Numeric Value</b-alert
+                  >
                 </b-form-group>
               </b-col>
               <b-col md="6">
@@ -90,19 +97,20 @@
                     :autocomplete-items="filteredVesselTypeItems"
                     :add-only-from-autocomplete="true"
                     @tags-changed="(newTags) => (selectedVesselType = newTags)"
-                    placeholder="Type Vessel Type"
+                    placeholder="Search Vessel Type..."
                   />
                 </b-form-group>
               </b-col>
             </b-row>
             <b-row>
               <b-col md="6">
-                <b-form-group label="Date Of Build">
+                <b-form-group label="Date Of Built">
                   <b-form-datepicker
                     id="built_date"
                     v-model="form.built_date"
                     class="mb-2"
-                    placeholder="Date Of Build"
+                    :max="max"
+                    placeholder="Date Of Built"
                   ></b-form-datepicker>
                 </b-form-group>
               </b-col>
@@ -116,18 +124,18 @@
                     :autocomplete-items="filteredBuiltPlaceItems"
                     :add-only-from-autocomplete="true"
                     @tags-changed="(newTags) => (selectedBuiltPlace = newTags)"
-                    placeholder="Type Place Of Built"
+                    placeholder="Search Place Of Built..."
                   />
                 </b-form-group>
               </b-col>
             </b-row>
             <b-row>
               <b-col md="6">
-                <b-form-group label="DWT">
+                <b-form-group label="Summer DWT">
                   <b-form-input
                     class="mb-2"
-                    label="DWT"
-                    placeholder="Enter DWT"
+                    label="Summer DWT"
+                    placeholder="Enter Summer DWT"
                     v-model.trim="$v.form.dwt.$model"
                   >
                   </b-form-input>
@@ -137,6 +145,13 @@
                     class="error mt-1"
                     v-if="!$v.form.dwt.required"
                     >Field is required</b-alert
+                  >
+                  <b-alert
+                    show
+                    variant="danger"
+                    class="error mt-1"
+                    v-if="!$v.form.dwt.numeric"
+                    >Only Numeric Value</b-alert
                   >
                 </b-form-group>
               </b-col>
@@ -159,6 +174,7 @@
                     id="management_in_date"
                     v-model="form.management_in_date"
                     class="mb-2"
+                    :max="max"
                     placeholder="Management IN Date"
                   ></b-form-datepicker>
                 </b-form-group>
@@ -169,6 +185,7 @@
                     id="management_out_date"
                     v-model="form.management_out_date"
                     class="mb-2"
+                    :max="max"
                     placeholder="Management OUT Date"
                   ></b-form-datepicker>
                 </b-form-group>
@@ -186,7 +203,9 @@
                         v-model.trim="$v.form.no_of_deck_officers.$model"
                       >
                       </b-form-input>
-
+                      <b-form-text id="input-live-help"
+                        >No. Of Deck Officers</b-form-text
+                      >
                       <b-alert
                         show
                         variant="danger"
@@ -210,7 +229,9 @@
                         v-model.trim="$v.form.no_of_engine_officers.$model"
                       >
                       </b-form-input>
-
+                      <b-form-text id="input-live-help"
+                        >No. Of Engine Officers</b-form-text
+                      >
                       <b-alert
                         show
                         variant="danger"
@@ -240,7 +261,9 @@
                         v-model.trim="$v.form.no_of_deck_rating.$model"
                       >
                       </b-form-input>
-
+                      <b-form-text id="input-live-help"
+                        >No. Of Deck Rating</b-form-text
+                      >
                       <b-alert
                         show
                         variant="danger"
@@ -264,7 +287,9 @@
                         v-model.trim="$v.form.no_of_engine_rating.$model"
                       >
                       </b-form-input>
-
+                      <b-form-text id="input-live-help"
+                        >No. Of Engine Rating</b-form-text
+                      >
                       <b-alert
                         show
                         variant="danger"
@@ -288,7 +313,9 @@
                         v-model.trim="$v.form.no_of_galley_rating.$model"
                       >
                       </b-form-input>
-
+                      <b-form-text id="input-live-help"
+                        >No. Of Galley Rating</b-form-text
+                      >
                       <b-alert
                         show
                         variant="danger"
@@ -310,17 +337,17 @@
             </b-row>
             <b-row>
               <b-col md="6">
-                <b-form-group label="Nationality Of Officier">
+                <b-form-group label="Nationality Of Officer">
                   <vue-tags-input
-                    v-model="searchOfficierNationality"
+                    v-model="searchOfficerNationality"
                     :tags="selectedOfficerNationality"
                     class="tag-custom text-15 mb-2"
-                    :autocomplete-items="filteredOfficierNationalityItems"
+                    :autocomplete-items="filteredOfficerNationalityItems"
                     :add-only-from-autocomplete="true"
                     @tags-changed="
                       (newTags) => (selectedOfficerNationality = newTags)
                     "
-                    placeholder="Type Nationality Of Officier"
+                    placeholder="Search Nationality Of Officer..."
                   />
                 </b-form-group>
               </b-col>
@@ -335,7 +362,7 @@
                     @tags-changed="
                       (newTags) => (selectedRatingNationality = newTags)
                     "
-                    placeholder="Type Nationality Of Rating"
+                    placeholder="Search Nationality Of Rating..."
                   />
                 </b-form-group>
               </b-col>
@@ -420,6 +447,7 @@ export default {
     form: {
       serial_no: {
         required,
+        numeric,
       },
       dwt: {
         required,
@@ -554,8 +582,12 @@ export default {
     //   validate form
     async submit() {
       console.log("submit!");
-      this.form.vessel_type_id = this.selectedVesselType[0].id;
-      this.form.built_place = this.selectedBuiltPlace[0].id;
+      if (this.selectedVesselType[0]) {
+        this.form.vessel_type_id = this.selectedVesselType[0].id;
+      }
+      if (this.selectedBuiltPlace[0]) {
+        this.form.built_place = this.selectedBuiltPlace[0].id;
+      }
       this.form.officer_nationalities = [];
       this.form.rating_nationalities = [];
 
