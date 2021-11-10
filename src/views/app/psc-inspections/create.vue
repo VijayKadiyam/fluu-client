@@ -91,6 +91,7 @@
                     class="mb-2"
                     label="No. Of Deficiency"
                     placeholder="Enter No. Of Deficiency"
+                    @change="Deficiency(form.no_of_deficiency)"
                     v-model.trim="$v.form.no_of_deficiency.$model"
                   >
                   </b-form-input>
@@ -157,6 +158,7 @@
               </b-col>
             </b-row>
             <b-row v-if="form.is_deficiency_closed == 1">
+              <span v-for="n in this.deficiency_count">786 </span>
               <b-col md="4">
                 <b-form-group label="Date Of Closure">
                   <b-form-datepicker
@@ -260,6 +262,10 @@ export default {
     this.getData();
   },
   methods: {
+    Deficiency(number) {
+      this.deficiency_count = number;
+      console.log(this.deficiency_count);
+    },
     async getMasters() {
       this.isLoading = true;
       let masters = await axios.get("psc_inspections/masters");
@@ -335,6 +341,10 @@ export default {
     },
   },
   computed: {
+    deficiency_count() {
+      let deficiency_count = this.form.no_of_deficiency;
+      return deficiency_count;
+    },
     filteredPortItems() {
       return this.portItems.filter((c) => {
         return (
