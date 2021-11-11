@@ -91,7 +91,7 @@
                     class="mb-2"
                     label="No. Of Deficiency"
                     placeholder="Enter No. Of Deficiency"
-                    @change="Deficiency(form.no_of_deficiency)"
+                    @change="Deficiency(parseInt(form.no_of_deficiency))"
                     v-model.trim="$v.form.no_of_deficiency.$model"
                   >
                   </b-form-input>
@@ -157,40 +157,43 @@
                 </b-form-group>
               </b-col>
             </b-row>
-            <b-row v-if="form.is_deficiency_closed == 1">
-              <span v-for="n in this.deficiency_count">786 </span>
-              <b-col md="4">
-                <b-form-group label="Date Of Closure">
-                  <b-form-datepicker
-                    id="date"
-                    v-model="form.date_of_closure"
-                    class="mb-2"
-                    placeholder="Date Of Closure"
-                  ></b-form-datepicker>
-                </b-form-group>
-              </b-col>
-              <b-col md="4">
-                <b-form-group label="Details">
-                  <b-form-input
-                    class="mb-2"
-                    label="Details"
-                    placeholder="Enter Details"
-                    v-model.trim="form.details"
-                  >
-                  </b-form-input>
-                </b-form-group>
-              </b-col>
-              <b-col md="4">
-                <b-form-group label="Evidence">
-                  <b-form-file
-                    id="file-default"
-                    name="report"
-                    ref="file"
-                  ></b-form-file>
-                </b-form-group>
-              </b-col>
-            </b-row>
-
+            <div v-if="form.is_deficiency_closed == 1">
+              <b-row
+                v-for="(deficiency_detail, dd) in deficiency_details"
+                :key="`deficiency_detail${dd}`"
+              >
+                <b-col md="4">
+                  <b-form-group label="Date Of Closure">
+                    <b-form-datepicker
+                      :id="`date_of_closure${dd}`"
+                      v-model="deficiency_detail.date_of_closure"
+                      class="mb-2"
+                      placeholder="Date Of Closure"
+                    ></b-form-datepicker>
+                  </b-form-group>
+                </b-col>
+                <b-col md="4">
+                  <b-form-group label="Details">
+                    <b-form-input
+                      class="mb-2"
+                      label="Details"
+                      placeholder="Enter Details"
+                      v-model.trim="deficiency_detail.details"
+                    >
+                    </b-form-input>
+                  </b-form-group>
+                </b-col>
+                <b-col md="4">
+                  <b-form-group label="Evidence">
+                    <b-form-file
+                      id="file-default"
+                      name="report"
+                      ref="file"
+                    ></b-form-file>
+                  </b-form-group>
+                </b-col>
+              </b-row>
+            </div>
             <b-button
               type="submit"
               variant="primary"
@@ -227,11 +230,18 @@ export default {
       form: {
         vessel_id: "",
         date: "",
-        no_of_deficiency: "",
+        no_of_deficiency: 0,
         is_detained: 0,
         is_deficiency_closed: 0,
-        date_of_closure: "",
+        // deficiency_details:{},
       },
+      deficiency_details: [
+        {
+          date_of_closure: "",
+          details: "",
+        },
+      ],
+      // deficiency_count:0,
       portItems: [],
       searchPort: "",
       selectedPort: [],
@@ -263,8 +273,28 @@ export default {
   },
   methods: {
     Deficiency(number) {
-      this.deficiency_count = number;
-      console.log(this.deficiency_count);
+
+      let current_len = this.deficiency_details.length;
+      console.log(current_len);
+      console.log(number);
+      if (current_len < number) {
+        // Add
+        console.log('add');
+        // this.deficiency_count=parseInt(number);
+        for (let b = 1; b < number; b++) {
+          this.$set(this.deficiency_details, b, {
+            id: b,
+          });
+        }
+      }else{
+        // Remove
+        console.log('remove');
+        for (let b = current_len; b >= number; b--) {
+          this.deficiency_details.splice(b);
+        }
+      }
+
+      console.log(this.deficiency_details);
     },
     async getMasters() {
       this.isLoading = true;
@@ -295,6 +325,8 @@ export default {
     async submit() {
       console.log("submit!");
 
+      this.form.psc_inspection_deficiencies = this.deficiency_details;
+
       this.$v.form.$touch();
       if (this.$v.form.$invalid) {
         this.submitStatus = "ERROR";
@@ -303,9 +335,9 @@ export default {
         try {
           this.isLoading = true;
           this.submitStatus = "PENDING";
-          console.log(this.form);
+          // console.log(this.form);
           await axios.post(
-            `/programs/${this.$route.params.program_id}/program_tasks`,
+            `/vessels/${this.$route.params.vessel_id}/psc_inspections`,
             this.form
           );
           this.isLoading = false;
@@ -313,7 +345,7 @@ export default {
 
           // setTimeout(() => {
           this.$router.push(
-            `/app/programs/${this.$route.params.program_id}/program-tasks/`
+            `/app/vessels/${this.$route.params.vessel_id}/psc-inspections/`
           );
           // }, 1000);
         } catch (e) {
@@ -342,7 +374,7 @@ export default {
   },
   computed: {
     deficiency_count() {
-      let deficiency_count = this.form.no_of_deficiency;
+      let deficiency_count = parseInt(this.form.no_of_deficiency);
       return deficiency_count;
     },
     filteredPortItems() {
