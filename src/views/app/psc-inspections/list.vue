@@ -75,17 +75,17 @@
               {{ props.row.button }}</a
             > -->
           </span>
-          <!-- <span v-if="props.column.field == 'port'">
+          <span v-if="props.column.field == 'port'">
             {{ props.row.port.description }}
           </span>
           <span v-if="props.column.field == 'country'">
             {{ props.row.country.description }}
-          </span> -->
+          </span>
           <span v-if="props.column.field == 'is_detained'">
-            {{ props.row.is_detained == 0 ? "Yes" : "No" }}
+            {{ props.row.is_detained == 1 ? "Yes" : "No" }}
           </span>
           <span v-if="props.column.field == 'is_deficiency_closed'">
-            {{ props.row.is_deficiency_closed == 0 ? "Yes" : "No" }}
+            {{ props.row.is_deficiency_closed == 1 ? "Yes" : "No" }}
           </span>
         </template>
       </vue-good-table>
