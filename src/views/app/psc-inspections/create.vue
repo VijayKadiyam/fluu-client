@@ -91,22 +91,22 @@
                     class="mb-2"
                     label="No. Of Deficiency"
                     placeholder="Enter No. Of Deficiency"
-                    @change="Deficiency(parseInt(form.no_of_deficiency))"
-                    v-model.trim="$v.form.no_of_deficiency.$model"
+                    @change="Deficiency(parseInt(form.no_of_deficiencies))"
+                    v-model.trim="$v.form.no_of_deficiencies.$model"
                   >
                   </b-form-input>
                   <b-alert
                     show
                     variant="danger"
                     class="error mt-1"
-                    v-if="!$v.form.no_of_deficiency.required"
+                    v-if="!$v.form.no_of_deficiencies.required"
                     >Field is required</b-alert
                   >
                   <b-alert
                     show
                     variant="danger"
                     class="error mt-1"
-                    v-if="!$v.form.no_of_deficiency.numeric"
+                    v-if="!$v.form.no_of_deficiencies.numeric"
                     >Only Numeric Value</b-alert
                   >
                 </b-form-group>
@@ -230,7 +230,7 @@ export default {
       form: {
         vessel_id: "",
         date: "",
-        no_of_deficiency: 0,
+        no_of_deficiencies: 0,
         is_detained: 0,
         is_deficiency_closed: 0,
         // deficiency_details:{},
@@ -259,7 +259,7 @@ export default {
       date: {
         required,
       },
-      no_of_deficiency: {
+      no_of_deficiencies: {
         required,
         numeric,
       },
@@ -273,22 +273,21 @@ export default {
   },
   methods: {
     Deficiency(number) {
-
       let current_len = this.deficiency_details.length;
       console.log(current_len);
       console.log(number);
       if (current_len < number) {
         // Add
-        console.log('add');
+        console.log("add");
         // this.deficiency_count=parseInt(number);
-        for (let b = 1; b < number; b++) {
+        for (let b = current_len; b < number; b++) {
           this.$set(this.deficiency_details, b, {
             id: b,
           });
         }
-      }else{
+      } else {
         // Remove
-        console.log('remove');
+        console.log("remove");
         for (let b = current_len; b >= number; b--) {
           this.deficiency_details.splice(b);
         }
@@ -326,7 +325,12 @@ export default {
       console.log("submit!");
 
       this.form.psc_inspection_deficiencies = this.deficiency_details;
-
+      if (this.selectedPort[0]) {
+        this.form.port_id = this.selectedPort[0].id;
+      }
+      if (this.selectedCountry[0]) {
+        this.form.country_id = this.selectedCountry[0].id;
+      }
       this.$v.form.$touch();
       if (this.$v.form.$invalid) {
         this.submitStatus = "ERROR";
@@ -335,7 +339,7 @@ export default {
         try {
           this.isLoading = true;
           this.submitStatus = "PENDING";
-          // console.log(this.form);
+          console.log(this.form);
           await axios.post(
             `/vessels/${this.$route.params.vessel_id}/psc_inspections`,
             this.form
@@ -374,7 +378,7 @@ export default {
   },
   computed: {
     deficiency_count() {
-      let deficiency_count = parseInt(this.form.no_of_deficiency);
+      let deficiency_count = parseInt(this.form.no_of_deficiencies);
       return deficiency_count;
     },
     filteredPortItems() {
