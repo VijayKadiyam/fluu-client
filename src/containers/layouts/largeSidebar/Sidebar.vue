@@ -98,6 +98,20 @@
             </router-link>
             <div class="triangle"></div>
           </li>
+          <!-- viq chapters -->
+          <li
+            @mouseenter="toggleSubMenu"
+            class="nav-item"
+            :class="{ active: selectedParentMenu == 'viq-chapters' }"
+            data-item="viq-chapters"
+            :data-submenu="true"
+          >
+            <router-link class="nav-item-hold" to="/app/viq-chapters/list">
+              <i class="nav-icon text-20 i-Diploma-2"></i>
+              <span class="nav-text">Viq Chapters</span>
+            </router-link>
+            <div class="triangle"></div>
+          </li>
           <!-- Vessels -->
           <li
             @mouseenter="toggleSubMenu"
@@ -306,6 +320,25 @@
             <router-link tag="a" class to="/app/value-lists/list">
               <i class="nav-icon i-File-Clipboard-Text--Image"></i>
               <span class="item-name">Listing</span>
+            </router-link>
+          </li>
+        </ul>
+        <!-- Submenu Viq chapters -->
+        <ul
+          class="childNav d-none"
+          data-parent="viq-chapters"
+          :class="{ 'd-block': selectedParentMenu == 'viq-chapters' }"
+        >
+          <li class="nav-item">
+            <router-link tag="a" class to="/app/viq-chapters/list">
+              <i class="nav-icon i-File-Clipboard-Text--Image"></i>
+              <span class="item-name">Listing</span>
+            </router-link>
+          </li>
+          <li class="nav-item">
+            <router-link tag="a" class to="/app/viq-chapters/create">
+              <i class="nav-icon i-Split-Vertical"></i>
+              <span class="item-name">Add New Viq Chapters</span>
             </router-link>
           </li>
         </ul>

@@ -225,6 +225,26 @@ const routes = [
           },
         ],
       },
+      // Viq Chapters
+      {
+        path: "/app/viq-chapters",
+        component: () => import("./views/app/viq-chapters"),
+        redirect: "/app/viq-chapters/list",
+        children: [
+          {
+            path: "list",
+            component: () => import("./views/app/viq-chapters/list"),
+          },
+          {
+            path: "create",
+            component: () => import("./views/app/viq-chapters/create"),
+          },
+          {
+            path: ":id",
+            component: () => import("./views/app/viq-chapters/id"),
+          },
+        ],
+      },
     ],
   },
   // sessions
