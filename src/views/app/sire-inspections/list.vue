@@ -8,7 +8,7 @@
           <b-col md="3">
             <p class="text-muted mt-2 mb-0">Vessel Name</p>
             <p class="text-primary text-24 line-height-1 mb-2">
-              {{ vessel.vessel_name }}
+              {{ vessel.name }}
             </p>
           </b-col>
           <b-col md="3">
@@ -79,12 +79,12 @@
           <span v-if="props.column.field == 'inspection_type'">
               {{ props.row.inspection_type }}
           </span>
-          <span v-if="props.column.field == 'oil_major'">
+          <!-- <span v-if="props.column.field == 'oil_major'">
               {{ props.row.oil_major.description }}
-          </span>
-          <span v-if="props.column.field == 'inspector'">
+          </span> -->
+          <!-- <span v-if="props.column.field == 'inspector'">
               {{ props.row.inspector.user_name }}
-          </span>
+          </span> -->
           <span v-if="props.column.field == 'date_of_inspection'">
               {{ props.row.date_of_inspection }}
           </span>
@@ -143,32 +143,7 @@ export default {
         },
       ],
       sire_inspections: [],
-      vessel: {
-        id: "1",
-        serial_no: "123",
-        vessel_name: "Vessel 1",
-        imo_no: "6781230",
-        built_date: "05-08-1865",
-        dwt: "120000",
-        remark: "Remarks",
-        management_in_date: "05-04-1965",
-        management_out_date: "25-08-1997",
-        deck_officier: "25",
-        engine_officier: "85",
-        deck_rating: "",
-        engine_rating: "",
-        galley_rating: "",
-        vessel_type_id: "1",
-        vessel_type: {
-          id: 1,
-          description: "Oil Tanker",
-        },
-        built_place_id: 1,
-        built_place: {
-          id: 1,
-          name: "India",
-        },
-      },
+      vessel: [],
     };
   },
   mounted() {
@@ -184,6 +159,7 @@ export default {
 
       let vessel = await axios.get(`/vessels/${this.$route.params.vessel_id}`);
       this.vessel = vessel.data.data;
+      // console.log(this.vessel);
       // this.count = sire_inspections.data.count;
       this.serialNoStarting = (page - 1) * this.rowsPerPage;
       this.isLoading = false;
