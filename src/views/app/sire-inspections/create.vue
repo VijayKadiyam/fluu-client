@@ -8,7 +8,7 @@
           <b-col md="3">
             <p class="text-muted mt-2 mb-0">Vessel Name</p>
             <p class="text-primary text-24 line-height-1 mb-2">
-              {{ vessel.vessel_name }}
+              {{ vessel.name }}
             </p>
           </b-col>
           <b-col md="3">
@@ -310,10 +310,10 @@ export default {
   data() {
     return {
       form: {
-        vessel_id: 2,
+        vessel_id: '',
         inspection_type: "",
         date_of_inspection: "",
-        inspector: "",
+        inspector_id: "",
         oil_major: "",
         total_observations: "",
         other_type: "",
@@ -321,93 +321,22 @@ export default {
       },
       searchOilMajor: "",
       selectedOilMajor: [],
-      OilMajorItems: [
-        { id: "1", text: "Oil" },
-        { id: "2", text: "Major" },
-      ],
+      OilMajorItems: [],
 
       searchPort: "",
       selectedPort: [],
-      PortItems: [
-        {
-          text: "China",
-        },
-        {
-          text: "Japan",
-        },
-        {
-          text: "India",
-        },
-        {
-          text: "Hongkong",
-        },
-        {
-          text: "Siveria",
-        },
-        {
-          text: "Dubai",
-        },
-        {
-          text: "Russia",
-        },
-      ],
+      PortItems: [],
 
       searchCountry: "",
       selectedCountry: [],
 
       searchInspectionName: "",
       selectedInspectionName: [],
-      countryItems: [
-        {
-          text: "China",
-        },
-        {
-          text: "Japan",
-        },
-        {
-          text: "India",
-        },
-        {
-          text: "Hongkong",
-        },
-        {
-          text: "Siveria",
-        },
-        {
-          text: "Dubai",
-        },
-        {
-          text: "Russia",
-        },
-      ],
+      InspectorNameItems: [],
+      countryItems: [],
 
       submitStatus: null,
-      vessel: {
-        id: "1",
-        serial_no: "123",
-        vessel_name: "Vessel 1",
-        imo_no: "6781230",
-        built_date: "05-08-1865",
-        dwt: "120000",
-        remark: "Remarks",
-        management_in_date: "05-04-1965",
-        management_out_date: "25-08-1997",
-        deck_officier: "25",
-        engine_officier: "85",
-        deck_rating: "",
-        engine_rating: "",
-        galley_rating: "",
-        vessel_type_id: "1",
-        vessel_type: {
-          id: 1,
-          description: "Oil Tanker",
-        },
-        built_place_id: 1,
-        built_place: {
-          id: 1,
-          name: "India",
-        },
-      },
+      vessel: [],
 
       inspectionTypeItems: [
         { value: "", text: " select an option" },
@@ -468,12 +397,12 @@ export default {
       date_of_inspection: {
         required,
       },
-      inspector: {
-        required,
-      },
-      oil_major: {
-        required,
-      },
+      // inspector_id: {
+      //   required,
+      // },
+      // oil_major: {
+      //   required,
+      // },
       total_observations: {
         required,
         numeric,
@@ -481,8 +410,9 @@ export default {
     },
   },
   mounted() {
-    // this.form.program_id = this.$route.params.program_id;
-    // this.form.site_id = this.site.id;
+    this.form.vessel_id = this.$route.params.vessel_id;
+    this.form.site_id = this.site.id;
+    this.getMasters();
     this.getData();
     this.viqChapters.forEach((chapter) => {
       let name = "viqChapterDetails" + chapter.id;
@@ -492,11 +422,87 @@ export default {
   methods: {
     async getData() {
       this.isLoading = true;
-      // let program = await axios.get(
-      //   `/programs/${this.$route.params.program_id}`
-      // );
-      // this.program = program.data.data;
+     let vessel = await axios.get(`/vessels/${this.$route.params.vessel_id}`);
+      this.vessel = vessel.data.data;
       this.isLoading = false;
+    },
+    async getMasters() {
+      this.isLoading = true;
+      let masters = await axios.get("sire_inspections/masters");
+      masters = masters.data;
+      // console.log(masters);
+      masters.ports.forEach((port) => {
+        this.PortItems.push({
+          id: port.id,
+          text: port.description,
+        });
+      });
+
+      masters.countries.forEach((country) => {
+        this.countryItems.push({
+          id: country.id,
+          text: country.description,
+        });
+      });
+
+      masters.oilMajors.forEach((oilMajor) => {
+        this.OilMajorItems.push({
+          id: oilMajor.id,
+          text: oilMajor.description,
+        });
+      });
+
+      masters.users.forEach((user) => {
+        this.InspectorNameItems.push({
+          id: user.id,
+          text: user.user_name,
+        });
+      });
+
+      // console.log(masters.data.data.oilMajors);
+      this.isLoading = false;
+    },
+    async submit() {
+      console.log("submit!");
+    if (this.selectedOilMajor[0]) {
+        this.form.oil_major_id = this.selectedOilMajor[0].id;
+      }
+      if (this.selectedPort[0]) {
+        this.form.port_id = this.selectedPort[0].id;
+      }
+      if (this.selectedCountry[0]) {
+        this.form.country_id = this.selectedCountry[0].id;
+      }
+      if (this.selectedInspectionName[0]) {
+        this.form.inspector_id = this.selectedInspectionName[0].id;
+      }
+      this.form.sire_inspection_details = this.sire_inspection_details;
+
+      this.$v.form.$touch();
+      if (this.$v.form.$invalid) {
+        this.submitStatus = "ERROR";
+      } else {
+        // do your submit logic here
+        try {
+          this.isLoading = true;
+          this.submitStatus = "PENDING";
+          console.log(this.form);
+          await axios.post(
+            `/vessels/${this.$route.params.vessel_id}/sire_inspections`,
+            this.form
+          );
+          this.isLoading = false;
+          this.submitStatus = "OK";
+
+          // setTimeout(() => {
+          this.$router.push(
+            `/app/vessels/${this.$route.params.vessel_id}/sire-inspections/`
+          );
+          // }, 1000);
+        } catch (e) {
+          this.isLoading = false;
+        }
+      }
     },
 
     addEmptyVIQChapter(Chapter) {
@@ -515,35 +521,35 @@ export default {
       console.log(this[name]);
     },
     //   validate form
-    async submit() {
-      console.log("submit!");
+    // async submit() {
+    //   console.log("submit!");
 
-      this.$v.form.$touch();
-      if (this.$v.form.$invalid) {
-        this.submitStatus = "ERROR";
-      } else {
-        // do your submit logic here
-        try {
-          this.isLoading = true;
-          this.submitStatus = "PENDING";
-          console.log(this.form);
-          await axios.post(
-            `/programs/${this.$route.params.program_id}/program_tasks`,
-            this.form
-          );
-          this.isLoading = false;
-          this.submitStatus = "OK";
+    //   this.$v.form.$touch();
+    //   if (this.$v.form.$invalid) {
+    //     this.submitStatus = "ERROR";
+    //   } else {
+    //     // do your submit logic here
+    //     try {
+    //       this.isLoading = true;
+    //       this.submitStatus = "PENDING";
+    //       console.log(this.form);
+    //       await axios.post(
+    //         `/programs/${this.$route.params.program_id}/program_tasks`,
+    //         this.form
+    //       );
+    //       this.isLoading = false;
+    //       this.submitStatus = "OK";
 
-          // setTimeout(() => {
-          this.$router.push(
-            `/app/programs/${this.$route.params.program_id}/program-tasks/`
-          );
-          // }, 1000);
-        } catch (e) {
-          this.isLoading = false;
-        }
-      }
-    },
+    //       // setTimeout(() => {
+    //       this.$router.push(
+    //         `/app/programs/${this.$route.params.program_id}/program-tasks/`
+    //       );
+    //       // }, 1000);
+    //     } catch (e) {
+    //       this.isLoading = false;
+    //     }
+    //   }
+    // },
     makeToast(variant = null) {
       this.$bvToast.toast("Please fill the form correctly.", {
         title: `Variant ${variant || "default"}`,
@@ -572,7 +578,7 @@ export default {
       });
     },
     filteredInspectionNameItems() {
-      return this.countryItems.filter((c) => {
+      return this.InspectorNameItems.filter((c) => {
         return (
           c.text
             .toLowerCase()
