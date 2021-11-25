@@ -133,7 +133,7 @@
                   <b-form-file
                     id="file-default"
                     name="report"
-                    ref="file"
+                    ref="report"
                   ></b-form-file>
                 </b-form-group>
               </b-col>
@@ -186,9 +186,9 @@
                 <b-col md="4">
                   <b-form-group label="Evidence">
                     <b-form-file
-                      id="file-default"
-                      name="report"
-                      ref="file"
+                      :id="`evidence${dd}`"
+                      name="evidence"
+                      ref="evidence"
                     ></b-form-file>
                   </b-form-group>
                 </b-col>
@@ -239,6 +239,7 @@ export default {
         {
           date_of_closure: "",
           details: "",
+          evidence: "",
         },
       ],
       // deficiency_count:0,
@@ -339,19 +340,18 @@ export default {
         try {
           this.isLoading = true;
           this.submitStatus = "PENDING";
-          console.log(this.form);
-          await axios.post(
+          // console.log(this.form);
+          let psc_inspection = await axios.post(
             `/vessels/${this.$route.params.vessel_id}/psc_inspections`,
             this.form
           );
+          this.psc_inspection = psc_inspection.data.data;
+          await this.handleFileUpload();
           this.isLoading = false;
           this.submitStatus = "OK";
-
-          // setTimeout(() => {
           this.$router.push(
             `/app/vessels/${this.$route.params.vessel_id}/psc-inspections/`
           );
-          // }, 1000);
         } catch (e) {
           this.isLoading = false;
         }
@@ -371,7 +371,35 @@ export default {
         solid: true,
       });
     },
+    async handleFileUpload() {
+      let reportpath = this.$refs.report.files[0];
+      const psc_inspection_id = this.psc_inspection.id;
+      let formData = new FormData();
+      formData.append("psc_inspection_id", psc_inspection_id);
+      formData.append("reportpath", reportpath);
+      let evidence_count = 0;
+      this.psc_inspection.psc_inspection_deficiencies.forEach((dd, index) => {
+        let deficiency_id = dd.id;
+        let d_id = "deficiency_id" + index;
 
+        let evidencepath = this.$refs.evidence[index].files[0];
+        let path_name = "evidencepath" + index;
+        
+        formData.append(d_id, deficiency_id);
+        formData.append(path_name, evidencepath);
+        evidence_count++;
+      });
+      formData.append("evidence_count", evidence_count);
+      await axios
+        .post("upload_psc_inspection_report", formData, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        })
+        .catch(function() {
+          console.log("FAILURE!!");
+        });
+    },
     inputSubmit() {
       console.log("submitted");
     },
