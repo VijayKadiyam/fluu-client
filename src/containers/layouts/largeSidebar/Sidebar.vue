@@ -20,6 +20,7 @@
             class="nav-item"
             data-item="dashboards"
             :data-submenu="true"
+            v-if="this.userPermissions.indexOf(1) != -1"
           >
             <a class="nav-item-hold" href="#">
               <i class="nav-icon i-Bar-Chart"></i>
@@ -35,6 +36,7 @@
             :class="{ active: selectedParentMenu == 'sites' }"
             data-item="sites"
             :data-submenu="true"
+            v-if="this.userPermissions.indexOf(2) != -1"
           >
             <router-link tag="a" class="nav-item-hold" to="/app/sites/list">
               <i class="nav-icon i-File-Clipboard-File--Text"></i>
@@ -49,6 +51,7 @@
             :class="{ active: selectedParentMenu == 'users' }"
             data-item="users"
             :data-submenu="true"
+            v-if="this.userPermissions.indexOf(3) != -1"
           >
             <router-link class="nav-item-hold" to="/app/users/list">
               <i class="nav-icon i-File-Clipboard-File--Text"></i>
@@ -63,6 +66,7 @@
             :class="{ active: selectedParentMenu == 'permissions' }"
             data-item="permissions"
             :data-submenu="true"
+            v-if="this.userPermissions.indexOf(4) != -1"
           >
             <router-link class="nav-item-hold" to="/app/permissions/list">
               <i class="nav-icon text-20 i-Check"></i>
@@ -77,6 +81,7 @@
             :class="{ active: selectedParentMenu == 'values' }"
             data-item="values"
             :data-submenu="true"
+            v-if="this.userPermissions.indexOf(5) != -1"
           >
             <router-link class="nav-item-hold" to="/app/values/list">
               <i class="nav-icon text-20 i-Diploma-2"></i>
@@ -91,6 +96,7 @@
             :class="{ active: selectedParentMenu == 'value-lists' }"
             data-item="value-lists"
             :data-submenu="true"
+            v-if="this.userPermissions.indexOf(6) != -1"
           >
             <router-link class="nav-item-hold" to="/app/value-lists/list">
               <i class="nav-icon text-20 i-Diploma-2"></i>
@@ -105,6 +111,7 @@
             :class="{ active: selectedParentMenu == 'viq-chapters' }"
             data-item="viq-chapters"
             :data-submenu="true"
+            v-if="this.userPermissions.indexOf(7) != -1"
           >
             <router-link class="nav-item-hold" to="/app/viq-chapters/list">
               <i class="nav-icon text-20 i-Diploma-2"></i>
@@ -119,6 +126,7 @@
             class="nav-item"
             data-item="vessels"
             :data-submenu="true"
+            v-if="this.userPermissions.indexOf(8) != -1"
           >
             <router-link class="nav-item-hold" to="/app/vessels/list">
               <i class="nav-icon i-Bar-Chart"></i>
@@ -134,6 +142,7 @@
             class="nav-item"
             data-item="near-misses"
             :data-submenu="true"
+            v-if="this.userPermissions.indexOf(9) != -1"
           >
             <router-link class="nav-item-hold" to="/app/near-misses/list">
               <i class="nav-icon i-Bar-Chart"></i>
