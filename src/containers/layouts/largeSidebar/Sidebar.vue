@@ -157,7 +157,7 @@
           data-parent="dashboards"
           :class="{ 'd-block': selectedParentMenu == 'dashboards' }"
         >
-          <li class="nav-item">
+          <!-- <li class="nav-item">
             <router-link tag="a" class to="/app/dashboards/dashboard.v1">
               <i class="nav-icon i-Clock-3"></i>
               <span class="item-name">{{
@@ -188,17 +188,17 @@
                 $t("dashboardItems.versionFour")
               }}</span>
             </router-link>
-          </li>
+          </li> -->
           <li class="nav-item">
             <router-link tag="a" class to="/app/dashboards/dashboard.v5">
               <i class="nav-icon i-Clock"></i>
-              <span class="item-name">Dashboard Five</span>
+              <span class="item-name">Dashboard</span>
             </router-link>
           </li>
           <li class="nav-item">
             <router-link tag="a" class to="/app/dashboards/dashboard.v6">
               <i class="nav-icon i-Clock"></i>
-              <span class="item-name">Dashboard Six</span>
+              <span class="item-name">Near Miss Dashboard</span>
             </router-link>
           </li>
         </ul>
