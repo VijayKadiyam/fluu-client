@@ -55,8 +55,8 @@
                   >
                 </b-form-group>
               </b-col>
-              <b-col md="6">
-                <b-form-group label="Others" v-if="form.inspection_type == 3">
+              <b-col md="6" v-if="form.inspection_type == 3">
+                <b-form-group label="Others">
                   <b-form-input
                     class="mb-2 other"
                     label="Others"
@@ -67,9 +67,7 @@
                   </b-form-input>
                 </b-form-group>
               </b-col>
-            </b-row>
-            <b-row>
-              <b-col md="6">
+              <b-col md="6" v-if="form.inspection_type == 1">
                 <b-form-group label="Oil Major">
                   <vue-tags-input
                     v-model="searchOilMajor"
@@ -102,20 +100,14 @@
               </b-col>
             </b-row>
             <b-row>
-              <b-col md="6">
-                <b-form-group label="Port">
-                  <vue-tags-input
-                    v-model="searchPort"
-                    :tags="selectedPort"
-                    :max-tags="1"
-                    class="tag-custom text-15 mb-2"
-                    :autocomplete-items="filteredPortItems"
-                    :add-only-from-autocomplete="true"
-                    @tags-changed="(newTags) => (selectedPort = newTags)"
-                    placeholder="Type Port"
-                  />
-                </b-form-group>
-              </b-col>
+              <!-- <b-col md="6">
+                
+              </b-col> -->
+              <!-- <b-col md="6" >
+                
+              </b-col> -->
+            </b-row>
+            <b-row>
               <b-col md="6">
                 <b-form-group label="Country">
                   <vue-tags-input
@@ -127,6 +119,20 @@
                     :add-only-from-autocomplete="true"
                     @tags-changed="(newTags) => (selectedCountry = newTags)"
                     placeholder="Type Country"
+                  />
+                </b-form-group>
+              </b-col>
+              <b-col md="6">
+                <b-form-group label="Port">
+                  <vue-tags-input
+                    v-model="searchPort"
+                    :tags="selectedPort"
+                    :max-tags="1"
+                    class="tag-custom text-15 mb-2"
+                    :autocomplete-items="filteredPortItems"
+                    :add-only-from-autocomplete="true"
+                    @tags-changed="(newTags) => (selectedPort = newTags)"
+                    placeholder="Type Port"
                   />
                 </b-form-group>
               </b-col>
@@ -162,11 +168,11 @@
             </b-row>
             <b-row>
               <b-col md="6">
-                <b-form-group label="Total Observation">
+                <b-form-group label="Total Observations">
                   <b-form-input
                     class="mb-2"
-                    label="Total Observation"
-                    placeholder="Enter Total Observation"
+                    label="Total Observations"
+                    placeholder="Enter Total Observations"
                     v-model.trim="$v.form.total_observations.$model"
                   >
                   </b-form-input>
@@ -233,11 +239,16 @@
                             variant="primary"
                             class="btn-rounded d-none d-sm-block"
                             @click="addEmptyVIQChapter(viqChapter.id)"
-                            ><i class="i-Add text-white mr-2"></i>Add Row
+                            ><i class="i-Add text-white mr-2"></i
+                            >{{ viqChapter.id }}Add Row
                           </b-button>
                         </div>
 
                         <template slot="table-row" slot-scope="props">
+                          <!-- <span v-for="(order, at) in orders" :key="`order${at}`" > -->
+                          <!-- <span v-for="chapter in masters.viqChapters" :key="`chapter`" > -->
+                          <!-- <span v-if="chapter.id == viqChapter.id"> hi</span>
+                          </span> -->
                           <span v-if="props.column.field == 'sr_no'">
                             <b-button
                               variant="primary"
@@ -251,21 +262,21 @@
                               >X
                             </b-button>
                           </span>
-                          <span v-if="props.column.field == 'serial_no'">
+                          <span v-if="props.column.field == 'viq_no'">
                             <b-form-input
                               class="mb-2"
-                              label="Serial No"
-                              v-model="props.row.serial_no"
-                              placeholder="Enter Serial No"
+                              label="Viq No"
+                              v-model="props.row.viq_no"
+                              placeholder="Enter Viq No"
                             >
                             </b-form-input>
                           </span>
-                          <span v-if="props.column.field == 'details'">
+                          <span v-if="props.column.field == 'observation'">
                             <b-form-input
                               class="mb-2"
-                              label="Details"
-                              v-model="props.row.details"
-                              placeholder="Enter Details"
+                              label="Observation"
+                              v-model="props.row.observation"
+                              placeholder="Enter Observation"
                             >
                             </b-form-input>
                           </span>
@@ -310,7 +321,7 @@ export default {
   data() {
     return {
       form: {
-        vessel_id: '',
+        vessel_id: "",
         inspection_type: "",
         date_of_inspection: "",
         inspector_id: "",
@@ -344,47 +355,27 @@ export default {
         { value: "2", text: "CDI" },
         { value: "3", text: "Other" },
       ],
-      viqChapters: [
-        {
-          id: 1,
-          description: "Chapter1",
-        },
-        {
-          id: 2,
-          description: "Chapter2",
-        },
-        {
-          id: 3,
-          description: "Chapter3",
-        },
-        {
-          id: 4,
-          description: "Chapter4",
-        },
-        {
-          id: 5,
-          description: "Chapter5",
-        },
-      ],
+      viqChapters: [],
       viqChapterDetails1: [
         {
           id: 1,
-          serial_no: "23",
-          details: "details",
+          viq_no: "",
+          observation: "",
         },
       ],
+
       columns: [
         {
           label: "Sr No",
           field: "sr_no",
         },
         {
-          label: "Serial No",
-          field: "serial_no",
+          label: "Viq No",
+          field: "viq_no",
         },
         {
-          label: "Details",
-          field: "details",
+          label: "Observation",
+          field: "observation",
         },
       ],
     };
@@ -414,15 +405,17 @@ export default {
     this.form.site_id = this.site.id;
     this.getMasters();
     this.getData();
-    this.viqChapters.forEach((chapter) => {
-      let name = "viqChapterDetails" + chapter.id;
+    this.viqChapters.forEach((viq) => {
+      console.log(viq);
+      let name = "viqChapterDetails" + viq.id;
       this[name] = [];
     });
+    // console.log(this.chapter);
   },
   methods: {
     async getData() {
       this.isLoading = true;
-     let vessel = await axios.get(`/vessels/${this.$route.params.vessel_id}`);
+      let vessel = await axios.get(`/vessels/${this.$route.params.vessel_id}`);
       this.vessel = vessel.data.data;
       this.isLoading = false;
     },
@@ -430,6 +423,7 @@ export default {
       this.isLoading = true;
       let masters = await axios.get("sire_inspections/masters");
       masters = masters.data;
+      this.masters = masters;
       // console.log(masters);
       masters.ports.forEach((port) => {
         this.PortItems.push({
@@ -459,12 +453,19 @@ export default {
         });
       });
 
+      masters.viqChapters.forEach((viqChapter) => {
+        this.viqChapters.push({
+          id: viqChapter.id,
+          text: viqChapter.chapter_name,
+        });
+      });
+
       // console.log(masters.data.data.oilMajors);
       this.isLoading = false;
     },
     async submit() {
       console.log("submit!");
-    if (this.selectedOilMajor[0]) {
+      if (this.selectedOilMajor[0]) {
         this.form.oil_major_id = this.selectedOilMajor[0].id;
       }
       if (this.selectedPort[0]) {
@@ -507,13 +508,22 @@ export default {
 
     addEmptyVIQChapter(Chapter) {
       let name = "viqChapterDetails" + Chapter;
-      console.log(this[name]);
-      this[name].push({
-        serial_no: "",
-        sire_inspection_id: Chapter,
-        details: "",
-        is_active: 1,
+      this.masters.viqChapters.forEach((viqChapter) => {
+        if (viqChapter.id == Chapter) {
+          this[name].push({
+            viq_no: "",
+            // sire_inspection_id: Chapter,
+            observation: "",
+            is_active: 1,
+          });
+        }
+        // this.viqChapters.push({
+        // id: viqChapter.id,
+        //   description: viqChapter.chapter_name,
+        // });
       });
+      // console.log(this[name]);
+      // this[name].push({
     },
     deleteVIQChapter(Chapter, row) {
       let name = "viqChapterDetails" + Chapter;
