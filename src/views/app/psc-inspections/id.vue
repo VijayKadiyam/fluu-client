@@ -133,7 +133,7 @@
                   <b-form-file
                     id="file-default"
                     name="report"
-                    ref="file"
+                    ref="report"
                   ></b-form-file>
                 </b-form-group>
               </b-col>
@@ -186,9 +186,9 @@
                 <b-col md="4">
                   <b-form-group label="Evidence">
                     <b-form-file
-                      id="file-default"
-                      name="report"
-                      ref="file"
+                      :id="`evidence${dd}`"
+                      name="evidence"
+                      ref="evidence"
                     ></b-form-file>
                   </b-form-group>
                 </b-col>
@@ -279,7 +279,7 @@ export default {
         // Add
         for (let b = current_len; b < number; b++) {
           this.$set(this.deficiency_details, b, {
-            id: b,
+            d_id: b,
           });
         }
       } else {
@@ -337,8 +337,8 @@ export default {
     //   validate form
     async submit() {
       console.log("submit!");
-this.form.psc_inspection_deficiencies = this.deficiency_details;
-if (this.selectedPort[0]) {
+      this.form.psc_inspection_deficiencies = this.deficiency_details;
+      if (this.selectedPort[0]) {
         this.form.port_id = this.selectedPort[0].id;
       }
       if (this.selectedCountry[0]) {
@@ -353,10 +353,12 @@ if (this.selectedPort[0]) {
           this.isLoading = true;
           this.submitStatus = "PENDING";
           console.log(this.form);
-          await axios.post(
+          let psc_inspection = await axios.post(
             `/vessels/${this.$route.params.vessel_id}/psc_inspections/${this.$route.params.id}`,
             this.form
           );
+          this.psc_inspection = psc_inspection.data.data;
+          await this.handleFileUpload();
           this.isLoading = false;
           this.submitStatus = "OK";
 
@@ -369,6 +371,37 @@ if (this.selectedPort[0]) {
           this.isLoading = false;
         }
       }
+    },
+    async handleFileUpload() {
+      console.log("File UPload");
+      let reportpath = this.$refs.report.files[0];
+      const psc_inspection_id = this.psc_inspection.id;
+      let formData = new FormData();
+      formData.append("psc_inspection_id", psc_inspection_id);
+      formData.append("reportpath", reportpath);
+      let evidence_count = 0;
+      this.psc_inspection.psc_inspection_deficiencies.forEach((dd, index) => {
+        let deficiency_id = dd.id;
+        let d_id = "deficiency_id" + index;
+        if (this.$refs.evidence[index]) {
+          let evidencepath = this.$refs.evidence[index].files[0];
+          let path_name = "evidencepath" + index;
+
+          formData.append(d_id, deficiency_id);
+          formData.append(path_name, evidencepath);
+          evidence_count++;
+        }
+      });
+      formData.append("evidence_count", evidence_count);
+      await axios
+        .post("upload_psc_inspection_report", formData, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        })
+        .catch(function() {
+          console.log("FAILURE!!");
+        });
     },
     makeToast(variant = null) {
       this.$bvToast.toast("Please fill the form correctly.", {
