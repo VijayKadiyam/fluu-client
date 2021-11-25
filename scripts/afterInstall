@@ -1,8 +1,8 @@
 #!/bin/bash
 export PATH="$PATH:"/usr/local/bin/
-cd /var/www/vhosts/lbsm/lbsm-client
+cd /var/www/vhosts/ves-kpi/ves-kpi-client
 
 npm run build
 
-pm2 delete lbsm 
-pm2 start npm --name lbsm -- start
+pm2 delete ves-kpi 
+pm2 start npm --name ves-kpi -- start
