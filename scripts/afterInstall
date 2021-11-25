@@ -4,5 +4,6 @@ cd /var/www/vhosts/ves-kpi/ves-kpi-client
 
 npm run build
 
+
 pm2 delete ves-kpi 
 pm2 start npm --name ves-kpi -- start
