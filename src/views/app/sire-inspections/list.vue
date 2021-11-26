@@ -63,9 +63,9 @@
             <a
               :href="
                 '/app/vessels/' +
-                props.row.vessel_id +
-                '/sire-inspections/' +
-                props.row.id
+                  props.row.vessel_id +
+                  '/sire-inspections/' +
+                  props.row.id
               "
             >
               <i class="i-Eraser-2 text-25 text-success mr-2"></i>
@@ -77,22 +77,29 @@
             > -->
           </span>
           <span v-if="props.column.field == 'inspection_type'">
-              {{ props.row.inspection_type }}
+            <span v-if="props.row.inspection_type == 1">SIRE</span>
+            <span v-if="props.row.inspection_type == 2">CDI</span>
+            <span v-if="props.row.inspection_type == 3">{{
+              props.row.inspection_type_detail
+            }}</span>
           </span>
-          <!-- <span v-if="props.column.field == 'oil_major'">
-              {{ props.row.oil_major.description }}
-          </span> -->
-          <!-- <span v-if="props.column.field == 'inspector'">
-              {{ props.row.inspector.user_name }}
-          </span> -->
+          <span v-if="props.column.field == 'oil_major'">
+            {{ props.row.oil_major.description }}
+          </span>
+          <span v-if="props.column.field == 'inspector'">
+            {{ props.row.inspector.user_name }}
+          </span>
           <span v-if="props.column.field == 'date_of_inspection'">
-              {{ props.row.date_of_inspection }}
+            {{ props.row.date_of_inspection }}
           </span>
-          <span v-if="props.column.field == 'place_of_inspection'">
-              {{ props.row.place_of_inspection }}
+          <span v-if="props.column.field == 'country'">
+            {{ props.row.country.description }}
+          </span>
+          <span v-if="props.column.field == 'port'">
+            {{ props.row.port.description }}
           </span>
           <span v-if="props.column.field == 'total_observations'">
-              {{ props.row.total_observations }}
+            {{ props.row.total_observations }}
           </span>
         </template>
       </vue-good-table>
@@ -123,8 +130,12 @@ export default {
           field: "date_of_inspection",
         },
         {
-          label: "Place of Inspection",
-          field: "place_of_inspection",
+          label: "Country",
+          field: "country",
+        },
+        {
+          label: "Port",
+          field: "port",
         },
         {
           label: "Inspector Name",
