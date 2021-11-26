@@ -83,9 +83,9 @@
               props.row.inspection_type_detail
             }}</span>
           </span>
-          <span v-if="props.column.field == 'oil_major'">
+          <!-- <span v-if="props.column.field == 'oil_major'">
             {{ props.row.oil_major.description }}
-          </span>
+          </span> -->
           <span v-if="props.column.field == 'inspector'">
             {{ props.row.inspector.user_name }}
           </span>
@@ -121,10 +121,10 @@ export default {
           label: "Inspection Type",
           field: "inspection_type",
         },
-        {
-          label: "Oil Major",
-          field: "oil_major",
-        },
+        // {
+        //   label: "Oil Major",
+        //   field: "oil_major",
+        // },
         {
           label: "Date of Inspection",
           field: "date_of_inspection",

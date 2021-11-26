@@ -197,7 +197,7 @@
                   <b-form-file
                     id="file-default"
                     name="attachment"
-                    ref="file"
+                    ref="attachment"
                   ></b-form-file>
                 </b-form-group>
               </b-col>
@@ -214,74 +214,75 @@
                     <b-tab
                       v-for="(viqChapter, at) in viqChapters"
                       :key="`viqChapter${at}`"
-                      :title="`Chapter ${viqChapter.id}`"
-                      active
+                      :title="`${viqChapter.description + ' ' + viqChapter.id}`"
                     >
-                      <vue-good-table
-                        :columns="columns"
-                        :line-numbers="true"
-                        :search-options="{
-                          enabled: false,
-                          placeholder: 'Search this table',
-                        }"
-                        :pagination-options="{
-                          enabled: true,
-                          mode: 'records',
-                        }"
-                        styleClass="tableOne vgt-table"
-                        :rows="viqChapterDetails1"
-                      >
-                        <div
-                          slot="table-actions-bottom"
-                          class="mb-1 mr-2 mt-3 pull-right"
-                        >
-                          <b-button
-                            variant="primary"
-                            class="btn-rounded d-none d-sm-block"
-                            @click="addEmptyVIQChapter(viqChapter.id)"
-                            ><i class="i-Add text-white mr-2"></i
-                            >{{ viqChapter.id }}Add Row
-                          </b-button>
-                        </div>
-
-                        <template slot="table-row" slot-scope="props">
-                          <!-- <span v-for="(order, at) in orders" :key="`order${at}`" > -->
-                          <!-- <span v-for="chapter in masters.viqChapters" :key="`chapter`" > -->
-                          <!-- <span v-if="chapter.id == viqChapter.id"> hi</span>
-                          </span> -->
-                          <span v-if="props.column.field == 'sr_no'">
-                            <b-button
-                              variant="primary"
-                              class="btn-rounded d-none d-sm-block"
-                              @click="
-                                deleteVIQChapter(
-                                  viqChapter.id,
-                                  props.row.originalIndex
-                                )
-                              "
-                              >X
-                            </b-button>
-                          </span>
-                          <span v-if="props.column.field == 'viq_no'">
-                            <b-form-input
-                              class="mb-2"
-                              label="Viq No"
-                              v-model="props.row.viq_no"
-                              placeholder="Enter Viq No"
-                            >
-                            </b-form-input>
-                          </span>
-                          <span v-if="props.column.field == 'observation'">
-                            <b-form-input
-                              class="mb-2"
-                              label="Observation"
-                              v-model="props.row.observation"
-                              placeholder="Enter Observation"
-                            >
-                            </b-form-input>
-                          </span>
-                        </template>
-                      </vue-good-table>
+                      <table class="table table-strip">
+                        <thead>
+                          <tr>
+                            <th>Sr No</th>
+                            <th>VIQ No</th>
+                            <th>Observation</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr
+                            v-for="(
+                              viqChapterDetail, vqcd
+                            ) in viqChapterDetailArrays[at]"
+                            :key="`viqChapterDetailArray${vqcd}`"
+                          >
+                            <td>
+                              <div class="row">
+                                <div class="col-md-6">{{ vqcd + 1 }}</div>
+                                <div class="col-md-6">
+                                  <b-button
+                                    variant="primary"
+                                    class="btn-rounded d-none d-sm-block"
+                                    @click="
+                                      deleteVIQChapter(viqChapter.id, vqcd)
+                                    "
+                                    >X
+                                  </b-button>
+                                </div>
+                              </div>
+                            </td>
+                            <td>
+                              <b-form-input
+                                class="mb-2"
+                                label="Viq No"
+                                v-model="viqChapterDetail.viq_no"
+                                placeholder="Enter Viq No"
+                              >
+                              </b-form-input>
+                            </td>
+                            <td>
+                              <b-form-input
+                                class="mb-2"
+                                label="Observation"
+                                v-model="viqChapterDetail.observation"
+                                placeholder="Enter Observation"
+                              >
+                              </b-form-input>
+                            </td>
+                          </tr>
+                        </tbody>
+                        <tfoot>
+                          <tr>
+                            <td></td>
+                            <td></td>
+                            <td>
+                              <b-button
+                                style="float: right"
+                                variant="primary"
+                                class="btn-rounded d-none d-sm-block"
+                                @click="addEmptyVIQChapter(viqChapter.id)"
+                                ><i class="i-Add text-white mr-2"></i
+                                >{{ viqChapter.id }}Add Row
+                              </b-button>
+                            </td>
+                          </tr>
+                        </tfoot>
+                      </table>
                     </b-tab>
                   </b-tabs>
                 </b-card>
@@ -330,6 +331,10 @@ export default {
         other_type: "",
         address: "",
       },
+      viqChapterDetail: {
+        viq_no: "",
+        observation: "",
+      },
       searchOilMajor: "",
       selectedOilMajor: [],
       OilMajorItems: [],
@@ -356,13 +361,15 @@ export default {
         { value: "3", text: "Other" },
       ],
       viqChapters: [],
-      viqChapterDetails1: [
-        {
-          id: 1,
-          viq_no: "",
-          observation: "",
-        },
-      ],
+      viqChapterDetails: [],
+      viqChapterDetailArrays: [],
+      // viqChapterDetails: [
+      //   {
+      //     id: 1,
+      //     viq_no: "",
+      //     observation: "",
+      //   },
+      // ],
 
       columns: [
         {
@@ -400,16 +407,24 @@ export default {
       },
     },
   },
+  //   computed: {
+  //     things() {
+  //       this.viqChapters.forEach((viq) => {
+  //         // console.log(viq);
+  //         let name = "viqChapterDetails" + viq.id;
+  //         this.name = name
+  //         // this[name] = [];
+  //       // console.log(this[name]);
+  //       });
+  //         return this.$data[this.name];
+  //     }
+  // },
   mounted() {
+    this.getMasters();
     this.form.vessel_id = this.$route.params.vessel_id;
     this.form.site_id = this.site.id;
-    this.getMasters();
     this.getData();
-    this.viqChapters.forEach((viq) => {
-      console.log(viq);
-      let name = "viqChapterDetails" + viq.id;
-      this[name] = [];
-    });
+
     // console.log(this.chapter);
   },
   methods: {
@@ -424,7 +439,6 @@ export default {
       let masters = await axios.get("sire_inspections/masters");
       masters = masters.data;
       this.masters = masters;
-      // console.log(masters);
       masters.ports.forEach((port) => {
         this.PortItems.push({
           id: port.id,
@@ -456,11 +470,21 @@ export default {
       masters.viqChapters.forEach((viqChapter) => {
         this.viqChapters.push({
           id: viqChapter.id,
-          text: viqChapter.chapter_name,
+          description: viqChapter.chapter_name,
         });
       });
 
-      // console.log(masters.data.data.oilMajors);
+      this.viqChapters.forEach((viq) => {
+        let viqChapterDetails = "viqChapterDetails" + viq.id;
+        this[viqChapterDetails] = [];
+        this[viqChapterDetails].push({
+          id: viq.id,
+          viq_chapter_id: viq.id,
+        });
+
+        this.viqChapterDetailArrays.push(this[viqChapterDetails]);
+      });
+      console.log(this.viqChapterDetailArrays);
       this.isLoading = false;
     },
     async submit() {
@@ -487,11 +511,24 @@ export default {
         try {
           this.isLoading = true;
           this.submitStatus = "PENDING";
-          console.log(this.form);
-          await axios.post(
-            `/vessels/${this.$route.params.vessel_id}/sire_inspections`,
+
+          // console.log(this.viqChapterDetailArrays);
+
+          // this.viqChapterDetailArrays.flat(Infinity);
+          this.sire_inspection_details = [];
+          this.viqChapterDetailArrays.forEach((Chp) => {
+            Chp.forEach((details) => {
+              this.sire_inspection_details.push(details);
+            });
+          });
+          console.log(this.sire_inspection_details);
+          this.form.sire_inspection_details = this.sire_inspection_details;
+          let sire_inspection = await axios.post(
+            `/vessels/${this.$route.params.vessel_id}/sire_inspections/`,
             this.form
           );
+          this.sire_inspection = sire_inspection.data.data;
+          await this.handleFileUpload();
           this.isLoading = false;
           this.submitStatus = "OK";
 
@@ -505,61 +542,37 @@ export default {
         }
       }
     },
-
+    async handleFileUpload() {
+      let attachment = this.$refs.attachment.files[0];
+      const sire_inspection_id = this.sire_inspection.id;
+      let formData = new FormData();
+      formData.append("sire_inspection_id", sire_inspection_id);
+      formData.append("attachment", attachment);
+      await axios
+        .post("upload_sire_inspection_attachment", formData, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        })
+        .catch(function () {
+          console.log("FAILURE!!");
+        });
+    },
     addEmptyVIQChapter(Chapter) {
       let name = "viqChapterDetails" + Chapter;
-      this.masters.viqChapters.forEach((viqChapter) => {
-        if (viqChapter.id == Chapter) {
-          this[name].push({
-            viq_no: "",
-            // sire_inspection_id: Chapter,
-            observation: "",
-            is_active: 1,
-          });
-        }
-        // this.viqChapters.push({
-        // id: viqChapter.id,
-        //   description: viqChapter.chapter_name,
-        // });
+      this[name].push({
+        viq_no: "",
+        observation: "",
+        viq_chapter_id: Chapter,
+        is_active: 1,
       });
-      // console.log(this[name]);
-      // this[name].push({
     },
     deleteVIQChapter(Chapter, row) {
       let name = "viqChapterDetails" + Chapter;
       this[name].splice(row, 1);
       console.log(this[name]);
     },
-    //   validate form
-    // async submit() {
-    //   console.log("submit!");
 
-    //   this.$v.form.$touch();
-    //   if (this.$v.form.$invalid) {
-    //     this.submitStatus = "ERROR";
-    //   } else {
-    //     // do your submit logic here
-    //     try {
-    //       this.isLoading = true;
-    //       this.submitStatus = "PENDING";
-    //       console.log(this.form);
-    //       await axios.post(
-    //         `/programs/${this.$route.params.program_id}/program_tasks`,
-    //         this.form
-    //       );
-    //       this.isLoading = false;
-    //       this.submitStatus = "OK";
-
-    //       // setTimeout(() => {
-    //       this.$router.push(
-    //         `/app/programs/${this.$route.params.program_id}/program-tasks/`
-    //       );
-    //       // }, 1000);
-    //     } catch (e) {
-    //       this.isLoading = false;
-    //     }
-    //   }
-    // },
     makeToast(variant = null) {
       this.$bvToast.toast("Please fill the form correctly.", {
         title: `Variant ${variant || "default"}`,

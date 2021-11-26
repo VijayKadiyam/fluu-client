@@ -1,10 +1,10 @@
 <template>
   <div class="main-content">
-    <breadcumb :page="'Update Site'" :folder="'Sites'" />
+    <breadcumb :page="'Update VIQ Chapter'" :folder="'VIQ Chapters'" />
 
     <b-row class="justify-content-md-center">
       <b-col md="9">
-        <b-card title="Validate Form">
+        <b-card title="VIQ Chapter">
           <b-form @submit.prevent="submit">
             <b-form-group label="Serial Number">
               <b-form-input
