@@ -8,7 +8,7 @@
           <b-col md="3">
             <p class="text-muted mt-2 mb-0">Vessel Name</p>
             <p class="text-primary text-24 line-height-1 mb-2">
-              {{ vessel.vessel_name }}
+              {{ vessel.name }}
             </p>
           </b-col>
           <b-col md="3">
@@ -62,7 +62,7 @@
                     label="Others"
                     id="Other-type"
                     placeholder="Enter Others"
-                    v-model="form.other_type"
+                    v-model="form.inspection_type_detail"
                   >
                   </b-form-input>
                 </b-form-group>
@@ -321,93 +321,22 @@ export default {
       },
       searchOilMajor: "",
       selectedOilMajor: [],
-      OilMajorItems: [
-        { id: "1", text: "Oil" },
-        { id: "2", text: "Major" },
-      ],
+      OilMajorItems: [],
 
       searchPort: "",
       selectedPort: [],
-      PortItems: [
-        {
-          text: "China",
-        },
-        {
-          text: "Japan",
-        },
-        {
-          text: "India",
-        },
-        {
-          text: "Hongkong",
-        },
-        {
-          text: "Siveria",
-        },
-        {
-          text: "Dubai",
-        },
-        {
-          text: "Russia",
-        },
-      ],
+      PortItems: [],
 
       searchCountry: "",
       selectedCountry: [],
+      countryItems: [],
 
       searchInspectionName: "",
       selectedInspectionName: [],
-      countryItems: [
-        {
-          text: "China",
-        },
-        {
-          text: "Japan",
-        },
-        {
-          text: "India",
-        },
-        {
-          text: "Hongkong",
-        },
-        {
-          text: "Siveria",
-        },
-        {
-          text: "Dubai",
-        },
-        {
-          text: "Russia",
-        },
-      ],
+      InspectorNameItems: [],
 
       submitStatus: null,
-      vessel: {
-        id: "1",
-        serial_no: "123",
-        vessel_name: "Vessel 1",
-        imo_no: "6781230",
-        built_date: "05-08-1865",
-        dwt: "120000",
-        remark: "Remarks",
-        management_in_date: "05-04-1965",
-        management_out_date: "25-08-1997",
-        deck_officier: "25",
-        engine_officier: "85",
-        deck_rating: "",
-        engine_rating: "",
-        galley_rating: "",
-        vessel_type_id: "1",
-        vessel_type: {
-          id: 1,
-          description: "Oil Tanker",
-        },
-        built_place_id: 1,
-        built_place: {
-          id: 1,
-          name: "India",
-        },
-      },
+      vessel: [],
 
       inspectionTypeItems: [
         { value: "", text: " select an option" },
@@ -415,28 +344,8 @@ export default {
         { value: "2", text: "CDI" },
         { value: "3", text: "Other" },
       ],
-      viqChapters: [
-        {
-          id: 1,
-          description: "Chapter1",
-        },
-        {
-          id: 2,
-          description: "Chapter2",
-        },
-        {
-          id: 3,
-          description: "Chapter3",
-        },
-        {
-          id: 4,
-          description: "Chapter4",
-        },
-        {
-          id: 5,
-          description: "Chapter5",
-        },
-      ],
+
+      viqChapters: [],
       viqChapterDetails1: [
         {
           id: 1,
@@ -450,12 +359,12 @@ export default {
           field: "sr_no",
         },
         {
-          label: "Serial No",
-          field: "serial_no",
+          label: "VIQ No",
+          field: "viq_no",
         },
         {
-          label: "Details",
-          field: "details",
+          label: "Observation",
+          field: "observation",
         },
       ],
     };
@@ -468,12 +377,6 @@ export default {
       date_of_inspection: {
         required,
       },
-      inspector: {
-        required,
-      },
-      oil_major: {
-        required,
-      },
       total_observations: {
         required,
         numeric,
@@ -481,13 +384,10 @@ export default {
     },
   },
   mounted() {
-    // this.form.program_id = this.$route.params.program_id;
-    // this.form.site_id = this.site.id;
+    this.form.vessel_id = this.$route.params.vessel_id;
+    this.form.site_id = this.site.id;
+    this.getMasters();
     this.getData();
-    this.viqChapters.forEach((chapter) => {
-      let name = "viqChapterDetails" + chapter.id;
-      this[name] = [];
-    });
   },
   computed: {
     filteredOilMajorItems() {
@@ -498,7 +398,7 @@ export default {
       });
     },
     filteredInspectionNameItems() {
-      return this.countryItems.filter((c) => {
+      return this.InspectorNameItems.filter((c) => {
         return (
           c.text
             .toLowerCase()
@@ -524,11 +424,83 @@ export default {
   methods: {
     async getData() {
       this.isLoading = true;
-      // let form = await axios.get(
-      //   `/vessels/${this.$route.params.vessel_id}/sire_inspections/${this.$route.params.id}`
-      // );
-      // this.form = form.data.data;
+      let form = await axios.get(
+        `/vessels/${this.$route.params.vessel_id}/sire_inspections/${this.$route.params.id}`
+      );
+      this.form = form.data.data;
+      this.port = this.form.port;
+      this.country = this.form.country;
+      this.oil_major = this.form.oil_major;
+      this.inspector = this.form.inspector;
+
+      this.selectedPort.push({
+        id: this.port.id,
+        text: this.port.description,
+      });
+
+      this.selectedCountry.push({
+        id: this.country.id,
+        text: this.country.description,
+      });
+      this.selectedOilMajor.push({
+        id: this.oil_major.id,
+        text: this.oil_major.description,
+      });
+      this.selectedInspectionName.push({
+        id: this.inspector.id,
+        text: this.inspector.user_name,
+      });
+
+      let vessel = await axios.get(`/vessels/${this.$route.params.vessel_id}`);
+      this.vessel = vessel.data.data;
+      console.log(this.vessel);
       // this.program = form.data.data.program;
+      this.isLoading = false;
+    },
+    async getMasters() {
+      this.isLoading = true;
+      let masters = await axios.get("sire_inspections/masters");
+      masters = masters.data;
+      this.masters = masters;
+
+      masters.ports.forEach((port) => {
+        this.PortItems.push({
+          id: port.id,
+          text: port.description,
+        });
+      });
+
+      masters.countries.forEach((country) => {
+        this.countryItems.push({
+          id: country.id,
+          text: country.description,
+        });
+      });
+
+      masters.oilMajors.forEach((oilMajor) => {
+        this.OilMajorItems.push({
+          id: oilMajor.id,
+          text: oilMajor.description,
+        });
+      });
+
+      masters.users.forEach((user) => {
+        this.InspectorNameItems.push({
+          id: user.id,
+          text: user.user_name,
+        });
+      });
+
+      masters.viqChapters.forEach((viqChapter) => {
+        this.viqChapters.push({
+          id: viqChapter.id,
+          text: viqChapter.chapter_name,
+        });
+      });
+      this.viqChapters.forEach((chapter) => {
+        let name = "viqChapterDetails" + chapter.id;
+        this[name] = [];
+      });
       this.isLoading = false;
     },
     addEmptyVIQChapter(Chapter) {
@@ -549,7 +521,18 @@ export default {
     //   validate form
     async submit() {
       console.log("submit!");
-
+      if (this.selectedPort[0]) {
+        this.form.port_id = this.selectedPort[0].id;
+      }
+      if (this.selectedCountry[0]) {
+        this.form.country_id = this.selectedCountry[0].id;
+      }
+      if (this.selectedOilMajor[0]) {
+        this.form.oil_major_id = this.selectedOilMajor[0].id;
+      }
+      if (this.selectedInspectionName[0]) {
+        this.form.inspector_id = this.selectedInspectionName[0].id;
+      }
       this.$v.$touch();
       if (this.$v.$invalid) {
         this.submitStatus = "ERROR";
@@ -559,16 +542,17 @@ export default {
           this.isLoading = true;
           this.submitStatus = "PENDING";
           // console.log(this.form);
-          await axios.patch(
-            `/programs/${this.$route.params.program_id}/program_tasks/${this.$route.params.id}`,
+          let sire_inspection = await axios.post(
+            `/vessels/${this.$route.params.vessel_id}/sire_inspections/${this.$route.params.id}`,
             this.form
           );
+          this.sire_inspection = sire_inspection.data.data;
           this.isLoading = false;
           this.submitStatus = "OK";
 
           // setTimeout(() => {
           this.$router.push(
-            `/app/programs/${this.$route.params.program_id}/program-tasks/`
+            `/app/vessels/${this.$route.params.vessel_id}/sire-inspections/`
           );
           // }, 1000);
         } catch (e) {
