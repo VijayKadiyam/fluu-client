@@ -191,7 +191,7 @@
                   <b-form-file
                     id="file-default"
                     name="attachment"
-                    ref="file"
+                    ref="attachment"
                   ></b-form-file>
                 </b-form-group>
               </b-col>
@@ -547,6 +547,7 @@ export default {
             this.form
           );
           this.sire_inspection = sire_inspection.data.data;
+           await this.handleFileUpload();
           this.isLoading = false;
           this.submitStatus = "OK";
 
@@ -559,6 +560,22 @@ export default {
           this.isLoading = false;
         }
       }
+    },
+     async handleFileUpload() {
+      let attachment = this.$refs.attachment.files[0];
+      const sire_inspection_id = this.sire_inspection.id;
+      let formData = new FormData();
+      formData.append("sire_inspection_id", sire_inspection_id);
+      formData.append("attachment", attachment);
+      await axios
+        .post("upload_sire_inspection_attachment", formData, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        })
+        .catch(function() {
+          console.log("FAILURE!!");
+        });
     },
     makeToast(variant = null) {
       this.$bvToast.toast("Please fill the form correctly.", {
