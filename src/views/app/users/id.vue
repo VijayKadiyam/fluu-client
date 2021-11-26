@@ -188,7 +188,7 @@ export default {
         password: "",
         email: "",
         active: 1,
-        role_id: 3,
+        role_id: 4,
       },
       submitStatus: null,
     };

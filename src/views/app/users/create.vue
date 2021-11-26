@@ -188,7 +188,7 @@ export default {
         email: "",
         gender: 0,
         active: 1,
-        role_id: 3,
+        role_id: 4,
       },
       submitStatus: null,
     };
