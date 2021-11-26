@@ -197,7 +197,7 @@
                   <b-form-file
                     id="file-default"
                     name="attachment"
-                    ref="file"
+                    ref="attachment"
                   ></b-form-file>
                 </b-form-group>
               </b-col>
@@ -215,19 +215,20 @@
                       v-for="(viqChapter, at) in viqChapters"
                       :key="`viqChapter${at}`"
                       :title="`${viqChapter.description + ' ' + viqChapter.id}`"
-                      
                     >
                       <table class="table table-strip">
                         <thead>
                           <tr>
                             <th>Sr No</th>
-                            <th>Viq No</th>
+                            <th>VIQ No</th>
                             <th>Observation</th>
                           </tr>
                         </thead>
                         <tbody>
                           <tr
-                            v-for="(viqChapterDetail, vqcd) in viqChapterDetails"
+                            v-for="(
+                              viqChapterDetail, vqcd
+                            ) in viqChapterDetailArrays[at]"
                             :key="`viqChapterDetailArray${vqcd}`"
                           >
                             <td>
@@ -237,7 +238,9 @@
                                   <b-button
                                     variant="primary"
                                     class="btn-rounded d-none d-sm-block"
-                                    @click="deleteVIQChapter(viqChapter.id, vqcd)"
+                                    @click="
+                                      deleteVIQChapter(viqChapter.id, vqcd)
+                                    "
                                     >X
                                   </b-button>
                                 </div>
@@ -247,7 +250,7 @@
                               <b-form-input
                                 class="mb-2"
                                 label="Viq No"
-                                v-model="viq_no"
+                                v-model="viqChapterDetail.viq_no"
                                 placeholder="Enter Viq No"
                               >
                               </b-form-input>
@@ -256,7 +259,7 @@
                               <b-form-input
                                 class="mb-2"
                                 label="Observation"
-                                v-model="observation"
+                                v-model="viqChapterDetail.observation"
                                 placeholder="Enter Observation"
                               >
                               </b-form-input>
@@ -328,6 +331,10 @@ export default {
         other_type: "",
         address: "",
       },
+      viqChapterDetail: {
+        viq_no: "",
+        observation: "",
+      },
       searchOilMajor: "",
       selectedOilMajor: [],
       OilMajorItems: [],
@@ -355,7 +362,7 @@ export default {
       ],
       viqChapters: [],
       viqChapterDetails: [],
-      viqChapterDetailArray: [],
+      viqChapterDetailArrays: [],
       // viqChapterDetails: [
       //   {
       //     id: 1,
@@ -432,7 +439,6 @@ export default {
       let masters = await axios.get("sire_inspections/masters");
       masters = masters.data;
       this.masters = masters;
-      // console.log(masters);
       masters.ports.forEach((port) => {
         this.PortItems.push({
           id: port.id,
@@ -473,11 +479,12 @@ export default {
         this[viqChapterDetails] = [];
         this[viqChapterDetails].push({
           id: viq.id,
-          description: viqChapterDetails,
+          viq_chapter_id: viq.id,
         });
-        // console.log(viqChapterDetails);
-      });
 
+        this.viqChapterDetailArrays.push(this[viqChapterDetails]);
+      });
+      console.log(this.viqChapterDetailArrays);
       this.isLoading = false;
     },
     async submit() {
@@ -504,11 +511,24 @@ export default {
         try {
           this.isLoading = true;
           this.submitStatus = "PENDING";
-          console.log(this.form);
-          await axios.post(
-            `/vessels/${this.$route.params.vessel_id}/sire_inspections`,
+
+          // console.log(this.viqChapterDetailArrays);
+
+          // this.viqChapterDetailArrays.flat(Infinity);
+          this.sire_inspection_details = [];
+          this.viqChapterDetailArrays.forEach((Chp) => {
+            Chp.forEach((details) => {
+              this.sire_inspection_details.push(details);
+            });
+          });
+          console.log(this.sire_inspection_details);
+          this.form.sire_inspection_details = this.sire_inspection_details;
+          let sire_inspection = await axios.post(
+            `/vessels/${this.$route.params.vessel_id}/sire_inspections/`,
             this.form
           );
+          this.sire_inspection = sire_inspection.data.data;
+          await this.handleFileUpload();
           this.isLoading = false;
           this.submitStatus = "OK";
 
@@ -522,14 +542,28 @@ export default {
         }
       }
     },
-
+    async handleFileUpload() {
+      let attachment = this.$refs.attachment.files[0];
+      const sire_inspection_id = this.sire_inspection.id;
+      let formData = new FormData();
+      formData.append("sire_inspection_id", sire_inspection_id);
+      formData.append("attachment", attachment);
+      await axios
+        .post("upload_sire_inspection_attachment", formData, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        })
+        .catch(function () {
+          console.log("FAILURE!!");
+        });
+    },
     addEmptyVIQChapter(Chapter) {
       let name = "viqChapterDetails" + Chapter;
-      // console.log(this.viqChapterDetails);
-      // console.log(name);
-      this.viqChapterDetails.push({
+      this[name].push({
         viq_no: "",
         observation: "",
+        viq_chapter_id: Chapter,
         is_active: 1,
       });
     },
@@ -538,7 +572,7 @@ export default {
       this[name].splice(row, 1);
       console.log(this[name]);
     },
-   
+
     makeToast(variant = null) {
       this.$bvToast.toast("Please fill the form correctly.", {
         title: `Variant ${variant || "default"}`,
