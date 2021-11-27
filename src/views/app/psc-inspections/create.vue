@@ -44,6 +44,7 @@
                     id="date"
                     v-model="form.date"
                     class="mb-2"
+                    :max="max"
                     placeholder="Date"
                   ></b-form-datepicker>
                   <b-alert
@@ -86,7 +87,7 @@
             </b-row>
             <b-row>
               <b-col md="4">
-                <b-form-group label="No. Of Deficiency">
+                <b-form-group label="No. Of Closed Deficiency">
                   <b-form-input
                     class="mb-2"
                     label="No. Of Deficiency"
@@ -226,6 +227,10 @@ export default {
     title: "PSC Inspection | Create",
   },
   data() {
+    const now = new Date();
+    const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    // const minDate = new Date(today);
+    const maxDate = new Date(today);
     return {
       form: {
         vessel_id: "",
@@ -235,6 +240,7 @@ export default {
         is_deficiency_closed: 0,
         // deficiency_details:{},
       },
+      max:maxDate,
       deficiency_details: [
         {
           date_of_closure: "",
@@ -384,7 +390,7 @@ export default {
 
         let evidencepath = this.$refs.evidence[index].files[0];
         let path_name = "evidencepath" + index;
-        
+
         formData.append(d_id, deficiency_id);
         formData.append(path_name, evidencepath);
         evidence_count++;
