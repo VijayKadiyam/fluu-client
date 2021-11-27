@@ -6,15 +6,15 @@
       <div class="content">
         <b-row>
           <b-col md="3">
-            <p class="text-muted mt-2 mb-0">Vessel Name</p>
-            <p class="text-primary text-24 line-height-1 mb-2">
-              {{ vessel.name }}
-            </p>
-          </b-col>
-          <b-col md="3">
             <p class="text-muted mt-2 mb-0">Serial No</p>
             <p class="text-primary text-24 line-height-1 mb-2">
               {{ vessel.serial_no }}
+            </p>
+          </b-col>
+          <b-col md="3">
+            <p class="text-muted mt-2 mb-0">Vessel Name</p>
+            <p class="text-primary text-24 line-height-1 mb-2">
+              {{ vessel.name }}
             </p>
           </b-col>
           <b-col md="3">
@@ -89,6 +89,7 @@
                     id="date_of_inspection"
                     v-model="form.date_of_inspection"
                     class="mb-2"
+                    :max="max"
                     placeholder="Date Of Inspection"
                   ></b-form-datepicker>
                   <b-alert
@@ -206,71 +207,77 @@
                 >
                   <b-tabs content-class="mt-3" align="center">
                     <b-tab
-                      v-for="(viqChapter, at) in viqChapters"
+                       v-for="(viqChapter, at) in viqChapters"
                       :key="`viqChapter${at}`"
-                      :title="`Chapter ${viqChapter.id}`"
-                      active
+                      :title="`${viqChapter.description}`"
                     >
-                      <vue-good-table
-                        :columns="columns"
-                        :line-numbers="true"
-                        :search-options="{
-                          enabled: false,
-                          placeholder: 'Search this table',
-                        }"
-                        :pagination-options="{
-                          enabled: true,
-                          mode: 'records',
-                        }"
-                        styleClass="tableOne vgt-table"
-                        :rows="viqChapterDetails1"
-                      >
-                        <div
-                          slot="table-actions-bottom"
-                          class="mb-1 mr-2 mt-3 pull-right"
-                        >
-                          <b-button
-                            variant="primary"
-                            class="btn-rounded d-none d-sm-block"
-                            @click="addEmptyVIQChapter(viqChapter.id)"
-                            ><i class="i-Add text-white mr-2"></i>Add Row
-                          </b-button>
-                        </div>
-
-                        <template slot="table-row" slot-scope="props">
-                          <span v-if="props.column.field == 'sr_no'">
-                            <b-button
-                              variant="primary"
-                              class="btn-rounded d-none d-sm-block"
-                              @click="
-                                deleteVIQChapter(
-                                  viqChapter.id,
-                                  props.row.originalIndex
-                                )
-                              "
-                              >X
-                            </b-button>
-                          </span>
-                          <span v-if="props.column.field == 'serial_no'">
-                            <b-form-input
-                              class="mb-2"
-                              label="Serial No"
-                              v-model="props.row.serial_no"
-                              placeholder="Enter Serial No"
-                            >
-                            </b-form-input>
-                          </span>
-                          <span v-if="props.column.field == 'details'">
-                            <b-form-input
-                              class="mb-2"
-                              label="Details"
-                              v-model="props.row.details"
-                              placeholder="Enter Details"
-                            >
-                            </b-form-input>
-                          </span>
-                        </template>
-                      </vue-good-table>
+                      <table class="table table-strip">
+                        <thead>
+                          <tr>
+                            <th>Sr No</th>
+                            <th>VIQ No</th>
+                            <th>Observation Details</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr
+                            v-for="(
+                              viqChapterDetail, vqcd
+                            ) in viqChapterDetailArrays[at]"
+                            :key="`viqChapterDetailArray${vqcd}`"
+                          >
+                            <td>
+                              <div class="row">
+                                <div class="col-md-6">{{ vqcd + 1 }}</div>
+                                <div class="col-md-6">
+                                  <b-button
+                                    variant="primary"
+                                    class="btn-rounded d-none d-sm-block"
+                                    @click="
+                                      deleteVIQChapter(viqChapter.id, vqcd)
+                                    "
+                                    >X
+                                  </b-button>
+                                </div>
+                              </div>
+                            </td>
+                            <td>
+                              <b-form-input
+                                class="mb-2"
+                                label="Viq No"
+                                v-model="viqChapterDetail.viq_no"
+                                placeholder="Enter Viq No"
+                              >
+                              </b-form-input>
+                            </td>
+                            <td>
+                              <b-form-input
+                                class="mb-2"
+                                label="Observation"
+                                v-model="viqChapterDetail.observation"
+                                placeholder="Enter Observation"
+                              >
+                              </b-form-input>
+                            </td>
+                          </tr>
+                        </tbody>
+                        <tfoot>
+                          <tr>
+                            <td></td>
+                            <td></td>
+                            <td>
+                              <b-button
+                                style="float: right"
+                                variant="primary"
+                                class="btn-rounded d-none d-sm-block"
+                                @click="addEmptyVIQChapter(viqChapter.id)"
+                                ><i class="i-Add text-white mr-2"></i
+                                >Add Row
+                              </b-button>
+                            </td>
+                          </tr>
+                        </tfoot>
+                      </table>
                     </b-tab>
                   </b-tabs>
                 </b-card>
@@ -308,6 +315,10 @@ export default {
     title: "SIRE Inspection | Create",
   },
   data() {
+    const now = new Date();
+    const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    // const minDate = new Date(today);
+    const maxDate = new Date(today);
     return {
       form: {
         vessel_id: 2,
@@ -319,6 +330,12 @@ export default {
         other_type: "",
         address: "",
       },
+      max: maxDate,
+      viqChapterDetail: {
+        viq_no: "",
+        observation: "",
+      },
+      sireDetails: [],
       searchOilMajor: "",
       selectedOilMajor: [],
       OilMajorItems: [],
@@ -346,13 +363,8 @@ export default {
       ],
 
       viqChapters: [],
-      viqChapterDetails1: [
-        {
-          id: 1,
-          serial_no: "23",
-          details: "details",
-        },
-      ],
+      viqChapterDetails: [],
+      viqChapterDetailArrays: [],
       columns: [
         {
           label: "Sr No",
@@ -363,7 +375,7 @@ export default {
           field: "viq_no",
         },
         {
-          label: "Observation",
+          label: "Observation Details",
           field: "observation",
         },
       ],
@@ -433,6 +445,8 @@ export default {
       this.oil_major = this.form.oil_major;
       this.inspector = this.form.inspector;
 
+      this.sireDetails = this.form.sire_inspection_details
+
       this.selectedPort.push({
         id: this.port.id,
         text: this.port.description,
@@ -453,7 +467,7 @@ export default {
 
       let vessel = await axios.get(`/vessels/${this.$route.params.vessel_id}`);
       this.vessel = vessel.data.data;
-      console.log(this.vessel);
+      // console.log(this.vessel);
       // this.program = form.data.data.program;
       this.isLoading = false;
     },
@@ -491,16 +505,24 @@ export default {
         });
       });
 
-      masters.viqChapters.forEach((viqChapter) => {
+     masters.viqChapters.forEach((viqChapter) => {
         this.viqChapters.push({
           id: viqChapter.id,
-          text: viqChapter.chapter_name,
+          description: viqChapter.chapter_name,
         });
       });
-      this.viqChapters.forEach((chapter) => {
-        let name = "viqChapterDetails" + chapter.id;
-        this[name] = [];
+
+      this.viqChapters.forEach((viq) => {
+        let viqChapterDetails = "viqChapterDetails" + viq.id;
+        this[viqChapterDetails] = [];
+        this[viqChapterDetails].push({
+          id: viq.id,
+          viq_chapter_id: viq.id,
+        });
+
+        this.viqChapterDetailArrays.push(this[viqChapterDetails]);
       });
+      // console.log(this.viqChapterDetailArrays);
       this.isLoading = false;
     },
     addEmptyVIQChapter(Chapter) {
@@ -533,6 +555,7 @@ export default {
       if (this.selectedInspectionName[0]) {
         this.form.inspector_id = this.selectedInspectionName[0].id;
       }
+      this.form.sire_inspection_details = this.sire_inspection_details;
       this.$v.$touch();
       if (this.$v.$invalid) {
         this.submitStatus = "ERROR";
@@ -541,6 +564,14 @@ export default {
         try {
           this.isLoading = true;
           this.submitStatus = "PENDING";
+          this.sire_inspection_details = [];
+          this.viqChapterDetailArrays.forEach((Chp) => {
+            Chp.forEach((details) => {
+              this.sire_inspection_details.push(details);
+            });
+          });
+          // console.log(this.sire_inspection_details);
+          this.form.sire_inspection_details = this.sire_inspection_details;
           // console.log(this.form);
           let sire_inspection = await axios.post(
             `/vessels/${this.$route.params.vessel_id}/sire_inspections/${this.$route.params.id}`,

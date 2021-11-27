@@ -163,6 +163,19 @@ const routes = [
             path: ":id",
             component: () => import("./views/app/sire-inspections/id"),
           },
+          
+        ],
+      },
+      {
+        path: "/app/vessels/:vessel_id/sire-inspections-view/",
+        component: () => import("./views/app/sire-inspections"),
+        redirect: "/app/vessels/:vessel_id/sire-inspections-view/",
+        children: [
+          {
+            path: ":id",
+            component: () => import("./views/app/sire-inspections/view"),
+          },
+          
         ],
       },
       // Near Misses
