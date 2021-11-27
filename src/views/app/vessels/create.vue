@@ -16,13 +16,13 @@
                     v-model.trim="$v.form.serial_no.$model"
                   >
                   </b-form-input>
-                  <b-alert
+                  <!-- <b-alert
                     show
                     variant="danger"
                     class="error mt-1"
                     v-if="!$v.form.serial_no.required"
                     >Field is required</b-alert
-                  >
+                  > -->
                   <b-alert
                     show
                     variant="danger"
@@ -45,8 +45,8 @@
                     show
                     variant="danger"
                     class="error mt-1"
-                    v-if="!$v.form.name.required"
-                    >Field is required</b-alert
+                    v-if="!$v.form.name.alphaNum"
+                    >Only AlphaNumeric values</b-alert
                   >
                 </b-form-group>
               </b-col>
@@ -61,14 +61,13 @@
                     v-model.trim="$v.form.imo_no.$model"
                   >
                   </b-form-input>
-
-                  <b-alert
+                  <!-- <b-alert
                     show
                     variant="danger"
                     class="error mt-1"
                     v-if="!$v.form.imo_no.required"
                     >Field is required</b-alert
-                  >
+                  > -->
                   <b-alert
                     show
                     variant="danger"
@@ -136,23 +135,39 @@
                   <b-form-input
                     class="mb-2"
                     label="Summer DWT"
-                    placeholder="Enter Summer DWT"
+                    placeholder="Enter Summer DWT in Metric Tons"
                     v-model.trim="$v.form.dwt.$model"
                   >
                   </b-form-input>
-                  <b-alert
+                  <b-form-text id="input-live-help">in Metric Tons</b-form-text>
+                  <!-- <b-alert
                     show
                     variant="danger"
                     class="error mt-1"
                     v-if="!$v.form.dwt.required"
                     >Field is required</b-alert
-                  >
-                  <b-alert
+                  > -->
+                  <!-- <b-alert
                     show
                     variant="danger"
                     class="error mt-1"
                     v-if="!$v.form.dwt.numeric"
                     >Only Numeric Value</b-alert
+                  > -->
+                  <b-alert
+                    show
+                    variant="danger"
+                    class="error mt-1"
+                    v-if="!$v.form.dwt.decimal"
+                    >Only Numeric Value</b-alert
+                  >
+                  <b-alert
+                    show
+                    variant="danger"
+                    class="error mt-1"
+                    v-if="!$v.form.dwt.maxLength"
+                    >Summer DWT should have
+                    {{ $v.form.dwt.$params.maxLength.max }} Digits.</b-alert
                   >
                 </b-form-group>
               </b-col>
@@ -175,7 +190,7 @@
                     id="management_in_date"
                     v-model="form.management_in_date"
                     class="mb-2"
-                    :max="max"
+                    :min="form.built_date"
                     placeholder="Management IN Date"
                   ></b-form-datepicker>
                 </b-form-group>
@@ -186,7 +201,7 @@
                     id="management_out_date"
                     v-model="form.management_out_date"
                     class="mb-2"
-                    :max="max"
+                    :min="form.management_in_date"
                     placeholder="Management OUT Date"
                   ></b-form-datepicker>
                 </b-form-group>
@@ -207,13 +222,13 @@
                       <b-form-text id="input-live-help"
                         >No. Of Deck Officers</b-form-text
                       >
-                      <b-alert
+                      <!-- <b-alert
                         show
                         variant="danger"
                         class="error mt-1"
                         v-if="!$v.form.no_of_deck_officers.required"
                         >Field is required</b-alert
-                      >
+                      > -->
                       <b-alert
                         show
                         variant="danger"
@@ -233,13 +248,13 @@
                       <b-form-text id="input-live-help"
                         >No. Of Engine Officers</b-form-text
                       >
-                      <b-alert
+                      <!-- <b-alert
                         show
                         variant="danger"
                         class="error mt-1"
                         v-if="!$v.form.no_of_engine_officers.required"
                         >Field is required</b-alert
-                      >
+                      > -->
                       <b-alert
                         show
                         variant="danger"
@@ -265,13 +280,13 @@
                       <b-form-text id="input-live-help"
                         >No. Of Deck Rating</b-form-text
                       >
-                      <b-alert
+                      <!-- <b-alert
                         show
                         variant="danger"
                         class="error mt-1"
                         v-if="!$v.form.no_of_deck_rating.required"
                         >Field is required</b-alert
-                      >
+                      > -->
                       <b-alert
                         show
                         variant="danger"
@@ -291,13 +306,13 @@
                       <b-form-text id="input-live-help"
                         >No. Of Engine Rating</b-form-text
                       >
-                      <b-alert
+                      <!-- <b-alert
                         show
                         variant="danger"
                         class="error mt-1"
                         v-if="!$v.form.no_of_engine_rating.required"
                         >Field is required</b-alert
-                      >
+                      > -->
                       <b-alert
                         show
                         variant="danger"
@@ -317,13 +332,13 @@
                       <b-form-text id="input-live-help"
                         >No. Of Galley Rating</b-form-text
                       >
-                      <b-alert
+                      <!-- <b-alert
                         show
                         variant="danger"
                         class="error mt-1"
                         v-if="!$v.form.no_of_galley_rating.required"
                         >Field is required</b-alert
-                      >
+                      > -->
                       <b-alert
                         show
                         variant="danger"
@@ -396,8 +411,10 @@
 import axios from "axios";
 import {
   numeric,
-  required,
+  // required,
+  alphaNum,
   minLength,
+  decimal,
   maxLength,
 } from "vuelidate/lib/validators";
 export default {
@@ -451,41 +468,43 @@ export default {
   validations: {
     form: {
       serial_no: {
-        required,
+        // required,
         numeric,
       },
       dwt: {
-        required,
-        numeric,
+        // required,
+        decimal,
+        // numeric,
+        maxLength: maxLength(7),
       },
       imo_no: {
-        required,
+        // required,
         numeric,
         minLength: minLength(7),
         maxLength: maxLength(7),
       },
       no_of_deck_officers: {
-        required,
+        // required,
         numeric,
       },
       no_of_engine_officers: {
-        required,
+        // required,
         numeric,
       },
       no_of_deck_rating: {
-        required,
+        // required,
         numeric,
       },
       no_of_engine_rating: {
-        required,
+        // required,
         numeric,
       },
       no_of_galley_rating: {
-        required,
+        // required,
         numeric,
       },
       name: {
-        required,
+        alphaNum,
       },
     },
   },
