@@ -120,6 +120,10 @@ const routes = [
             component: () => import("./views/app/vessels/create"),
           },
           {
+            path: "view/:id",
+            component: () => import("./views/app/vessels/view"),
+          },
+          {
             path: ":id",
             component: () => import("./views/app/vessels/id"),
           },
