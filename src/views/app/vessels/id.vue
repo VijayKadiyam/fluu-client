@@ -1,6 +1,6 @@
 <template>
   <div class="main-content">
-    <breadcumb :page="'Update User'" :folder="'Users'" />
+    <breadcumb :page="'Update Vessel'" :folder="'Vessels'" />
     <b-row>
       <b-col md="12">
         <b-card title="Vessel">
