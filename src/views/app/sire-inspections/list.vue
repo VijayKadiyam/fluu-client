@@ -50,6 +50,8 @@
       >
         <div slot="table-actions" class="mb-3">
           <b-button
+            v-b-tooltip.hover
+            title="Add Sire Inspcteion"
             variant="primary"
             class="btn-rounded d-none d-sm-block"
             :to="'/app/vessels/' + vessel.id + '/sire-inspections/create'"
@@ -59,18 +61,39 @@
         </div>
 
         <template slot="table-row" slot-scope="props">
-          <span v-if="props.column.field == 'button'">
-            <a
-              :href="
-                '/app/vessels/' +
+          <span v-if="props.column.field == 'button'" class="row">
+            <div class="col-md-6">
+              <a
+                v-b-tooltip.hover
+                title="View Sire Inspcteion"
+                :href="
+                  '/app/vessels/' +
+                  props.row.vessel_id +
+                  '/sire-inspections-view/' +
+                  props.row.id
+                "
+                class="btn btn-primary btn-rounded d-none d-sm-block"
+              >
+                <i class="i-Eye text-white mr-2"> </i>Info
+                {{ props.row.button }}</a
+              >
+            </div>
+            <div class="com-md-6">
+              <a
+                v-b-tooltip.hover
+                title="Edit Sire Inspcteion"
+                :href="
+                  '/app/vessels/' +
                   props.row.vessel_id +
                   '/sire-inspections/' +
                   props.row.id
-              "
-            >
-              <i class="i-Eraser-2 text-25 text-success mr-2"></i>
-              {{ props.row.button }}</a
-            >
+                "
+                class="btn btn-primary btn-rounded d-none d-sm-block"
+              >
+                <i class="i-Eraser-2 text-white mr-2"> </i>Edit
+                {{ props.row.button }}</a
+              >
+            </div>
             <!-- <a href="">
               <i class="i-Close-Window text-25 text-danger"></i>
               {{ props.row.button }}</a

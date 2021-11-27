@@ -87,6 +87,9 @@
           <span v-if="props.column.field == 'is_deficiency_closed'">
             {{ props.row.is_deficiency_closed == 1 ? "Yes" : "No" }}
           </span>
+          <span v-if="props.column.field == 'no_of_deficiencies'">
+            {{ props.row.no_of_deficiencies }}
+          </span>
         </template>
       </vue-good-table>
     </b-card>
@@ -116,8 +119,8 @@ export default {
           field: "is_detained",
         },
         {
-          label: "No Of Deficieny",
-          field: "country",
+          label: "No Of Closed Deficiency",
+          field: "no_of_deficiencies",
         },
         {
           label: "Deficiency Closed Status",

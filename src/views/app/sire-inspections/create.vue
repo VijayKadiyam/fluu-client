@@ -6,15 +6,15 @@
       <div class="content">
         <b-row>
           <b-col md="3">
-            <p class="text-muted mt-2 mb-0">Vessel Name</p>
-            <p class="text-primary text-24 line-height-1 mb-2">
-              {{ vessel.name }}
-            </p>
-          </b-col>
-          <b-col md="3">
             <p class="text-muted mt-2 mb-0">Serial No</p>
             <p class="text-primary text-24 line-height-1 mb-2">
               {{ vessel.serial_no }}
+            </p>
+          </b-col>
+          <b-col md="3">
+            <p class="text-muted mt-2 mb-0">Vessel Name</p>
+            <p class="text-primary text-24 line-height-1 mb-2">
+              {{ vessel.name }}
             </p>
           </b-col>
           <b-col md="3">
@@ -87,6 +87,7 @@
                     id="date_of_inspection"
                     v-model="form.date_of_inspection"
                     class="mb-2"
+                    :max="max"
                     placeholder="Date Of Inspection"
                   ></b-form-datepicker>
                   <b-alert
@@ -214,14 +215,14 @@
                     <b-tab
                       v-for="(viqChapter, at) in viqChapters"
                       :key="`viqChapter${at}`"
-                      :title="`${viqChapter.description + ' ' + viqChapter.id}`"
+                      :title="`${viqChapter.description}`"
                     >
                       <table class="table table-strip">
                         <thead>
                           <tr>
                             <th>Sr No</th>
                             <th>VIQ No</th>
-                            <th>Observation</th>
+                            <th>Observation Details</th>
                           </tr>
                         </thead>
                         <tbody>
@@ -276,8 +277,7 @@
                                 variant="primary"
                                 class="btn-rounded d-none d-sm-block"
                                 @click="addEmptyVIQChapter(viqChapter.id)"
-                                ><i class="i-Add text-white mr-2"></i
-                                >{{ viqChapter.id }}Add Row
+                                ><i class="i-Add text-white mr-2"></i>Add Row
                               </b-button>
                             </td>
                           </tr>
@@ -320,6 +320,10 @@ export default {
     title: "SIRE Inspection | Create",
   },
   data() {
+    const now = new Date();
+    const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    // const minDate = new Date(today);
+    const maxDate = new Date(today);
     return {
       form: {
         vessel_id: "",
@@ -331,6 +335,7 @@ export default {
         other_type: "",
         address: "",
       },
+      max: maxDate,
       viqChapterDetail: {
         viq_no: "",
         observation: "",
@@ -363,13 +368,6 @@ export default {
       viqChapters: [],
       viqChapterDetails: [],
       viqChapterDetailArrays: [],
-      // viqChapterDetails: [
-      //   {
-      //     id: 1,
-      //     viq_no: "",
-      //     observation: "",
-      //   },
-      // ],
 
       columns: [
         {
@@ -381,7 +379,7 @@ export default {
           field: "viq_no",
         },
         {
-          label: "Observation",
+          label: "Observation Details",
           field: "observation",
         },
       ],
@@ -395,30 +393,12 @@ export default {
       date_of_inspection: {
         required,
       },
-      // inspector_id: {
-      //   required,
-      // },
-      // oil_major: {
-      //   required,
-      // },
       total_observations: {
         required,
         numeric,
       },
     },
   },
-  //   computed: {
-  //     things() {
-  //       this.viqChapters.forEach((viq) => {
-  //         // console.log(viq);
-  //         let name = "viqChapterDetails" + viq.id;
-  //         this.name = name
-  //         // this[name] = [];
-  //       // console.log(this[name]);
-  //       });
-  //         return this.$data[this.name];
-  //     }
-  // },
   mounted() {
     this.getMasters();
     this.form.vessel_id = this.$route.params.vessel_id;
@@ -511,10 +491,6 @@ export default {
         try {
           this.isLoading = true;
           this.submitStatus = "PENDING";
-
-          // console.log(this.viqChapterDetailArrays);
-
-          // this.viqChapterDetailArrays.flat(Infinity);
           this.sire_inspection_details = [];
           this.viqChapterDetailArrays.forEach((Chp) => {
             Chp.forEach((details) => {
