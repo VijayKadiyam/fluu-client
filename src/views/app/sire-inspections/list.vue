@@ -62,27 +62,27 @@
 
         <template slot="table-row" slot-scope="props">
           <span v-if="props.column.field == 'button'" class="row">
-            <div class="col-md-6">
-              <a
+            <b-col md="6">
+              <router-link
                 v-b-tooltip.hover
                 title="View Sire Inspcteion"
-                :href="
+                :to="
                   '/app/vessels/' +
                   props.row.vessel_id +
-                  '/sire-inspections-view/' +
+                  '/sire-inspections/view/' +
                   props.row.id
                 "
                 class="btn btn-primary btn-rounded d-none d-sm-block"
               >
-                <i class="i-Eye text-white mr-2"> </i>Info
-                {{ props.row.button }}</a
+                <i class="i-Eye text-white mr-2"> </i>View
+                {{ props.row.button }}</router-link
               >
-            </div>
-            <div class="com-md-6">
-              <a
+            </b-col>
+            <b-col md="6">
+              <router-link
                 v-b-tooltip.hover
                 title="Edit Sire Inspcteion"
-                :href="
+                :to="
                   '/app/vessels/' +
                   props.row.vessel_id +
                   '/sire-inspections/' +
@@ -91,9 +91,9 @@
                 class="btn btn-primary btn-rounded d-none d-sm-block"
               >
                 <i class="i-Eraser-2 text-white mr-2"> </i>Edit
-                {{ props.row.button }}</a
+                {{ props.row.button }}</router-link
               >
-            </div>
+            </b-col>
             <!-- <a href="">
               <i class="i-Close-Window text-25 text-danger"></i>
               {{ props.row.button }}</a
@@ -110,19 +110,19 @@
             {{ props.row.oil_major.description }}
           </span> -->
           <span v-if="props.column.field == 'inspector'">
-            {{ props.row.inspector.user_name }}
+            {{ props.row.inspector.user_name ? props.row.inspector.user_name: '' }}
           </span>
           <span v-if="props.column.field == 'date_of_inspection'">
-            {{ props.row.date_of_inspection }}
+            {{ props.row.date_of_inspection ? props.row.date_of_inspection : '' }}
           </span>
           <span v-if="props.column.field == 'country'">
-            {{ props.row.country.description }}
+            {{ props.row.country.description ? props.row.country.description : ''}}
           </span>
           <span v-if="props.column.field == 'port'">
-            {{ props.row.port.description }}
+            {{ props.row.port.description  ? props.row.port.description : ''}}
           </span>
           <span v-if="props.column.field == 'total_observations'">
-            {{ props.row.total_observations }}
+            {{ props.row.total_observations  ? props.row.total_observations : ''}}
           </span>
         </template>
       </vue-good-table>
