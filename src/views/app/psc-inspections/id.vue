@@ -192,12 +192,12 @@
               </b-col>
             </b-row>
             <div
-              v-if="
+            >
+              <!-- v-if="
                 form.is_deficiency_closed == 1 &&
                   form.no_of_issued_deficiencies ==
                     form.no_of_closed_deficiencies
-              "
-            >
+              " -->
               <div
                 v-for="(deficiency_detail, dd) in deficiency_details"
                 :key="`deficiency_detail${dd}`"
