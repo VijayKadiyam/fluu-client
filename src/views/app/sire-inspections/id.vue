@@ -498,7 +498,7 @@ export default {
       let vessel = await axios.get(`/vessels/${this.$route.params.vessel_id}`);
       this.vessel = vessel.data.data;
 
-      this.viqChapterDetailArrays = this.form.sire_inspection_details;
+      // this.viqChapterDetailArrays = this.form.sire_inspection_details;
 
       this.port = this.form.port;
       this.country = this.form.country;
