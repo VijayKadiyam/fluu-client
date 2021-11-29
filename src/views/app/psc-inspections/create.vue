@@ -87,31 +87,70 @@
             </b-row>
             <b-row>
               <b-col md="4">
-                <b-form-group label="No. Of Closed Deficiency">
+                <b-form-group label="No. Of Issued Deficiency">
                   <b-form-input
                     class="mb-2"
-                    label="No. Of Deficiency"
-                    placeholder="Enter No. Of Deficiency"
-                    @change="Deficiency(parseInt(form.no_of_deficiencies))"
-                    v-model.trim="$v.form.no_of_deficiencies.$model"
+                    label="No. Of Issued Deficiency"
+                    placeholder="Enter No. Of Issued Deficiency"
+                    v-model.trim="$v.form.no_of_issued_deficiencies.$model"
                   >
+                    <!-- @change="Deficiency(parseInt(form.no_of_closed_deficiencies))" -->
                   </b-form-input>
                   <b-alert
                     show
                     variant="danger"
                     class="error mt-1"
-                    v-if="!$v.form.no_of_deficiencies.required"
+                    v-if="!$v.form.no_of_issued_deficiencies.required"
                     >Field is required</b-alert
                   >
                   <b-alert
                     show
                     variant="danger"
                     class="error mt-1"
-                    v-if="!$v.form.no_of_deficiencies.numeric"
+                    v-if="!$v.form.no_of_issued_deficiencies.numeric"
                     >Only Numeric Value</b-alert
                   >
                 </b-form-group>
               </b-col>
+              <b-col md="4">
+                <b-form-group label="No. Of Closed Deficiency">
+                  <b-form-input
+                    class="mb-2"
+                    label="No. Of Deficiency"
+                    placeholder="Enter No. Of Deficiency"
+                    @change="
+                      Deficiency(parseInt(form.no_of_closed_deficiencies))
+                    "
+                    v-model.trim="$v.form.no_of_closed_deficiencies.$model"
+                  >
+                  </b-form-input>
+                  <b-alert
+                    show
+                    variant="danger"
+                    class="error mt-1"
+                    v-if="!$v.form.no_of_closed_deficiencies.required"
+                    >Field is required</b-alert
+                  >
+                  <b-alert
+                    show
+                    variant="danger"
+                    class="error mt-1"
+                    v-if="!$v.form.no_of_closed_deficiencies.numeric"
+                    >Only Numeric Value</b-alert
+                  >
+                </b-form-group>
+              </b-col>
+              <b-col md="4">
+                <b-form-group label="Report">
+                  <b-form-file
+                    id="file-default"
+                    name="report"
+                    ref="report"
+                  ></b-form-file>
+                </b-form-group>
+              </b-col>
+            </b-row>
+            <b-row>
               <b-col md="4">
                 <b-form-group label="Is Detained">
                   <b-row>
@@ -129,18 +168,13 @@
                   </b-row>
                 </b-form-group>
               </b-col>
-              <b-col md="4">
-                <b-form-group label="Report">
-                  <b-form-file
-                    id="file-default"
-                    name="report"
-                    ref="report"
-                  ></b-form-file>
-                </b-form-group>
-              </b-col>
-            </b-row>
-            <b-row>
-              <b-col md="6">
+              <b-col
+                md="6"
+                v-if="
+                  form.no_of_issued_deficiencies ==
+                    form.no_of_closed_deficiencies
+                "
+              >
                 <b-form-group label="Is Deficieny Closed">
                   <b-row>
                     <b-col md="8">
@@ -158,42 +192,96 @@
                 </b-form-group>
               </b-col>
             </b-row>
-            <div v-if="form.is_deficiency_closed == 1">
-              <b-row
+            <div>
+              <!-- v-if="
+                form.is_deficiency_closed == 1 &&
+                  form.no_of_issued_deficiencies ==
+                    form.no_of_closed_deficiencies
+              " -->
+              <div
                 v-for="(deficiency_detail, dd) in deficiency_details"
                 :key="`deficiency_detail${dd}`"
               >
-                <b-col md="4">
-                  <b-form-group label="Date Of Closure">
-                    <b-form-datepicker
-                      :id="`date_of_closure${dd}`"
-                      v-model="deficiency_detail.date_of_closure"
-                      class="mb-2"
-                      placeholder="Date Of Closure"
-                    ></b-form-datepicker>
-                  </b-form-group>
-                </b-col>
-                <b-col md="4">
-                  <b-form-group label="Details">
-                    <b-form-input
-                      class="mb-2"
-                      label="Details"
-                      placeholder="Enter Details"
-                      v-model.trim="deficiency_detail.details"
-                    >
-                    </b-form-input>
-                  </b-form-group>
-                </b-col>
-                <b-col md="4">
-                  <b-form-group label="Evidence">
-                    <b-form-file
-                      :id="`evidence${dd}`"
-                      name="evidence"
-                      ref="evidence"
-                    ></b-form-file>
-                  </b-form-group>
-                </b-col>
-              </b-row>
+                <b-row>
+                  <b-col md="4">
+                    <b-row>
+                      <b-col md="2">
+                        <span> {{ dd + 1 }} ).</span>
+                      </b-col>
+                      <b-col md="10">
+                        <b-form-group label="Date Of Closure">
+                          <b-form-datepicker
+                            :id="`date_of_closure${dd}`"
+                            v-model="deficiency_detail.date_of_closure"
+                            class="mb-2"
+                            :max="max"
+                            placeholder="Date Of Closure"
+                          ></b-form-datepicker>
+                        </b-form-group>
+                      </b-col>
+                    </b-row>
+                  </b-col>
+                  <b-col md="4">
+                    <b-form-group label="Details">
+                      <b-form-input
+                        class="mb-2"
+                        label="Details"
+                        placeholder="Enter Details"
+                        v-model.trim="deficiency_detail.details"
+                      >
+                      </b-form-input>
+                    </b-form-group>
+                  </b-col>
+                  <b-col md="4">
+                    <b-form-group label="Evidence 1">
+                      <b-form-file
+                        :id="`evidence_a${dd}`"
+                        name="evidence_a"
+                        ref="evidence_a"
+                      ></b-form-file>
+                    </b-form-group>
+                  </b-col>
+                </b-row>
+                <b-row>
+                  <b-col md="4">
+                    <b-row>
+                      <b-col md="2"> </b-col>
+                      <b-col md="10">
+                        <b-form-group label="Evidence 2">
+                          <b-form-file
+                            :id="`evidence_b${dd}`"
+                            name="evidence_b"
+                            ref="evidence_b"
+                          ></b-form-file>
+                        </b-form-group>
+                      </b-col>
+                    </b-row>
+                  </b-col>
+                  <b-col md="4">
+                    <b-form-group label="Evidence 3">
+                      <b-form-file
+                        :id="`evidence_c${dd}`"
+                        name="evidence_c"
+                        ref="evidence_c"
+                      ></b-form-file>
+                    </b-form-group>
+                  </b-col>
+                  <b-col md="4">
+                    <b-form-group label="Evidence 4">
+                      <b-form-file
+                        :id="`evidence_d${dd}`"
+                        name="evidence_d"
+                        ref="evidence_d"
+                      ></b-form-file>
+                    </b-form-group>
+                  </b-col>
+                </b-row>
+                <br />
+                <div class="divider">
+                  <span></span>
+                </div>
+                <br />
+              </div>
             </div>
             <b-button
               type="submit"
@@ -221,6 +309,7 @@
 <script>
 import axios from "axios";
 import { numeric, required } from "vuelidate/lib/validators";
+// import { numeric, required, maxValue } from "vuelidate/lib/validators";
 export default {
   metaInfo: {
     // if no subcomponents specify a metaInfo.title, this title will be used
@@ -235,19 +324,18 @@ export default {
       form: {
         vessel_id: "",
         date: "",
-        no_of_deficiencies: 0,
+        no_of_closed_deficiencies: 0,
+        // no_of_closed_deficiencies: {
+        //  maxValue: maxValue(this.maxValue)
+        // },
         is_detained: 0,
         is_deficiency_closed: 0,
+        no_of_issued_deficiencies: 0,
         // deficiency_details:{},
       },
-      max:maxDate,
-      deficiency_details: [
-        {
-          date_of_closure: "",
-          details: "",
-          evidence: "",
-        },
-      ],
+      maxValue: 3,
+      max: maxDate,
+      deficiency_details: [],
       // deficiency_count:0,
       portItems: [],
       searchPort: "",
@@ -266,7 +354,11 @@ export default {
       date: {
         required,
       },
-      no_of_deficiencies: {
+      no_of_closed_deficiencies: {
+        required,
+        numeric,
+      },
+      no_of_issued_deficiencies: {
         required,
         numeric,
       },
@@ -289,7 +381,7 @@ export default {
         // this.deficiency_count=parseInt(number);
         for (let b = current_len; b < number; b++) {
           this.$set(this.deficiency_details, b, {
-            id: b,
+            D_id: b,
           });
         }
       } else {
@@ -388,11 +480,20 @@ export default {
         let deficiency_id = dd.id;
         let d_id = "deficiency_id" + index;
 
-        let evidencepath = this.$refs.evidence[index].files[0];
-        let path_name = "evidencepath" + index;
+        let evidencepath_A = this.$refs.evidence_a[index].files[0];
+        let evidencepath_A_name = "evidencepath_A_" + index;
+        let evidencepath_B = this.$refs.evidence_b[index].files[0];
+        let evidencepath_B_name = "evidencepath_B_" + index;
+        let evidencepath_C = this.$refs.evidence_c[index].files[0];
+        let evidencepath_C_name = "evidencepath_C_" + index;
+        let evidencepath_D = this.$refs.evidence_d[index].files[0];
+        let evidencepath_D_name = "evidencepath_D_" + index;
 
         formData.append(d_id, deficiency_id);
-        formData.append(path_name, evidencepath);
+        formData.append(evidencepath_A_name, evidencepath_A);
+        formData.append(evidencepath_B_name, evidencepath_B);
+        formData.append(evidencepath_C_name, evidencepath_C);
+        formData.append(evidencepath_D_name, evidencepath_D);
         evidence_count++;
       });
       formData.append("evidence_count", evidence_count);
@@ -412,7 +513,7 @@ export default {
   },
   computed: {
     deficiency_count() {
-      let deficiency_count = parseInt(this.form.no_of_deficiencies);
+      let deficiency_count = parseInt(this.form.no_of_closed_deficiencies);
       return deficiency_count;
     },
     filteredPortItems() {
