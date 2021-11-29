@@ -20,41 +20,72 @@
         <div slot="table-actions" class="mb-3">
           <router-link to="/app/vessels/create">
             <b-button variant="primary" class="btn-rounded d-none d-sm-block"
-              ><i class="i-Add text-white mr-2"> Add Vessel</i>
+              ><i class="i-Add text-white mr-2"> </i>Add Vessel
             </b-button>
           </router-link>
         </div>
 
         <template slot="table-row" slot-scope="props">
           <div v-if="props.column.field == 'button'">
-            <router-link :to="'/app/vessels/' + props.row.id">
-              <i class="i-Eraser-2 text-25 text-success mr-2"></i>
-              {{ props.row.button }}</router-link
-            >
-            <!-- <a :href="'/app/vessels/' + props.row.id +'/psc-inspections'">
-              <i class="i-Add text-25 text-success mr-2"></i>
-              </a
-            > -->
-            <b-dropdown
-              variant="primary"
-              id="dropdown-1"
-              text="Inspections"
-              class="mb-2"
-            >
-              <b-dropdown-item>
-                <router-link
-                  :to="'/app/vessels/' + props.row.id + '/psc-inspections'"
-                >
-                  PSC Inspection
-                </router-link>
-              </b-dropdown-item>
-              <b-dropdown-item
-                 >
-                 <router-link :to="'/app/vessels/' + props.row.id + '/sire-inspections'">
-                 SIRE / CDI Inspection
-                 </router-link>
-              </b-dropdown-item>
-            </b-dropdown>
+            <b-row>
+              <router-link
+                :to="'/app/vessels/view/' + props.row.id"
+                class="btn btn-primary d-none d-sm-block mb-2 mr-2 "
+                v-b-tooltip.hover title="View Vessel Details"
+              >
+                <i class="i-Eye"></i> VIEW
+              </router-link>
+              <router-link
+                :to="'/app/vessels/' + props.row.id"
+                class="btn btn-primary d-none d-sm-block mb-2 mr-2 "
+                v-b-tooltip.hover title="Edit Vessel Details"
+              >
+                <i class="i-Eraser-2"></i> EDIT
+              </router-link>
+              <b-dropdown
+                variant="primary"
+                id="dropdown-1"
+                text="Inspections"
+                v-b-tooltip.hover title="List of Inspection Type"
+                class="mb-2"
+              >
+                <b-dropdown-item>
+                  <router-link
+                    :to="'/app/vessels/' + props.row.id + '/psc-inspections'"
+                  >
+                    PSC Inspection
+                  </router-link>
+                </b-dropdown-item>
+                <b-dropdown-item>
+                  <router-link
+                    :to="'/app/vessels/' + props.row.id + '/psc-inspections'"
+                  >
+                    FSC Inspection
+                  </router-link>
+                </b-dropdown-item>
+                <b-dropdown-item>
+                  <router-link
+                    :to="'/app/vessels/' + props.row.id + '/psc-inspections'"
+                  >
+                    Terminal Inspection
+                  </router-link>
+                </b-dropdown-item>
+                <b-dropdown-item>
+                  <router-link
+                    :to="'/app/vessels/' + props.row.id + '/psc-inspections'"
+                  >
+                    Charterers Inspection
+                  </router-link>
+                </b-dropdown-item>
+                <b-dropdown-item>
+                  <router-link
+                    :to="'/app/vessels/' + props.row.id + '/sire-inspections'"
+                  >
+                    SIRE / CDI Inspection
+                  </router-link>
+                </b-dropdown-item>
+              </b-dropdown>
+            </b-row>
           </div>
           <span v-if="props.column.field == 'serial_no'">
             {{ props.row.serial_no || "" }}
