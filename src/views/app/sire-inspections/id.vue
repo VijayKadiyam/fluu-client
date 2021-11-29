@@ -108,6 +108,7 @@
                 
               </b-col> -->
             </b-row>
+
             <b-row>
               <b-col md="6">
                 <b-form-group label="Country">
@@ -236,7 +237,9 @@
                             ) in viqChapterDetailArrays[at]"
                             :key="`viqChapterDetailArray${vqcd}`"
                           >
-                            <td>
+                            <td
+                              
+                            >
                               <div class="row">
                                 <div class="col-md-1">{{ vqcd + 1 }}</div>
                                 <div class="col-md-2">
@@ -251,7 +254,9 @@
                                 </div>
                               </div>
                             </td>
-                            <td>
+                            <td
+                              
+                            >
                               <b-form-input
                                 class="mb-2"
                                 label="Viq No"
@@ -260,7 +265,9 @@
                               >
                               </b-form-input>
                             </td>
-                            <td>
+                            <td
+                              
+                            >
                               <b-form-input
                                 class="mb-2"
                                 label="Observation"
@@ -269,7 +276,10 @@
                               >
                               </b-form-input>
                             </td>
-                            <td style="width: 130px">
+                            <td
+                              style="width: 130px"
+                              
+                            >
                               <b-form-group>
                                 <span>No</span>
                                 <label class="switch switch-success mr-2 ml-2">
@@ -282,7 +292,12 @@
                                 <span>Yes</span>
                               </b-form-group>
                             </td>
-                            <td v-if="viqChapterDetail.is_closed == 1">
+                            <td
+                              v-if="
+                                viqChapterDetail.is_closed == 1 &&
+                                viqChapterDetail.viq_chapter_id == viqChapter.id
+                              "
+                            >
                               <b-form-group>
                                 <b-form-datepicker
                                   :id="`date_of_closure${vqcd}`"
@@ -291,7 +306,12 @@
                                 ></b-form-datepicker>
                               </b-form-group>
                             </td>
-                            <td v-if="viqChapterDetail.is_closed == 1">
+                            <td
+                              v-if="
+                                viqChapterDetail.is_closed == 1 &&
+                                viqChapterDetail.viq_chapter_id == viqChapter.id
+                              "
+                            >
                               <b-form-group>
                                 <b-form-file
                                   :id="`evidence${vqcd + `_` + viqChapter.id}`"
@@ -300,7 +320,12 @@
                                 ></b-form-file>
                               </b-form-group>
                             </td>
-                            <td v-if="viqChapterDetail.is_closed == 1">
+                            <td
+                              v-if="
+                                viqChapterDetail.is_closed == 1 &&
+                                viqChapterDetail.viq_chapter_id == viqChapter.id
+                              "
+                            >
                               <b-form-input
                                 class="mb-2"
                                 v-model="viqChapterDetail.remarks"
@@ -498,8 +523,17 @@ export default {
       let vessel = await axios.get(`/vessels/${this.$route.params.vessel_id}`);
       this.vessel = vessel.data.data;
 
-      // this.viqChapterDetailArrays = this.form.sire_inspection_details;
-
+      this.form.sire_inspection_details.forEach((selected) => {
+        let details = this.viqChapterDetailArrays.findIndex((sp) => sp.viq_chapter_id == selected.viq_chapter_id);
+        if(!details) {
+          this.viqChapterDetailArrays[selected.viq_chapter_id -1].push(selected);
+        }else{
+          
+          this.viqChapterDetailArrays[selected.viq_chapter_id -1].push(selected);
+        }
+          // console.log(this.viqChapterDetailArrays[selected.viq_chapter_id]);
+      // this.viqChapterDetailArrays = this.viqChapterDetailArrays[selected.viq_chapter_id]
+      });
       this.port = this.form.port;
       this.country = this.form.country;
       this.oil_major = this.form.oil_major;
@@ -576,6 +610,11 @@ export default {
         // this[viqChapterDetails].push({
         //   id: viq.id,
         //   viq_chapter_id: viq.id,
+        //   viq_no: viq.viq_no,
+        //   observation: viq.observation,
+        //   is_closed: viq.is_closed,
+        //   date_of_closure: viq.date_of_closure,
+        //   remarks: viq.remarks,
         // });
 
         this.viqChapterDetailArrays.push(this[viqChapterDetails]);
@@ -585,12 +624,15 @@ export default {
     },
     addEmptyVIQChapter(Chapter) {
       let name = "viqChapterDetails" + Chapter;
-      console.log(this[name]);
       this[name].push({
-        serial_no: "",
-        sire_inspection_id: Chapter,
-        details: "",
-        is_active: 1,
+        viq_no: "",
+        observation: "",
+        viq_chapter_id: Chapter,
+        is_closed: 0,
+        date_of_closure: "",
+        evidence: "",
+        remarks: "",
+        applied: false,
       });
     },
     deleteVIQChapter(Chapter, row) {
@@ -656,6 +698,19 @@ export default {
       let formData = new FormData();
       formData.append("sire_inspection_id", sire_inspection_id);
       formData.append("attachment", attachment);
+      let evidence_count = 0;
+      this.sire_inspection.sire_inspection_details.forEach((dd, index) => {
+        let sire_inspection_detail_id = dd.id;
+        let d_id = "sire_inspection_detail_id" + index;
+        let evidencepath = this.$refs.evidence[index].files[0];
+  // console.log(evidencepath);
+        let path_name = "evidencepath" + index;
+
+        formData.append(d_id, sire_inspection_detail_id);
+        formData.append(path_name, evidencepath);
+        evidence_count++;
+      });
+      formData.append("evidence_count", evidence_count);
       await axios
         .post("upload_sire_inspection_attachment", formData, {
           headers: {
