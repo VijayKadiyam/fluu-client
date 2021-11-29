@@ -64,11 +64,9 @@
                 </b-row>
                 <b-row>
                   <b-col md="4">
-                    <p class="text-muted mt-2 mb-0">Summer Dwt</p>
+                    <p class="text-muted mt-2 mb-0">Summer Dwt (M/T)</p>
                     <p class="text-primary text-24 line-height-1 mb-2">
-                      {{ vessel.dwt }}&nbsp;<b-badge variant="light"
-                        >in Metric Tons</b-badge
-                      >
+                      {{ vessel.dwt }}
                     </p>
                   </b-col>
                   <b-col md="4">
@@ -322,7 +320,7 @@ export default {
   },
   data() {
     return {
-      vessel:{},
+      vessel: {},
       countryItems: [],
 
       searchOfficierNationality: "",

@@ -79,6 +79,41 @@
                 </b-dropdown-item>
                 <b-dropdown-item>
                   <router-link
+                    :to="'/app/vessels/' + props.row.id + '/psc-inspections'"
+                  >
+                    Internal Audit
+                  </router-link>
+                </b-dropdown-item>
+                <b-dropdown-item>
+                  <router-link
+                    :to="'/app/vessels/' + props.row.id + '/psc-inspections'"
+                  >
+                    External Audit
+                  </router-link>
+                </b-dropdown-item>
+                <b-dropdown-item>
+                  <router-link
+                    :to="'/app/vessels/' + props.row.id + '/psc-inspections'"
+                  >
+                    Near Miss / Non Confirmance
+                  </router-link>
+                </b-dropdown-item>
+                <b-dropdown-item>
+                  <router-link
+                    :to="'/app/vessels/' + props.row.id + '/psc-inspections'"
+                  >
+                    Best Practices
+                  </router-link>
+                </b-dropdown-item>
+                <b-dropdown-item>
+                  <router-link
+                    :to="'/app/vessels/' + props.row.id + '/psc-inspections'"
+                  >
+                    Incident / Accident
+                  </router-link>
+                </b-dropdown-item>
+                <b-dropdown-item>
+                  <router-link
                     :to="'/app/vessels/' + props.row.id + '/sire-inspections'"
                   >
                     SIRE / CDI Inspection

@@ -175,7 +175,7 @@
                     form.no_of_closed_deficiencies
                 "
               >
-                <b-form-group label="Is Deficieny Closed">
+                <b-form-group label="Are All Deficienies Closed">
                   <b-row>
                     <b-col md="8">
                       <span>No</span>
@@ -203,12 +203,12 @@
                 :key="`deficiency_detail${dd}`"
               >
                 <b-row>
-                  <b-col md="4">
+                  <b-col md="6">
                     <b-row>
-                      <b-col md="2">
-                        <span> {{ dd + 1 }} ).</span>
+                      <b-col md="1">
+                        <span> {{ dd + 1 }} </span>
                       </b-col>
-                      <b-col md="10">
+                      <b-col md="11">
                         <b-form-group label="Date Of Closure">
                           <b-form-datepicker
                             :id="`date_of_closure${dd}`"
@@ -221,43 +221,43 @@
                       </b-col>
                     </b-row>
                   </b-col>
-                  <b-col md="4">
-                    <b-form-group label="Details">
+                  <b-col md="6">
+                    <b-form-group label="Remarks">
                       <b-form-input
                         class="mb-2"
-                        label="Details"
-                        placeholder="Enter Details"
+                        label="Remarks"
+                        placeholder="Enter Remarks"
                         v-model.trim="deficiency_detail.details"
                       >
                       </b-form-input>
                     </b-form-group>
                   </b-col>
-                  <b-col md="4">
-                    <b-form-group label="Evidence 1">
-                      <b-form-file
-                        :id="`evidence_a${dd}`"
-                        name="evidence_a"
-                        ref="evidence_a"
-                      ></b-form-file>
-                    </b-form-group>
-                  </b-col>
                 </b-row>
                 <b-row>
-                  <b-col md="4">
+                  <b-col md="3">
                     <b-row>
                       <b-col md="2"> </b-col>
                       <b-col md="10">
-                        <b-form-group label="Evidence 2">
+                        <b-form-group label="Evidence 1">
                           <b-form-file
-                            :id="`evidence_b${dd}`"
-                            name="evidence_b"
-                            ref="evidence_b"
+                            :id="`evidence_a${dd}`"
+                            name="evidence_a"
+                            ref="evidence_a"
                           ></b-form-file>
                         </b-form-group>
                       </b-col>
                     </b-row>
                   </b-col>
-                  <b-col md="4">
+                  <b-col md="3">
+                    <b-form-group label="Evidence 2">
+                      <b-form-file
+                        :id="`evidence_b${dd}`"
+                        name="evidence_b"
+                        ref="evidence_b"
+                      ></b-form-file>
+                    </b-form-group>
+                  </b-col>
+                  <b-col md="3">
                     <b-form-group label="Evidence 3">
                       <b-form-file
                         :id="`evidence_c${dd}`"
@@ -266,7 +266,7 @@
                       ></b-form-file>
                     </b-form-group>
                   </b-col>
-                  <b-col md="4">
+                  <b-col md="3">
                     <b-form-group label="Evidence 4">
                       <b-form-file
                         :id="`evidence_d${dd}`"
