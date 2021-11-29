@@ -167,21 +167,23 @@ const routes = [
             path: ":id",
             component: () => import("./views/app/sire-inspections/id"),
           },
-          
-        ],
-      },
-      {
-        path: "/app/vessels/:vessel_id/sire-inspections-view/",
-        component: () => import("./views/app/sire-inspections"),
-        redirect: "/app/vessels/:vessel_id/sire-inspections-view/",
-        children: [
           {
-            path: ":id",
+          path: "view/:id",
             component: () => import("./views/app/sire-inspections/view"),
-          },
-          
+          }
         ],
       },
+      // {
+      //   path: "/app/vessels/:vessel_id/sire-inspections-view/",
+      //   component: () => import("./views/app/sire-inspections"),
+      //   redirect: "/app/vessels/:vessel_id/sire-inspections-view/",
+      //   children: [
+      //     {
+            
+      //     },
+          
+      //   ],
+      // },
       // Near Misses
       {
         path: "/app/near-misses",

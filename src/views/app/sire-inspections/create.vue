@@ -223,6 +223,10 @@
                             <th>Sr No</th>
                             <th>VIQ No</th>
                             <th>Observation Details</th>
+                            <th>Is Closed</th>
+                            <th>Date Of Closure</th>
+                            <th>Evidance</th>
+                            <th>Remarks</th>
                           </tr>
                         </thead>
                         <tbody>
@@ -234,8 +238,8 @@
                           >
                             <td>
                               <div class="row">
-                                <div class="col-md-6">{{ vqcd + 1 }}</div>
-                                <div class="col-md-6">
+                                <div class="col-md-1">{{ vqcd + 1 }}</div>
+                                <div class="col-md-2">
                                   <b-button
                                     variant="primary"
                                     class="btn-rounded d-none d-sm-block"
@@ -265,10 +269,53 @@
                               >
                               </b-form-input>
                             </td>
+                            <td style="width: 130px">
+                              <b-form-group>
+                                <span>No</span>
+                                <label class="switch switch-success mr-2 ml-2">
+                                  <input
+                                    type="checkbox"
+                                    checked="checkbox"
+                                    v-model="viqChapterDetail.is_closed"
+                                  /><span class="slider"></span>
+                                </label>
+                                <span>Yes</span>
+                              </b-form-group>
+                            </td>
+                            <td v-if="viqChapterDetail.is_closed == 1">
+                              <b-form-group>
+                                <b-form-datepicker
+                                  :id="`date_of_closure${vqcd}`"
+                                  v-model="viqChapterDetail.date_of_closure"
+                                  placeholder="Date Of Closure"
+                                ></b-form-datepicker>
+                              </b-form-group>
+                            </td>
+                            <td v-if="viqChapterDetail.is_closed == 1">
+                              <b-form-group>
+                                <b-form-file
+                                  :id="`evidence${vqcd +`_`+ viqChapter.id}`"
+                                  name="evidence"
+                                  ref="evidence"
+                                ></b-form-file>
+                              </b-form-group>
+                            </td>
+                            <td v-if="viqChapterDetail.is_closed == 1">
+                              <b-form-input
+                                class="mb-2"
+                                v-model="viqChapterDetail.remarks"
+                                placeholder="Enter Remarks"
+                              >
+                              </b-form-input>
+                            </td>
                           </tr>
                         </tbody>
                         <tfoot>
                           <tr>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
                             <td></td>
                             <td></td>
                             <td>
@@ -339,6 +386,10 @@ export default {
       viqChapterDetail: {
         viq_no: "",
         observation: "",
+        is_closed: 0,
+        date_of_closure: "",
+        evidence: "",
+        remarks: "",
       },
       searchOilMajor: "",
       selectedOilMajor: [],
@@ -368,6 +419,7 @@ export default {
       viqChapters: [],
       viqChapterDetails: [],
       viqChapterDetailArrays: [],
+     
 
       columns: [
         {
@@ -405,7 +457,7 @@ export default {
     this.form.site_id = this.site.id;
     this.getData();
 
-    // console.log(this.chapter);
+    // console.log(this.viqChapterDetailArrays);
   },
   methods: {
     async getData() {
@@ -457,14 +509,15 @@ export default {
       this.viqChapters.forEach((viq) => {
         let viqChapterDetails = "viqChapterDetails" + viq.id;
         this[viqChapterDetails] = [];
-        this[viqChapterDetails].push({
-          id: viq.id,
-          viq_chapter_id: viq.id,
-        });
+        // this[viqChapterDetails].push({
+        //   id: viq.id,
+        //   viq_chapter_id: viq.id,
+        //   is_closed: 0,
+        // });
 
         this.viqChapterDetailArrays.push(this[viqChapterDetails]);
       });
-      console.log(this.viqChapterDetailArrays);
+      // console.log(this.viqChapterDetailArrays);
       this.isLoading = false;
     },
     async submit() {
@@ -497,8 +550,9 @@ export default {
               this.sire_inspection_details.push(details);
             });
           });
-          console.log(this.sire_inspection_details);
+          // console.log(this.sire_inspection_details);
           this.form.sire_inspection_details = this.sire_inspection_details;
+          // console.log(this.viqChapterDetail);
           let sire_inspection = await axios.post(
             `/vessels/${this.$route.params.vessel_id}/sire_inspections/`,
             this.form
@@ -524,6 +578,19 @@ export default {
       let formData = new FormData();
       formData.append("sire_inspection_id", sire_inspection_id);
       formData.append("attachment", attachment);
+      let evidence_count = 0;
+      this.sire_inspection.sire_inspection_details.forEach((dd, index) => {
+        let sire_inspection_detail_id = dd.id;
+        let d_id = "sire_inspection_detail_id" + index;
+        let evidencepath = this.$refs.evidence[index].files[0];
+  // console.log(evidencepath);
+        let path_name = "evidencepath" + index;
+
+        formData.append(d_id, sire_inspection_detail_id);
+        formData.append(path_name, evidencepath);
+        evidence_count++;
+      });
+      formData.append("evidence_count", evidence_count);
       await axios
         .post("upload_sire_inspection_attachment", formData, {
           headers: {
@@ -540,13 +607,17 @@ export default {
         viq_no: "",
         observation: "",
         viq_chapter_id: Chapter,
-        is_active: 1,
+        is_closed: 0,
+        date_of_closure: "",
+        evidence: "",
+        remarks: "",
+        applied: false,
       });
     },
     deleteVIQChapter(Chapter, row) {
       let name = "viqChapterDetails" + Chapter;
       this[name].splice(row, 1);
-      console.log(this[name]);
+      // console.log(this[name]);
     },
 
     makeToast(variant = null) {
