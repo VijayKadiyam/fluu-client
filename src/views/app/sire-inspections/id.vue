@@ -55,21 +55,19 @@
                   >
                 </b-form-group>
               </b-col>
-              <b-col md="6">
-                <b-form-group label="Others" v-if="form.inspection_type == 3">
+              <b-col md="6" v-if="form.inspection_type == 3">
+                <b-form-group label="Others">
                   <b-form-input
                     class="mb-2 other"
                     label="Others"
                     id="Other-type"
                     placeholder="Enter Others"
-                    v-model="form.inspection_type_detail"
+                    v-model="form.other_type"
                   >
                   </b-form-input>
                 </b-form-group>
               </b-col>
-            </b-row>
-            <b-row>
-              <b-col md="6">
+              <b-col md="6" v-if="form.inspection_type == 1">
                 <b-form-group label="Oil Major">
                   <vue-tags-input
                     v-model="searchOilMajor"
@@ -103,20 +101,14 @@
               </b-col>
             </b-row>
             <b-row>
-              <b-col md="6">
-                <b-form-group label="Port">
-                  <vue-tags-input
-                    v-model="searchPort"
-                    :tags="selectedPort"
-                    :max-tags="1"
-                    class="tag-custom text-15 mb-2"
-                    :autocomplete-items="filteredPortItems"
-                    :add-only-from-autocomplete="true"
-                    @tags-changed="(newTags) => (selectedPort = newTags)"
-                    placeholder="Type Port"
-                  />
-                </b-form-group>
-              </b-col>
+              <!-- <b-col md="6">
+                
+              </b-col> -->
+              <!-- <b-col md="6" >
+                
+              </b-col> -->
+            </b-row>
+            <b-row>
               <b-col md="6">
                 <b-form-group label="Country">
                   <vue-tags-input
@@ -128,6 +120,20 @@
                     :add-only-from-autocomplete="true"
                     @tags-changed="(newTags) => (selectedCountry = newTags)"
                     placeholder="Type Country"
+                  />
+                </b-form-group>
+              </b-col>
+              <b-col md="6">
+                <b-form-group label="Port">
+                  <vue-tags-input
+                    v-model="searchPort"
+                    :tags="selectedPort"
+                    :max-tags="1"
+                    class="tag-custom text-15 mb-2"
+                    :autocomplete-items="filteredPortItems"
+                    :add-only-from-autocomplete="true"
+                    @tags-changed="(newTags) => (selectedPort = newTags)"
+                    placeholder="Type Port"
                   />
                 </b-form-group>
               </b-col>
@@ -163,11 +169,11 @@
             </b-row>
             <b-row>
               <b-col md="6">
-                <b-form-group label="Total Observation">
+                <b-form-group label="Total Observations">
                   <b-form-input
                     class="mb-2"
-                    label="Total Observation"
-                    placeholder="Enter Total Observation"
+                    label="Total Observations"
+                    placeholder="Enter Total Observations"
                     v-model.trim="$v.form.total_observations.$model"
                   >
                   </b-form-input>
@@ -207,7 +213,7 @@
                 >
                   <b-tabs content-class="mt-3" align="center">
                     <b-tab
-                       v-for="(viqChapter, at) in viqChapters"
+                      v-for="(viqChapter, at) in viqChapters"
                       :key="`viqChapter${at}`"
                       :title="`${viqChapter.description}`"
                     >
@@ -217,6 +223,10 @@
                             <th>Sr No</th>
                             <th>VIQ No</th>
                             <th>Observation Details</th>
+                            <th>Is Closed</th>
+                            <th>Date Of Closure</th>
+                            <th>Evidance</th>
+                            <th>Remarks</th>
                           </tr>
                         </thead>
                         <tbody>
@@ -228,8 +238,8 @@
                           >
                             <td>
                               <div class="row">
-                                <div class="col-md-6">{{ vqcd + 1 }}</div>
-                                <div class="col-md-6">
+                                <div class="col-md-1">{{ vqcd + 1 }}</div>
+                                <div class="col-md-2">
                                   <b-button
                                     variant="primary"
                                     class="btn-rounded d-none d-sm-block"
@@ -259,10 +269,53 @@
                               >
                               </b-form-input>
                             </td>
+                            <td style="width: 130px">
+                              <b-form-group>
+                                <span>No</span>
+                                <label class="switch switch-success mr-2 ml-2">
+                                  <input
+                                    type="checkbox"
+                                    checked="checkbox"
+                                    v-model="viqChapterDetail.is_closed"
+                                  /><span class="slider"></span>
+                                </label>
+                                <span>Yes</span>
+                              </b-form-group>
+                            </td>
+                            <td v-if="viqChapterDetail.is_closed == 1">
+                              <b-form-group>
+                                <b-form-datepicker
+                                  :id="`date_of_closure${vqcd}`"
+                                  v-model="viqChapterDetail.date_of_closure"
+                                  placeholder="Date Of Closure"
+                                ></b-form-datepicker>
+                              </b-form-group>
+                            </td>
+                            <td v-if="viqChapterDetail.is_closed == 1">
+                              <b-form-group>
+                                <b-form-file
+                                  :id="`evidence${vqcd + `_` + viqChapter.id}`"
+                                  name="evidence"
+                                  ref="evidence"
+                                ></b-form-file>
+                              </b-form-group>
+                            </td>
+                            <td v-if="viqChapterDetail.is_closed == 1">
+                              <b-form-input
+                                class="mb-2"
+                                v-model="viqChapterDetail.remarks"
+                                placeholder="Enter Remarks"
+                              >
+                              </b-form-input>
+                            </td>
                           </tr>
                         </tbody>
                         <tfoot>
                           <tr>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
                             <td></td>
                             <td></td>
                             <td>
@@ -271,8 +324,7 @@
                                 variant="primary"
                                 class="btn-rounded d-none d-sm-block"
                                 @click="addEmptyVIQChapter(viqChapter.id)"
-                                ><i class="i-Add text-white mr-2"></i
-                                >Add Row
+                                ><i class="i-Add text-white mr-2"></i>Add Row
                               </b-button>
                             </td>
                           </tr>
@@ -321,10 +373,10 @@ export default {
     const maxDate = new Date(today);
     return {
       form: {
-        vessel_id: 2,
-        inspection_type: "1",
+        vessel_id: "",
+        inspection_type: "",
         date_of_inspection: "",
-        inspector: "",
+        inspector_id: "",
         oil_major: "",
         total_observations: "",
         other_type: "",
@@ -334,8 +386,11 @@ export default {
       viqChapterDetail: {
         viq_no: "",
         observation: "",
+        is_closed: 0,
+        date_of_closure: "",
+        evidence: "",
+        remarks: "",
       },
-      sireDetails: [],
       searchOilMajor: "",
       selectedOilMajor: [],
       OilMajorItems: [],
@@ -346,11 +401,11 @@ export default {
 
       searchCountry: "",
       selectedCountry: [],
-      countryItems: [],
 
       searchInspectionName: "",
       selectedInspectionName: [],
       InspectorNameItems: [],
+      countryItems: [],
 
       submitStatus: null,
       vessel: [],
@@ -361,17 +416,17 @@ export default {
         { value: "2", text: "CDI" },
         { value: "3", text: "Other" },
       ],
-
       viqChapters: [],
       viqChapterDetails: [],
       viqChapterDetailArrays: [],
+
       columns: [
         {
           label: "Sr No",
           field: "sr_no",
         },
         {
-          label: "VIQ No",
+          label: "Viq No",
           field: "viq_no",
         },
         {
@@ -440,12 +495,17 @@ export default {
         `/vessels/${this.$route.params.vessel_id}/sire_inspections/${this.$route.params.id}`
       );
       this.form = form.data.data;
+      let vessel = await axios.get(`/vessels/${this.$route.params.vessel_id}`);
+      this.vessel = vessel.data.data;
+
+      this.viqChapterDetailArrays = this.form.sire_inspection_details;
+
       this.port = this.form.port;
       this.country = this.form.country;
       this.oil_major = this.form.oil_major;
       this.inspector = this.form.inspector;
 
-      this.sireDetails = this.form.sire_inspection_details
+      // this.viqChapterDetailArrays = this.form.sire_inspection_details;
 
       this.selectedPort.push({
         id: this.port.id,
@@ -465,8 +525,6 @@ export default {
         text: this.inspector.user_name,
       });
 
-      let vessel = await axios.get(`/vessels/${this.$route.params.vessel_id}`);
-      this.vessel = vessel.data.data;
       // console.log(this.vessel);
       // this.program = form.data.data.program;
       this.isLoading = false;
@@ -505,7 +563,7 @@ export default {
         });
       });
 
-     masters.viqChapters.forEach((viqChapter) => {
+      masters.viqChapters.forEach((viqChapter) => {
         this.viqChapters.push({
           id: viqChapter.id,
           description: viqChapter.chapter_name,
@@ -515,10 +573,10 @@ export default {
       this.viqChapters.forEach((viq) => {
         let viqChapterDetails = "viqChapterDetails" + viq.id;
         this[viqChapterDetails] = [];
-        this[viqChapterDetails].push({
-          id: viq.id,
-          viq_chapter_id: viq.id,
-        });
+        // this[viqChapterDetails].push({
+        //   id: viq.id,
+        //   viq_chapter_id: viq.id,
+        // });
 
         this.viqChapterDetailArrays.push(this[viqChapterDetails]);
       });
@@ -578,7 +636,7 @@ export default {
             this.form
           );
           this.sire_inspection = sire_inspection.data.data;
-           await this.handleFileUpload();
+          await this.handleFileUpload();
           this.isLoading = false;
           this.submitStatus = "OK";
 
@@ -592,7 +650,7 @@ export default {
         }
       }
     },
-     async handleFileUpload() {
+    async handleFileUpload() {
       let attachment = this.$refs.attachment.files[0];
       const sire_inspection_id = this.sire_inspection.id;
       let formData = new FormData();
@@ -604,7 +662,7 @@ export default {
             "Content-Type": "multipart/form-data",
           },
         })
-        .catch(function() {
+        .catch(function () {
           console.log("FAILURE!!");
         });
     },
