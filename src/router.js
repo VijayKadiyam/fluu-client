@@ -145,8 +145,36 @@ const routes = [
             component: () => import("./views/app/psc-inspections/create"),
           },
           {
+            path: "view/:id",
+            component: () => import("./views/app/psc-inspections/view"),
+          },
+          {
             path: ":id",
             component: () => import("./views/app/psc-inspections/id"),
+          },
+        ],
+      },
+      // FSC Inspection
+      {
+        path: "/app/vessels/:vessel_id/fsc-inspections",
+        component: () => import("./views/app/fsc-inspections"),
+        redirect: "/app/vessels/:vessel_id/fsc-inspections/list",
+        children: [
+          {
+            path: "list",
+            component: () => import("./views/app/fsc-inspections/list"),
+          },
+          {
+            path: "create",
+            component: () => import("./views/app/fsc-inspections/create"),
+          },
+          {
+            path: "view/:id",
+            component: () => import("./views/app/fsc-inspections/view"),
+          },
+          {
+            path: ":id",
+            component: () => import("./views/app/fsc-inspections/id"),
           },
         ],
       },

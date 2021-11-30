@@ -1,6 +1,6 @@
 <template>
   <div class="main-content">
-    <breadcumb :page="'PSC Inspection List'" :folder="'PSC Inspections'" />
+    <breadcumb :page="'FSC Inspection List'" :folder="'FSC Inspections'" />
     <!-- Vessel Details card -->
     <b-card class="mb-4">
       <div class="content">
@@ -46,14 +46,14 @@
           mode: 'records',
         }"
         styleClass="tableOne vgt-table"
-        :rows="psc_inspections"
+        :rows="fsc_inspections"
       >
         <div slot="table-actions" class="mb-3">
           <b-button
             variant="primary"
             class="btn-rounded d-none d-sm-block"
-            :to="'/app/vessels/' + vessel.id + '/psc-inspections/create'"
-            ><i class="i-Add-User text-white mr-2"> </i>Add PSC Inspection
+            :to="'/app/vessels/' + vessel.id + '/fsc-inspections/create'"
+            ><i class="i-Add-User text-white mr-2"> </i>Add FSC Inspection
           </b-button>
         </div>
 
@@ -64,11 +64,11 @@
                 :to="
                 '/app/vessels/' +
                   props.row.vessel_id +
-                  '/psc-inspections/view/' +
+                  '/fsc-inspections/view/' +
                   props.row.id
               "
                 class="btn btn-primary btn-rounded d-none d-sm-block mb-2 mr-2 "
-                v-b-tooltip.hover title="View PSC Inspection"
+                v-b-tooltip.hover title="View FSC Inspection"
               >
                 <i class="i-Eye"></i> VIEW
               </router-link>
@@ -76,11 +76,11 @@
                 :to="
                 '/app/vessels/' +
                   props.row.vessel_id +
-                  '/psc-inspections/' +
+                  '/fsc-inspections/' +
                   props.row.id
               "
                 class="btn btn-primary btn-rounded d-none d-sm-block mb-2 mr-2 "
-                v-b-tooltip.hover title="Edit PSC Inspection"
+                v-b-tooltip.hover title="Edit FSC Inspection"
               >
                 <i class="i-Eraser-2"></i> EDIT
               </router-link>
@@ -119,7 +119,7 @@ import axios from "axios";
 export default {
   metaInfo: {
     // if no subcomponents specify a metaInfo.title, this title will be used
-    title: "PSC Inspection List",
+    title: "FSC Inspection List",
   },
   data() {
     return {
@@ -156,7 +156,7 @@ export default {
           thClass: "text-right",
         },
       ],
-      psc_inspections: [],
+      fsc_inspections: [],
       vessel: {},
     };
   },
@@ -166,10 +166,10 @@ export default {
   methods: {
     async getData(page = 1) {
       this.isLoading = true;
-      let psc_inspections = await axios.get(
-        `/vessels/${this.$route.params.vessel_id}/psc_inspections`
+      let fsc_inspections = await axios.get(
+        `/vessels/${this.$route.params.vessel_id}/fsc_inspections`
       );
-      this.psc_inspections = psc_inspections.data.data;
+      this.fsc_inspections = fsc_inspections.data.data;
 
       let vessel = await axios.get(`/vessels/${this.$route.params.vessel_id}`);
       this.vessel = vessel.data.data;

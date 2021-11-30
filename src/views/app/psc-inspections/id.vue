@@ -6,15 +6,15 @@
       <div class="content">
         <b-row>
           <b-col md="3">
-            <p class="text-muted mt-2 mb-0">Vessel Name</p>
-            <p class="text-primary text-24 line-height-1 mb-2">
-              {{ vessel.name }}
-            </p>
-          </b-col>
-          <b-col md="3">
             <p class="text-muted mt-2 mb-0">Serial No</p>
             <p class="text-primary text-24 line-height-1 mb-2">
               {{ vessel.serial_no }}
+            </p>
+          </b-col>
+          <b-col md="3">
+            <p class="text-muted mt-2 mb-0">Vessel Name</p>
+            <p class="text-primary text-24 line-height-1 mb-2">
+              {{ vessel.name }}
             </p>
           </b-col>
           <b-col md="3">
@@ -191,8 +191,7 @@
                 </b-form-group>
               </b-col>
             </b-row>
-            <div
-            >
+            <div>
               <!-- v-if="
                 form.is_deficiency_closed == 1 &&
                   form.no_of_issued_deficiencies ==
@@ -203,12 +202,12 @@
                 :key="`deficiency_detail${dd}`"
               >
                 <b-row>
-                  <b-col md="4">
+                  <b-col md="6">
                     <b-row>
-                      <b-col md="2">
-                        <span> {{ dd + 1 }} ).</span>
+                      <b-col md="1">
+                        <span> {{ dd + 1 }}</span>
                       </b-col>
-                      <b-col md="10">
+                      <b-col md="11">
                         <b-form-group label="Date Of Closure">
                           <b-form-datepicker
                             :id="`date_of_closure${dd}`"
@@ -221,7 +220,7 @@
                       </b-col>
                     </b-row>
                   </b-col>
-                  <b-col md="4">
+                  <b-col md="6">
                     <b-form-group label="Details">
                       <b-form-input
                         class="mb-2"
@@ -232,32 +231,32 @@
                       </b-form-input>
                     </b-form-group>
                   </b-col>
-                  <b-col md="4">
-                    <b-form-group label="Evidence 1">
-                      <b-form-file
-                        :id="`evidence_a${dd}`"
-                        name="evidence_a"
-                        ref="evidence_a"
-                      ></b-form-file>
-                    </b-form-group>
-                  </b-col>
                 </b-row>
                 <b-row>
-                  <b-col md="4">
+                  <b-col md="3">
                     <b-row>
                       <b-col md="2"> </b-col>
                       <b-col md="10">
-                        <b-form-group label="Evidence 2">
+                        <b-form-group label="Evidence 1">
                           <b-form-file
-                            :id="`evidence_b${dd}`"
-                            name="evidence_b"
-                            ref="evidence_b"
+                            :id="`evidence_a${dd}`"
+                            name="evidence_a"
+                            ref="evidence_a"
                           ></b-form-file>
                         </b-form-group>
                       </b-col>
                     </b-row>
                   </b-col>
-                  <b-col md="4">
+                  <b-col md="3">
+                    <b-form-group label="Evidence 2">
+                      <b-form-file
+                        :id="`evidence_b${dd}`"
+                        name="evidence_b"
+                        ref="evidence_b"
+                      ></b-form-file>
+                    </b-form-group>
+                  </b-col>
+                  <b-col md="3">
                     <b-form-group label="Evidence 3">
                       <b-form-file
                         :id="`evidence_c${dd}`"
@@ -266,7 +265,7 @@
                       ></b-form-file>
                     </b-form-group>
                   </b-col>
-                  <b-col md="4">
+                  <b-col md="3">
                     <b-form-group label="Evidence 4">
                       <b-form-file
                         :id="`evidence_d${dd}`"
