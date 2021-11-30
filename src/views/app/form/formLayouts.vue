@@ -9,7 +9,6 @@
           <b-row>
             <b-col md="5">
               <b-form-input
-                
                 type="text"
                 required
                 placeholder="Enter your username"
@@ -18,7 +17,6 @@
 
             <b-col md="5" class="mt-3 mt-md-0">
               <b-form-input
-                
                 type="text"
                 required
                 placeholder="Enter your password"
@@ -50,9 +48,7 @@
                     placeholder="Enter your password"
                   ></b-form-input>
                 </b-form-group>
-                <b-button block variant="primary">
-                  Sign In
-                </b-button>
+                <b-button block variant="primary"> Sign In </b-button>
               </div>
             </b-card>
           </b-col>
@@ -154,6 +150,7 @@
                 </div>
               </div>
             </div>
+            
             <div class="form-group row">
               <div class="col-sm-10">
                 <button type="submit" class="btn btn-primary">Sign in</button>
@@ -193,9 +190,7 @@
                   >
                   </b-form-input>
                 </b-form-group>
-                <b-button block variant="primary">
-                  Sign In
-                </b-button>
+                <b-button block variant="primary"> Sign In </b-button>
               </b-form>
             </div>
           </b-dropdown-header>
@@ -208,8 +203,7 @@
 export default {
   metaInfo: {
     // if no subcomponents specify a metaInfo.title, this title will be used
-    title: "Form Layouts"
-  }
+    title: "Form Layouts",
+  },
 };
 </script>
-
