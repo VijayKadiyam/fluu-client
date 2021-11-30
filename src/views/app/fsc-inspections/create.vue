@@ -1,6 +1,6 @@
 <template>
   <div class="main-content">
-    <breadcumb :page="'Update PSC Inspection'" :folder="'PSC Inspections'" />
+    <breadcumb :page="'Create FSC Inspection'" :folder="'FSC Inspections'" />
     <!-- Vessel Details card -->
     <b-card class="mb-4">
       <div class="content">
@@ -94,6 +94,7 @@
                     placeholder="Enter No. Of Issued Deficiency"
                     v-model.trim="$v.form.no_of_issued_deficiencies.$model"
                   >
+                    <!-- @change="Deficiency(parseInt(form.no_of_closed_deficiencies))" -->
                   </b-form-input>
                   <b-alert
                     show
@@ -174,7 +175,7 @@
                     form.no_of_closed_deficiencies
                 "
               >
-                <b-form-group label="Is Deficieny Closed">
+                <b-form-group label="Are All Deficienies Closed">
                   <b-row>
                     <b-col md="8">
                       <span>No</span>
@@ -205,7 +206,7 @@
                   <b-col md="6">
                     <b-row>
                       <b-col md="1">
-                        <span> {{ dd + 1 }}</span>
+                        <span> {{ dd + 1 }} </span>
                       </b-col>
                       <b-col md="11">
                         <b-form-group label="Date Of Closure">
@@ -221,11 +222,11 @@
                     </b-row>
                   </b-col>
                   <b-col md="6">
-                    <b-form-group label="Details">
+                    <b-form-group label="Remarks">
                       <b-form-input
                         class="mb-2"
-                        label="Details"
-                        placeholder="Enter Details"
+                        label="Remarks"
+                        placeholder="Enter Remarks"
                         v-model.trim="deficiency_detail.details"
                       >
                       </b-form-input>
@@ -307,11 +308,12 @@
 
 <script>
 import axios from "axios";
-import { required, numeric } from "vuelidate/lib/validators";
+import { numeric, required } from "vuelidate/lib/validators";
+// import { numeric, required, maxValue } from "vuelidate/lib/validators";
 export default {
   metaInfo: {
     // if no subcomponents specify a metaInfo.title, this title will be used
-    title: "PSC Inspection | Update",
+    title: "FSC Inspection | Create",
   },
   data() {
     const now = new Date();
@@ -323,17 +325,18 @@ export default {
         vessel_id: "",
         date: "",
         no_of_closed_deficiencies: 0,
+        // no_of_closed_deficiencies: {
+        //  maxValue: maxValue(this.maxValue)
+        // },
         is_detained: 0,
         is_deficiency_closed: 0,
         no_of_issued_deficiencies: 0,
+        // deficiency_details:{},
       },
+      maxValue: 3,
       max: maxDate,
-      deficiency_details: [
-        {
-          date_of_closure: "",
-          details: "",
-        },
-      ],
+      deficiency_details: [],
+      // deficiency_count:0,
       portItems: [],
       searchPort: "",
       selectedPort: [],
@@ -362,22 +365,20 @@ export default {
     },
   },
   mounted() {
-    this.form.vessel_id = this.$route.params.vessel_id;
+    this.form.vessel_id = this.vessel.id;
     this.form.site_id = this.site.id;
-    this.getData();
     this.getMasters();
+    this.getData();
   },
-
   methods: {
     Deficiency(number) {
       let current_len = this.deficiency_details.length;
-      console.log(current_len);
-      console.log(number);
       if (current_len < number) {
         // Add
+        console.log("add");
         for (let b = current_len; b < number; b++) {
           this.$set(this.deficiency_details, b, {
-            d_id: b,
+            D_id: b,
           });
         }
       } else {
@@ -387,12 +388,10 @@ export default {
           this.deficiency_details.splice(b);
         }
       }
-
-      console.log(this.deficiency_details);
     },
     async getMasters() {
       this.isLoading = true;
-      let masters = await axios.get("psc_inspections/masters");
+      let masters = await axios.get("fsc_inspections/masters");
       masters = masters.data;
       masters.ports.forEach((port) => {
         this.portItems.push({
@@ -411,23 +410,6 @@ export default {
     },
     async getData() {
       this.isLoading = true;
-      let form = await axios.get(
-        `/vessels/${this.$route.params.vessel_id}/psc_inspections/${this.$route.params.id}`
-      );
-      this.form = form.data.data;
-      this.port = this.form.port;
-      this.country = this.form.country;
-      this.deficiency_details = this.form.psc_inspection_deficiencies;
-      this.selectedPort.push({
-        id: this.port.id,
-        text: this.port.description,
-      });
-
-      this.selectedCountry.push({
-        id: this.country.id,
-        text: this.country.description,
-      });
-
       let vessel = await axios.get(`/vessels/${this.$route.params.vessel_id}`);
       this.vessel = vessel.data.data;
       this.isLoading = false;
@@ -435,89 +417,38 @@ export default {
     //   validate form
     async submit() {
       console.log("submit!");
-      this.form.psc_inspection_deficiencies = this.deficiency_details;
+
+      this.form.fsc_inspection_deficiencies = this.deficiency_details;
       if (this.selectedPort[0]) {
         this.form.port_id = this.selectedPort[0].id;
       }
       if (this.selectedCountry[0]) {
         this.form.country_id = this.selectedCountry[0].id;
       }
-      this.$v.$touch();
-      if (this.$v.$invalid) {
+      this.$v.form.$touch();
+      if (this.$v.form.$invalid) {
         this.submitStatus = "ERROR";
       } else {
         // do your submit logic here
         try {
           this.isLoading = true;
           this.submitStatus = "PENDING";
-          console.log(this.form);
-          let psc_inspection = await axios.post(
-            `/vessels/${this.$route.params.vessel_id}/psc_inspections/${this.$route.params.id}`,
+          // console.log(this.form);
+          let fsc_inspection = await axios.post(
+            `/vessels/${this.$route.params.vessel_id}/fsc_inspections`,
             this.form
           );
-          this.psc_inspection = psc_inspection.data.data;
+          this.fsc_inspection = fsc_inspection.data.data;
           await this.handleFileUpload();
           this.isLoading = false;
           this.submitStatus = "OK";
-
-          // setTimeout(() => {
           this.$router.push(
-            `/app/vessels/${this.$route.params.vessel_id}/psc-inspections/`
+            `/app/vessels/${this.$route.params.vessel_id}/fsc-inspections/`
           );
-          // }, 1000);
         } catch (e) {
           this.isLoading = false;
         }
       }
-    },
-    async handleFileUpload() {
-      console.log("File UPload");
-      let reportpath = this.$refs.report.files[0];
-      const psc_inspection_id = this.psc_inspection.id;
-      let formData = new FormData();
-      formData.append("psc_inspection_id", psc_inspection_id);
-      formData.append("reportpath", reportpath);
-      let evidence_count = 0;
-      this.psc_inspection.psc_inspection_deficiencies.forEach((dd, index) => {
-        let deficiency_id = dd.id;
-        let d_id = "deficiency_id" + index;
-        if (this.$refs.evidence_a[index]) {
-          let evidencepath_A = this.$refs.evidence_a[index].files[0];
-          let evidencepath_A_name = "evidencepath_A_" + index;
-
-          formData.append(evidencepath_A_name, evidencepath_A);
-        }
-        if (this.$refs.evidence_b[index]) {
-          let evidencepath_B = this.$refs.evidence_b[index].files[0];
-          let evidencepath_B_name = "evidencepath_B_" + index;
-
-          formData.append(evidencepath_B_name, evidencepath_B);
-        }
-        if (this.$refs.evidence_c[index]) {
-          let evidencepath_C = this.$refs.evidence_c[index].files[0];
-          let evidencepath_C_name = "evidencepath_C_" + index;
-
-          formData.append(evidencepath_C_name, evidencepath_C);
-        }
-        if (this.$refs.evidence_d[index]) {
-          let evidencepath_D = this.$refs.evidence_d[index].files[0];
-          let evidencepath_D_name = "evidencepath_D_" + index;
-
-          formData.append(evidencepath_D_name, evidencepath_D);
-        }
-        evidence_count++;
-        formData.append(d_id, deficiency_id);
-      });
-      formData.append("evidence_count", evidence_count);
-      await axios
-        .post("upload_psc_inspection_report", formData, {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        })
-        .catch(function() {
-          console.log("FAILURE!!");
-        });
     },
     makeToast(variant = null) {
       this.$bvToast.toast("Please fill the form correctly.", {
@@ -533,7 +464,44 @@ export default {
         solid: true,
       });
     },
+    async handleFileUpload() {
+      let reportpath = this.$refs.report.files[0];
+      const fsc_inspection_id = this.fsc_inspection.id;
+      let formData = new FormData();
+      formData.append("fsc_inspection_id", fsc_inspection_id);
+      formData.append("reportpath", reportpath);
+      let evidence_count = 0;
+      this.fsc_inspection.fsc_inspection_deficiencies.forEach((dd, index) => {
+        let deficiency_id = dd.id;
+        let d_id = "deficiency_id" + index;
 
+        let evidencepath_A = this.$refs.evidence_a[index].files[0];
+        let evidencepath_A_name = "evidencepath_A_" + index;
+        let evidencepath_B = this.$refs.evidence_b[index].files[0];
+        let evidencepath_B_name = "evidencepath_B_" + index;
+        let evidencepath_C = this.$refs.evidence_c[index].files[0];
+        let evidencepath_C_name = "evidencepath_C_" + index;
+        let evidencepath_D = this.$refs.evidence_d[index].files[0];
+        let evidencepath_D_name = "evidencepath_D_" + index;
+
+        formData.append(d_id, deficiency_id);
+        formData.append(evidencepath_A_name, evidencepath_A);
+        formData.append(evidencepath_B_name, evidencepath_B);
+        formData.append(evidencepath_C_name, evidencepath_C);
+        formData.append(evidencepath_D_name, evidencepath_D);
+        evidence_count++;
+      });
+      formData.append("evidence_count", evidence_count);
+      await axios
+        .post("upload_fsc_inspection_report", formData, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        })
+        .catch(function() {
+          console.log("FAILURE!!");
+        });
+    },
     inputSubmit() {
       console.log("submitted");
     },
