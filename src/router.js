@@ -144,6 +144,10 @@ const routes = [
             component: () => import("./views/app/psc-inspections/create"),
           },
           {
+            path: "view/:id",
+            component: () => import("./views/app/psc-inspections/view"),
+          },
+          {
             path: ":id",
             component: () => import("./views/app/psc-inspections/id"),
           },

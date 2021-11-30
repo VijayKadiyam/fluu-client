@@ -6,15 +6,15 @@
       <div class="content">
         <b-row>
           <b-col md="3">
-            <p class="text-muted mt-2 mb-0">Vessel Name</p>
-            <p class="text-primary text-24 line-height-1 mb-2">
-              {{ vessel.name }}
-            </p>
-          </b-col>
-          <b-col md="3">
             <p class="text-muted mt-2 mb-0">Serial No</p>
             <p class="text-primary text-24 line-height-1 mb-2">
               {{ vessel.serial_no }}
+            </p>
+          </b-col>
+          <b-col md="3">
+            <p class="text-muted mt-2 mb-0">Vessel Name</p>
+            <p class="text-primary text-24 line-height-1 mb-2">
+              {{ vessel.name }}
             </p>
           </b-col>
           <b-col md="3">
@@ -59,17 +59,32 @@
 
         <template slot="table-row" slot-scope="props">
           <span v-if="props.column.field == 'button'">
-            <a
-              :href="
+            <b-row>
+              <router-link
+                :to="
+                '/app/vessels/' +
+                  props.row.vessel_id +
+                  '/psc-inspections/view/' +
+                  props.row.id
+              "
+                class="btn btn-primary btn-rounded d-none d-sm-block mb-2 mr-2 "
+                v-b-tooltip.hover title="View PSC Inspection"
+              >
+                <i class="i-Eye"></i> VIEW
+              </router-link>
+              <router-link
+                :to="
                 '/app/vessels/' +
                   props.row.vessel_id +
                   '/psc-inspections/' +
                   props.row.id
               "
-            >
-              <i class="i-Eraser-2 text-25 text-success mr-2"></i>
-              {{ props.row.button }}</a
-            >
+                class="btn btn-primary btn-rounded d-none d-sm-block mb-2 mr-2 "
+                v-b-tooltip.hover title="Edit PSC Inspection"
+              >
+                <i class="i-Eraser-2"></i> EDIT
+              </router-link>
+            </b-row>
             <!-- <a href="">
               <i class="i-Close-Window text-25 text-danger"></i>
               {{ props.row.button }}</a
