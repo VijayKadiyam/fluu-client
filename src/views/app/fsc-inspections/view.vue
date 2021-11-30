@@ -1,10 +1,10 @@
 <template>
   <div class="main-content">
     <breadcumb
-      :page="'View PSC Inspection Details'"
-      :folder="'PSC Inspection'"
+      :page="'View FSC Inspection Details'"
+      :folder="'FSC Inspection'"
     />
-    <b-card class="mb-4" title="PSC Inspection Details">
+    <b-card class="mb-4" title="FSC Inspection Details">
       <div role="tablist">
         <b-card no-body class="ul-card__border-radius">
           <b-card-header header-tag="header" class="p-1" role="tab">
@@ -92,7 +92,7 @@
               href="#"
               v-b-toggle.management
               variant="transparent"
-              >PSC Inspection</b-button
+              >FSC Inspection</b-button
             >
           </b-card-header>
           <b-collapse id="management" accordion="my-accordion" role="tabpanel">
@@ -102,19 +102,19 @@
                   <b-col md="4">
                     <p class="text-muted mt-2 mb-0">Date</p>
                     <p class="text-primary text-24 line-height-1 mb-2">
-                      {{ psc_inspection.date }}
+                      {{ fsc_inspection.date }}
                     </p>
                   </b-col>
                   <b-col md="4">
                     <p class="text-muted mt-2 mb-0">Port</p>
                     <p class="text-primary text-24 line-height-1 mb-2">
-                      {{ psc_inspection.port.description }}
+                      {{ fsc_inspection.port.description }}
                     </p>
                   </b-col>
                   <b-col md="4">
                     <p class="text-muted mt-2 mb-0">Country</p>
                     <p class="text-primary text-24 line-height-1 mb-2">
-                      {{ psc_inspection.country.description }}
+                      {{ fsc_inspection.country.description }}
                     </p>
                   </b-col>
                 </b-row>
@@ -122,24 +122,24 @@
                   <b-col md="4">
                     <p class="text-muted mt-2 mb-0">No Of Issued Deficienies</p>
                     <p class="text-primary text-24 line-height-1 mb-2">
-                      {{ psc_inspection.no_of_issued_deficiencies }}
+                      {{ fsc_inspection.no_of_issued_deficiencies }}
                     </p>
                   </b-col>
                   <b-col md="4">
                     <p class="text-muted mt-2 mb-0">No Of Closed Deficienies</p>
                     <p class="text-primary text-24 line-height-1 mb-2">
-                      {{ psc_inspection.no_of_closed_deficiencies }}
+                      {{ fsc_inspection.no_of_closed_deficiencies }}
                     </p>
                   </b-col>
                   <b-col md="4">
                     <p class="text-muted mt-2 mb-0">Report</p>
                     <p class="text-primary text-18 line-height-1 mb-2">
                       <a
-                        :href="`${mediaUrl}${psc_inspection.reportpath}`"
+                        :href="`${mediaUrl}${fsc_inspection.reportpath}`"
                         target="_blank"
                         style="color: blue"
                       >
-                        Click to see : {{ psc_inspection.reportpath }}
+                        Click to see : {{ fsc_inspection.reportpath }}
                       </a>
                     </p>
                   </b-col>
@@ -148,7 +148,7 @@
                   <b-col md="4">
                     <p class="text-muted mt-2 mb-0">Is Detained</p>
                     <p class="text-primary text-24 line-height-1 mb-2">
-                      {{ psc_inspection.is_detained == 0 ? "NO" : "YES" }}
+                      {{ fsc_inspection.is_detained == 0 ? "NO" : "YES" }}
                     </p>
                   </b-col>
                   <b-col md="4">
@@ -157,7 +157,7 @@
                     </p>
                     <p class="text-primary text-24 line-height-1 mb-2">
                       {{
-                        psc_inspection.is_deficiency_closed == 0 ? "NO" : "YES"
+                        fsc_inspection.is_deficiency_closed == 0 ? "NO" : "YES"
                       }}
                     </p>
                   </b-col>
@@ -175,7 +175,7 @@
               href="#"
               v-b-toggle.accordion-3
               variant="transparent"
-              >PSC Inspection Details</b-button
+              >FSC Inspection Details</b-button
             >
           </b-card-header>
           <b-collapse id="accordion-3" accordion="my-accordion" role="tabpanel">
@@ -187,7 +187,7 @@
                       <div
                         class="ul-widget-s7__items mb-30"
                         v-for="(deficiency_detail,
-                        dd) in psc_inspection.psc_inspection_deficiencies"
+                        dd) in fsc_inspection.fsc_inspection_deficiencies"
                         :key="`deficiency_detail${dd}`"
                       >
                         <span class="ul-widget-s7__item-time ul-middle">{{
@@ -318,7 +318,7 @@ import axios from "axios";
 export default {
   metaInfo: {
     // if no subcomponents specify a metaInfo.title, this title will be used
-    title: "View PSC Inspection Details",
+    title: "View FSC Inspection Details",
   },
   data() {
     return {
@@ -350,10 +350,10 @@ export default {
     },
     async getData() {
       this.isLoading = true;
-      let psc_inspection = await axios.get(
-        `/vessels/${this.$route.params.vessel_id}/psc_inspections/${this.$route.params.id}`
+      let fsc_inspection = await axios.get(
+        `/vessels/${this.$route.params.vessel_id}/fsc_inspections/${this.$route.params.id}`
       );
-      this.psc_inspection = psc_inspection.data.data;
+      this.fsc_inspection = fsc_inspection.data.data;
       let vessel = await axios.get(`/vessels/${this.$route.params.vessel_id}`);
       this.vessel = vessel.data.data;
       this.isLoading = false;
