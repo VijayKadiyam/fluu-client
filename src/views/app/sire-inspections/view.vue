@@ -52,7 +52,7 @@
           <b-col md="3">
             <p class="text-muted mt-2 mb-0">Type Oil Major</p>
             <p class="text-primary text-24 line-height-1 mb-2">
-              {{ form.oil_major.description }}
+              {{ form.oil_major.description || "" }}
             </p>
           </b-col>
           <b-col md="3">
@@ -114,16 +114,24 @@
     <!-- Sire Inspection Details  -->
     <b-card class="mb-4">
       <h4>Sire Inpection Details</h4>
-      <div class="content">
-        <b-row
-          v-for="(sireInspectionDetail, at) in form.sire_inspection_details"
-          :key="`sireInspectionDetail${at}`"
-        >
+      <div
+        class="content"
+        v-for="(sireInspectionDetail, at) in form.sire_inspection_details"
+        :key="`sireInspectionDetail${at}`"
+      >
+        <b-row>
           <b-col md="4">
-            <p class="text-muted mt-2 mb-0">VIQ Chapter Name</p>
-            <p class="text-primary text-24 line-height-1 mb-2">
-              {{ sireInspectionDetail.viq_chapter.chapter_name }}
-            </p>
+            <b-row>
+              <b-col md="4">
+                <p class="text-muted mt-2 mb-0">Sr No ({{ at + 1 }})</p>
+              </b-col>
+              <b-col md="8">
+                <p class="text-muted mt-2 mb-0">VIQ Chapter Name</p>
+                <p class="text-primary text-24 line-height-1 mb-2">
+                  {{ sireInspectionDetail.viq_chapter.chapter_name }}
+                </p>
+              </b-col>
+            </b-row>
           </b-col>
           <b-col md="4">
             <p class="text-muted mt-2 mb-0">VIQ No</p>
@@ -138,6 +146,40 @@
             </p>
           </b-col>
         </b-row>
+        <b-row>
+          <b-col md="4">
+            <b-row>
+              <b-col md="4">
+              </b-col>
+              <b-col md="8">
+                <p class="text-muted mt-2 mb-0">is Closed</p>
+            <p class="text-primary text-24 line-height-1 mb-2">
+              {{ sireInspectionDetail.is_closed ? "Yes" : "No" }}
+            </p>
+              </b-col>
+            </b-row>
+          </b-col>
+          
+          <b-col md="4">
+            <p class="text-muted mt-2 mb-0">Observation</p>
+            <p class="text-primary text-24 line-height-1 mb-2">
+              {{ sireInspectionDetail.observation }}
+            </p>
+          </b-col>
+          <b-col md="4">
+            <p class="text-muted mt-2 mb-0">Evidence</p>
+            <p class="text-primary text-18 line-height-1 mb-2">
+              <a
+                :href="`${mediaUrl}${sireInspectionDetail.evidence}`"
+                target="_blank"
+                style="color: blue"
+              >
+                Click to see : {{ sireInspectionDetail.evidence }}
+              </a>
+            </p>
+          </b-col>
+        </b-row>
+        <br />
       </div>
     </b-card>
     <!-- Sire Inspection details ens -->
@@ -229,10 +271,10 @@ export default {
     },
   },
   mounted() {
+    this.getData();
     this.form.vessel_id = this.$route.params.vessel_id;
     this.form.site_id = this.site.id;
     this.getMasters();
-    this.getData();
   },
   computed: {
     filteredOilMajorItems() {
@@ -273,13 +315,14 @@ export default {
         `/vessels/${this.$route.params.vessel_id}/sire_inspections/${this.$route.params.id}`
       );
       this.form = form.data.data;
-      console.log(this.form);
+      let vessel = await axios.get(`/vessels/${this.$route.params.vessel_id}`);
+      this.vessel = vessel.data.data;
+      this.sireDetails = this.form.sire_inspection_details;
+      // console.log(this.form);
       this.port = this.form.port;
       this.country = this.form.country;
       this.oil_major = this.form.oil_major;
       this.inspector = this.form.inspector;
-
-      this.sireDetails = this.form.sire_inspection_details;
 
       this.selectedPort.push({
         id: this.port.id,
@@ -299,8 +342,6 @@ export default {
         text: this.inspector.user_name,
       });
 
-      let vessel = await axios.get(`/vessels/${this.$route.params.vessel_id}`);
-      this.vessel = vessel.data.data;
       // console.log(this.vessel);
       // this.program = form.data.data.program;
       this.isLoading = false;
