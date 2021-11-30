@@ -154,6 +154,30 @@ const routes = [
           },
         ],
       },
+      // Terminal Inspection
+      {
+        path: "/app/vessels/:vessel_id/terminal-inspections",
+        component: () => import("./views/app/terminal-inspections"),
+        redirect: "/app/vessels/:vessel_id/terminal-inspections/list",
+        children: [
+          {
+            path: "list",
+            component: () => import("./views/app/terminal-inspections/list"),
+          },
+          {
+            path: "create",
+            component: () => import("./views/app/terminal-inspections/create"),
+          },
+          {
+            path: "view/:id",
+            component: () => import("./views/app/terminal-inspections/view"),
+          },
+          {
+            path: ":id",
+            component: () => import("./views/app/terminal-inspections/id"),
+          },
+        ],
+      },
       // FSC Inspection
       {
         path: "/app/vessels/:vessel_id/fsc-inspections",
