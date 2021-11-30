@@ -131,7 +131,7 @@
             </b-row>
             <b-row>
               <b-col md="6">
-                <b-form-group label="Summer DWT">
+                <b-form-group label="Summer DWT (M/T) ">
                   <b-form-input
                     class="mb-2"
                     label="Summer DWT"
@@ -139,7 +139,7 @@
                     v-model.trim="$v.form.dwt.$model"
                   >
                   </b-form-input>
-                  <b-form-text id="input-live-help">in Metric Tons</b-form-text>
+                  <!-- <b-form-text id="input-live-help">in Metric Tons</b-form-text> -->
                   <!-- <b-alert
                     show
                     variant="danger"

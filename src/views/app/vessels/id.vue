@@ -131,7 +131,7 @@
             </b-row>
             <b-row>
               <b-col md="6">
-                <b-form-group label="Summer DWT">
+                <b-form-group label="Summer DWT (M/T)">
                   <b-form-input
                     class="mb-2"
                     label="Summer DWT"
