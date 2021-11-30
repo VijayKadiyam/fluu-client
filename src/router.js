@@ -129,6 +129,7 @@ const routes = [
           },
         ],
       },
+      
       // PSC Inspection
       {
         path: "/app/vessels/:vessel_id/psc-inspections",
