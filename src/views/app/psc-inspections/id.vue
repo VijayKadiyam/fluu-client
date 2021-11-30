@@ -6,15 +6,15 @@
       <div class="content">
         <b-row>
           <b-col md="3">
-            <p class="text-muted mt-2 mb-0">Vessel Name</p>
-            <p class="text-primary text-24 line-height-1 mb-2">
-              {{ vessel.name }}
-            </p>
-          </b-col>
-          <b-col md="3">
             <p class="text-muted mt-2 mb-0">Serial No</p>
             <p class="text-primary text-24 line-height-1 mb-2">
               {{ vessel.serial_no }}
+            </p>
+          </b-col>
+          <b-col md="3">
+            <p class="text-muted mt-2 mb-0">Vessel Name</p>
+            <p class="text-primary text-24 line-height-1 mb-2">
+              {{ vessel.name }}
             </p>
           </b-col>
           <b-col md="3">
@@ -191,8 +191,7 @@
                 </b-form-group>
               </b-col>
             </b-row>
-            <div
-            >
+            <div>
               <!-- v-if="
                 form.is_deficiency_closed == 1 &&
                   form.no_of_issued_deficiencies ==
