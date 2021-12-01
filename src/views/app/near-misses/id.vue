@@ -232,7 +232,9 @@ export default {
     },
     async getData() {
       this.isLoading = true;
-      let form = await axios.get(`/near_misses/${this.$route.params.id}`);
+      let form = await axios.get(
+        `/vessels/${this.$route.params.vessel_id}/near_misses/${this.$route.params.id}`
+      );
       this.form = form.data.data;
       this.location = this.form.location;
       this.category = this.form.category;
@@ -278,14 +280,19 @@ export default {
       } else {
         try {
           this.isLoading = true;
-          await axios.patch(`/near_misses/${this.$route.params.id}`, this.form);
+          await axios.patch(
+            `/vessels/${this.$route.params.vessel_id}/near_misses/${this.$route.params.id}`,
+            this.form
+          );
           this.isLoading = false;
         } catch (e) {
           this.isLoading = false;
         }
         this.submitStatus = "PENDING";
         this.submitStatus = "OK";
-        this.$router.push("/app/near-misses");
+        this.$router.push(
+          `/app/vessels/${this.$route.params.vessel_id}/near-misses`
+        );
       }
     },
     makeToast(variant = null) {

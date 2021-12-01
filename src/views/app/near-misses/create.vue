@@ -253,14 +253,14 @@ export default {
         try {
           console.log(this.form);
           this.isLoading = true;
-          await axios.post("/near_misses", this.form);
+          await axios.post(`/vessels/${this.$route.params.vessel_id}/near_misses`, this.form);
           this.isLoading = false;
         } catch (e) {
           this.isLoading = false;
         }
         this.submitStatus = "PENDING";
         this.submitStatus = "OK";
-        this.$router.push("/app/near-misses");
+        this.$router.push(`/app/vessels/${this.$route.params.vessel_id}/near-misses`);
       }
     },
     makeToast(variant = null) {
