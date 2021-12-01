@@ -1,6 +1,6 @@
 <template>
   <div class="main-content">
-    <breadcumb :page="'Create Terminal Inspection'" :folder="'Terminal Inspections'" />
+    <breadcumb :page="'Create Charterer Inspection'" :folder="'Charterer Inspections'" />
     <!-- Vessel Details card -->
     <b-card class="mb-4">
       <div class="content">
@@ -325,7 +325,7 @@ import { numeric, required } from "vuelidate/lib/validators";
 export default {
   metaInfo: {
     // if no subcomponents specify a metaInfo.title, this title will be used
-    title: "Terminal Inspection | Create",
+    title: "Charterer Inspection | Create",
   },
   data() {
     const now = new Date();
@@ -408,7 +408,7 @@ export default {
     },
     async getMasters() {
       this.isLoading = true;
-      let masters = await axios.get("terminal_inspections/masters");
+      let masters = await axios.get("charterer_inspections/masters");
       masters = masters.data;
       masters.ports.forEach((port) => {
         this.portItems.push({
@@ -435,7 +435,7 @@ export default {
     async submit() {
       console.log("submit!");
 
-      this.form.terminal_inspection_deficiencies = this.deficiency_details;
+      this.form.charterer_inspection_deficiencies = this.deficiency_details;
       if (this.selectedPort[0]) {
         this.form.port_id = this.selectedPort[0].id;
       }
@@ -451,16 +451,16 @@ export default {
           this.isLoading = true;
           this.submitStatus = "PENDING";
           // console.log(this.form);
-          let terminal_inspection = await axios.post(
-            `/vessels/${this.$route.params.vessel_id}/terminal_inspections`,
+          let charterer_inspection = await axios.post(
+            `/vessels/${this.$route.params.vessel_id}/charterer_inspections`,
             this.form
           );
-          this.terminal_inspection = terminal_inspection.data.data;
+          this.charterer_inspection = charterer_inspection.data.data;
           await this.handleFileUpload();
           this.isLoading = false;
           this.submitStatus = "OK";
           this.$router.push(
-            `/app/vessels/${this.$route.params.vessel_id}/terminal-inspections/`
+            `/app/vessels/${this.$route.params.vessel_id}/charterer-inspections/`
           );
         } catch (e) {
           this.isLoading = false;
@@ -483,12 +483,12 @@ export default {
     },
     async handleFileUpload() {
       let reportpath = this.$refs.report.files[0];
-      const terminal_inspection_id = this.terminal_inspection.id;
+      const charterer_inspection_id = this.charterer_inspection.id;
       let formData = new FormData();
-      formData.append("terminal_inspection_id", terminal_inspection_id);
+      formData.append("charterer_inspection_id", charterer_inspection_id);
       formData.append("reportpath", reportpath);
       let evidence_count = 0;
-      this.terminal_inspection.terminal_inspection_deficiencies.forEach(
+      this.charterer_inspection.charterer_inspection_deficiencies.forEach(
         (dd, index) => {
           let deficiency_id = dd.id;
           let d_id = "deficiency_id" + index;
@@ -512,7 +512,7 @@ export default {
       );
       formData.append("evidence_count", evidence_count);
       await axios
-        .post("upload_terminal_inspection_report", formData, {
+        .post("upload_charterer_inspection_report", formData, {
           headers: {
             "Content-Type": "multipart/form-data",
           },

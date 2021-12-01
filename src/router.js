@@ -178,6 +178,30 @@ const routes = [
           },
         ],
       },
+       // Charterer Inspection
+       {
+        path: "/app/vessels/:vessel_id/charterer-inspections",
+        component: () => import("./views/app/charterer-inspections"),
+        redirect: "/app/vessels/:vessel_id/charterer-inspections/list",
+        children: [
+          {
+            path: "list",
+            component: () => import("./views/app/charterer-inspections/list"),
+          },
+          {
+            path: "create",
+            component: () => import("./views/app/charterer-inspections/create"),
+          },
+          {
+            path: "view/:id",
+            component: () => import("./views/app/charterer-inspections/view"),
+          },
+          {
+            path: ":id",
+            component: () => import("./views/app/charterer-inspections/id"),
+          },
+        ],
+      },
       // FSC Inspection
       {
         path: "/app/vessels/:vessel_id/fsc-inspections",
@@ -202,7 +226,7 @@ const routes = [
           },
         ],
       },
-      // SIRE Inspection
+      // CDI Inspection
       {
         path: "/app/vessels/:vessel_id/sire-inspections",
         component: () => import("./views/app/sire-inspections"),
@@ -239,9 +263,9 @@ const routes = [
       // },
       // Near Misses
       {
-        path: "/app/vessels/:vessel_id/near-misses",
+        path: "/app/near-misses",
         component: () => import("./views/app/near-misses"),
-        redirect: "/app/vessels/:vessel_id/near-misses/list",
+        redirect: "/app/near-misses/list",
         children: [
           {
             path: "list",
@@ -250,10 +274,6 @@ const routes = [
           {
             path: "create",
             component: () => import("./views/app/near-misses/create"),
-          },
-          {
-            path: "view/:id",
-            component: () => import("./views/app/near-misses/view"),
           },
           {
             path: ":id",

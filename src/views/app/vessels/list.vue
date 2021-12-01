@@ -72,7 +72,7 @@
                 </b-dropdown-item>
                 <b-dropdown-item>
                   <router-link
-                    :to="'/app/vessels/' + props.row.id + '/psc-inspections'"
+                    :to="'/app/vessels/' + props.row.id + '/charterer-inspections'"
                   >
                     Charterers Inspection
                   </router-link>
