@@ -136,7 +136,7 @@
             <div class="triangle"></div>
           </li>
           <!-- Near Misses -->
-          <li
+          <!-- <li
             @mouseenter="toggleSubMenu"
             :class="{ active: selectedParentMenu == 'near-misses' }"
             class="nav-item"
@@ -149,7 +149,7 @@
               <span class="nav-text">Near Misses</span>
             </router-link>
             <div class="triangle"></div>
-          </li>
+          </li> -->
         </ul>
       </div>
     </vue-perfect-scrollbar>

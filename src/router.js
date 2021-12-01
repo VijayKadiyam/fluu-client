@@ -202,7 +202,7 @@ const routes = [
           },
         ],
       },
-      // CDI Inspection
+      // SIRE Inspection
       {
         path: "/app/vessels/:vessel_id/sire-inspections",
         component: () => import("./views/app/sire-inspections"),
@@ -239,9 +239,9 @@ const routes = [
       // },
       // Near Misses
       {
-        path: "/app/near-misses",
+        path: "/app/vessels/:vessel_id/near-misses",
         component: () => import("./views/app/near-misses"),
-        redirect: "/app/near-misses/list",
+        redirect: "/app/vessels/:vessel_id/near-misses/list",
         children: [
           {
             path: "list",
@@ -250,6 +250,10 @@ const routes = [
           {
             path: "create",
             component: () => import("./views/app/near-misses/create"),
+          },
+          {
+            path: "view/:id",
+            component: () => import("./views/app/near-misses/view"),
           },
           {
             path: ":id",

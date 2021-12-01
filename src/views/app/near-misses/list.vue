@@ -1,6 +1,38 @@
 <template>
   <div class="main-content">
     <breadcumb :page="'Near Miss List'" :folder="'Near Misses'" />
+    <!-- Vessel Details card -->
+    <b-card class="mb-4">
+      <div class="content">
+        <b-row>
+          <b-col md="3">
+            <p class="text-muted mt-2 mb-0">Serial No</p>
+            <p class="text-primary text-24 line-height-1 mb-2">
+              {{ vessel.serial_no }}
+            </p>
+          </b-col>
+          <b-col md="3">
+            <p class="text-muted mt-2 mb-0">Vessel Name</p>
+            <p class="text-primary text-24 line-height-1 mb-2">
+              {{ vessel.name }}
+            </p>
+          </b-col>
+          <b-col md="3">
+            <p class="text-muted mt-2 mb-0">IMO No</p>
+            <p class="text-primary text-24 line-height-1 mb-2">
+              {{ vessel.imo_no }}
+            </p>
+          </b-col>
+          <b-col md="3">
+            <p class="text-muted mt-2 mb-0">Type</p>
+            <p class="text-primary text-24 line-height-1 mb-2">
+              {{ vessel.vessel_type.description }}
+            </p>
+          </b-col>
+        </b-row>
+      </div>
+    </b-card>
+    <!-- /Vessel Details card -->
     <!-- <div class="wrapper"> -->
     <b-card>
       <vue-good-table
@@ -21,23 +53,48 @@
           <b-button
             variant="primary"
             class="btn-rounded d-none d-sm-block"
-            to="/app/near-misses/create"
+            :to="'/app/vessels/' + vessel.id + '/near-misses/create'"
             ><i class="i-Add text-white mr-2"> </i>Add Near Miss
           </b-button>
         </div>
 
         <template slot="table-row" slot-scope="props">
-          <div v-if="props.column.field == 'button'">
-            <a :href="'/app/near-misses/' + props.row.id">
-              <i class="i-Eraser-2 text-25 text-success mr-2"></i>
-              {{ props.row.button }}</a
-            >
-            <!-- <a :href="'/app/near_misses/' + props.row.id +'/psc-inspections'">
-              <i class="i-Add text-25 text-success mr-2"></i>
-              </a
-            > -->
-          </div>
-          <span v-if="props.column.field == 'number_reported' && props.row.number_reported">
+          <span v-if="props.column.field == 'button'">
+            <b-row>
+              <router-link
+                :to="
+                  '/app/vessels/' +
+                    props.row.vessel_id +
+                    '/near-misses/view/' +
+                    props.row.id
+                "
+                class="btn btn-primary btn-rounded d-none d-sm-block mb-2 mr-2 "
+                v-b-tooltip.hover
+                title="View Near Miss"
+              >
+                <i class="i-Eye"></i> VIEW
+              </router-link>
+              <router-link
+                :to="
+                  '/app/vessels/' +
+                    props.row.vessel_id +
+                    '/near-misses/' +
+                    props.row.id
+                "
+                class="btn btn-primary btn-rounded d-none d-sm-block mb-2 mr-2 "
+                v-b-tooltip.hover
+                title="Edit Near Miss"
+              >
+                <i class="i-Eraser-2"></i> EDIT
+              </router-link>
+            </b-row>
+          </span>
+          <span
+            v-if="
+              props.column.field == 'number_reported' &&
+                props.row.number_reported
+            "
+          >
             {{ props.row.number_reported || "" }}
           </span>
           <span v-if="props.column.field == 'location' && props.row.location">
@@ -98,6 +155,7 @@ export default {
           thClass: "text-right",
         },
       ],
+      vessel: {},
       near_misses: [],
     };
   },
@@ -107,8 +165,13 @@ export default {
   methods: {
     async getData() {
       this.isLoading = true;
-      let near_misses = await axios.get(`near_misses`);
+      let near_misses = await axios.get(
+        `/vessels/${this.$route.params.vessel_id}/near_misses`
+      );
       this.near_misses = near_misses.data.data;
+
+      let vessel = await axios.get(`/vessels/${this.$route.params.vessel_id}`);
+      this.vessel = vessel.data.data;
       this.isLoading = false;
     },
   },
