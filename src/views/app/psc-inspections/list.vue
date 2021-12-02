@@ -49,12 +49,20 @@
         :rows="psc_inspections"
       >
         <div slot="table-actions" class="mb-3">
-          <b-button
-            variant="primary"
-            class="btn-rounded d-none d-sm-block"
-            :to="'/app/vessels/' + vessel.id + '/psc-inspections/create'"
-            ><i class="i-Add-User text-white mr-2"> </i>Add PSC Inspection
-          </b-button>
+          <b-row>
+            <b-button
+              @click="$router.back()"
+              variant="primary"
+              class="btn-rounded d-none d-sm-block mr-2"
+              ><i class="i-Arrow-Back-3"></i> BACK</b-button
+            >
+            <b-button
+              variant="primary"
+              class="btn-rounded d-none d-sm-block"
+              :to="'/app/vessels/' + vessel.id + '/psc-inspections/create'"
+              ><i class="i-Add-User text-white mr-2"> </i>Add PSC Inspection
+            </b-button>
+          </b-row>
         </div>
 
         <template slot="table-row" slot-scope="props">
@@ -62,25 +70,27 @@
             <b-row>
               <router-link
                 :to="
-                '/app/vessels/' +
-                  props.row.vessel_id +
-                  '/psc-inspections/view/' +
-                  props.row.id
-              "
+                  '/app/vessels/' +
+                    props.row.vessel_id +
+                    '/psc-inspections/view/' +
+                    props.row.id
+                "
                 class="btn btn-primary btn-rounded d-none d-sm-block mb-2 mr-2 "
-                v-b-tooltip.hover title="View PSC Inspection"
+                v-b-tooltip.hover
+                title="View PSC Inspection"
               >
                 <i class="i-Eye"></i> VIEW
               </router-link>
               <router-link
                 :to="
-                '/app/vessels/' +
-                  props.row.vessel_id +
-                  '/psc-inspections/' +
-                  props.row.id
-              "
+                  '/app/vessels/' +
+                    props.row.vessel_id +
+                    '/psc-inspections/' +
+                    props.row.id
+                "
                 class="btn btn-primary btn-rounded d-none d-sm-block mb-2 mr-2 "
-                v-b-tooltip.hover title="Edit PSC Inspection"
+                v-b-tooltip.hover
+                title="Edit PSC Inspection"
               >
                 <i class="i-Eraser-2"></i> EDIT
               </router-link>

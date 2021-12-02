@@ -5,6 +5,17 @@
     <b-row class="justify-content-md-center">
       <b-col md="9">
         <b-card title="Near Miss">
+          <b-row>
+            <b-col md="12">
+              <b-button
+                @click="$router.back()"
+                class="pull-right"
+                style="margin-top:-45px"
+                variant="primary"
+                ><i class="i-Arrow-Back-3"></i> BACK</b-button
+              >
+            </b-col>
+          </b-row>
           <b-form @submit.prevent="submit">
             <b-row>
               <b-col>
@@ -253,14 +264,19 @@ export default {
         try {
           console.log(this.form);
           this.isLoading = true;
-          await axios.post(`/vessels/${this.$route.params.vessel_id}/near_misses`, this.form);
+          await axios.post(
+            `/vessels/${this.$route.params.vessel_id}/near_misses`,
+            this.form
+          );
           this.isLoading = false;
         } catch (e) {
           this.isLoading = false;
         }
         this.submitStatus = "PENDING";
         this.submitStatus = "OK";
-        this.$router.push(`/app/vessels/${this.$route.params.vessel_id}/near-misses`);
+        this.$router.push(
+          `/app/vessels/${this.$route.params.vessel_id}/near-misses`
+        );
       }
     },
     makeToast(variant = null) {

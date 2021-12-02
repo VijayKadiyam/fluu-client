@@ -49,12 +49,20 @@
         :rows="fsc_inspections"
       >
         <div slot="table-actions" class="mb-3">
-          <b-button
-            variant="primary"
-            class="btn-rounded d-none d-sm-block"
-            :to="'/app/vessels/' + vessel.id + '/fsc-inspections/create'"
-            ><i class="i-Add-User text-white mr-2"> </i>Add FSC Inspection
-          </b-button>
+          <b-row>
+            <b-button
+              @click="$router.back()"
+              variant="primary"
+              class="btn-rounded d-none d-sm-block mr-2"
+              ><i class="i-Arrow-Back-3"></i> BACK</b-button
+            >
+            <b-button
+              variant="primary"
+              class="btn-rounded d-none d-sm-block"
+              :to="'/app/vessels/' + vessel.id + '/fsc-inspections/create'"
+              ><i class="i-Add-User text-white mr-2"> </i>Add FSC Inspection
+            </b-button>
+          </b-row>
         </div>
 
         <template slot="table-row" slot-scope="props">
@@ -62,25 +70,27 @@
             <b-row>
               <router-link
                 :to="
-                '/app/vessels/' +
-                  props.row.vessel_id +
-                  '/fsc-inspections/view/' +
-                  props.row.id
-              "
+                  '/app/vessels/' +
+                    props.row.vessel_id +
+                    '/fsc-inspections/view/' +
+                    props.row.id
+                "
                 class="btn btn-primary btn-rounded d-none d-sm-block mb-2 mr-2 "
-                v-b-tooltip.hover title="View FSC Inspection"
+                v-b-tooltip.hover
+                title="View FSC Inspection"
               >
                 <i class="i-Eye"></i> VIEW
               </router-link>
               <router-link
                 :to="
-                '/app/vessels/' +
-                  props.row.vessel_id +
-                  '/fsc-inspections/' +
-                  props.row.id
-              "
+                  '/app/vessels/' +
+                    props.row.vessel_id +
+                    '/fsc-inspections/' +
+                    props.row.id
+                "
                 class="btn btn-primary btn-rounded d-none d-sm-block mb-2 mr-2 "
-                v-b-tooltip.hover title="Edit FSC Inspection"
+                v-b-tooltip.hover
+                title="Edit FSC Inspection"
               >
                 <i class="i-Eraser-2"></i> EDIT
               </router-link>

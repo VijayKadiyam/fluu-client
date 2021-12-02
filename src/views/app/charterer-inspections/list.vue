@@ -1,6 +1,9 @@
 <template>
   <div class="main-content">
-    <breadcumb :page="'Charterer Inspection List'" :folder="'Charterer Inspections'" />
+    <breadcumb
+      :page="'Charterer Inspection List'"
+      :folder="'Charterer Inspections'"
+    />
     <!-- Vessel Details card -->
     <b-card class="mb-4">
       <div class="content">
@@ -49,25 +52,36 @@
         :rows="charterer_inspections"
       >
         <div slot="table-actions" class="mb-3">
-          <b-button
-            variant="primary"
-            class="btn-rounded d-none d-sm-block"
-            :to="'/app/vessels/' + vessel.id + '/charterer-inspections/create'"
-            ><i class="i-Add-User text-white mr-2"> </i>Add Charterer Inspection
-          </b-button>
+          <b-row>
+            <b-button
+              @click="$router.back()"
+              variant="primary"
+              class="btn-rounded d-none d-sm-block mr-2"
+              ><i class="i-Arrow-Back-3"></i> BACK</b-button
+            >
+            <b-button
+              variant="primary"
+              class="btn-rounded d-none d-sm-block"
+              :to="
+                '/app/vessels/' + vessel.id + '/charterer-inspections/create'
+              "
+              ><i class="i-Add-User text-white mr-2"> </i>Add Charterer
+              Inspection
+            </b-button>
+          </b-row>
         </div>
 
         <template slot="table-row" slot-scope="props">
-         <span v-if="props.column.field == 'button'" class="row">
+          <span v-if="props.column.field == 'button'" class="row">
             <b-col md="6">
               <router-link
                 v-b-tooltip.hover
                 title="View Charterer Inspcteion"
                 :to="
                   '/app/vessels/' +
-                  props.row.vessel_id +
-                  '/charterer-inspections/view/' +
-                  props.row.id
+                    props.row.vessel_id +
+                    '/charterer-inspections/view/' +
+                    props.row.id
                 "
                 class="btn btn-primary btn-rounded d-none d-sm-block"
               >
@@ -81,9 +95,9 @@
                 title="Edit Charterer Inspcteion"
                 :to="
                   '/app/vessels/' +
-                  props.row.vessel_id +
-                  '/charterer-inspections/' +
-                  props.row.id
+                    props.row.vessel_id +
+                    '/charterer-inspections/' +
+                    props.row.id
                 "
                 class="btn btn-primary btn-rounded d-none d-sm-block"
               >

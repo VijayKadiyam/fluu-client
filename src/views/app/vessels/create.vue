@@ -1,10 +1,20 @@
 <template>
   <div class="main-content">
     <breadcumb :page="'Create Vessel'" :folder="'Vessels'" />
-
     <b-row>
       <b-col md="12">
         <b-card title="Vessel">
+          <b-row>
+            <b-col md="12">
+              <b-button
+                @click="$router.back()"
+                class="mb-2 pull-right"
+                style="margin-top:-45px"
+                variant="primary"
+                ><i class="i-Arrow-Back-3"></i> BACK</b-button
+              >
+            </b-col>
+          </b-row>
           <b-form @submit.prevent="submit">
             <b-row>
               <b-col md="6">
