@@ -370,10 +370,15 @@ export default {
       searchCountry: "",
       selectedCountry: [],
       countryItems: [],
+      valueCountryItems: [],
 
       submitStatus: null,
       vessel: {},
     };
+  },
+  watch: {
+    // selectedUser: "searchSelectedUser",
+    selectedCountry: "searchSelectedCountry",
   },
   validations: {
     form: {
@@ -424,17 +429,23 @@ export default {
       this.isLoading = true;
       let masters = await axios.get("terminal_inspections/masters");
       masters = masters.data;
-      masters.ports.forEach((port) => {
-        this.portItems.push({
-          id: port.id,
-          text: port.description,
-        });
-      });
+      // masters.ports.forEach((port) => {
+      //   this.portItems.push({
+      //     id: port.id,
+      //     text: port.description,
+      //   });
+      // });
 
       masters.countries.forEach((country) => {
         this.countryItems.push({
           id: country.id,
           text: country.description,
+        });
+      });
+      masters.valueCountry.forEach((country) => {
+        this.valueCountryItems.push({
+          id: country.id,
+          text: country.name,
         });
       });
       this.isLoading = false;
@@ -537,6 +548,29 @@ export default {
     },
     inputSubmit() {
       console.log("submitted");
+    },
+    async searchSelectedCountry() {
+      if (this.selectedCountry.length > 0) {  
+        this.country_name=this.selectedCountry[0].text // IRAQ Valuelist desc 
+        this.countryData=this.valueCountryItems.find((sp) => sp.text == this.country_name); // 99->data
+        console.log(this.countryData);
+        let ports = await axios.get(
+          `/values/${this.countryData.id}/value_lists`
+        );
+        this.ports = ports.data.data;
+        console.log(this.country_name);
+        this.ports.forEach((port) => {
+          this.portItems.push({
+            id: port.id,
+            text: port.description,
+          });
+        });
+      } else {
+        // console.log('clean all');
+        this.ports = [];
+        this.searchPort = [];
+        // this.selectedProgramPost=[];
+      }
     },
   },
   computed: {
