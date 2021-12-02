@@ -5,6 +5,16 @@
     <b-row class="justify-content-md-center">
       <b-col md="9">
         <b-card title="Site">
+          <b-row>
+            <b-col md="12">
+              <b-button
+                style="float: right; margin-top: -45px;"
+                @click="$router.back()"
+                variant="primary"
+                ><i class="i-Arrow-Back-3"></i> Back</b-button
+              >
+            </b-col>
+          </b-row>
           <b-form @submit.prevent="submit">
             <b-form-group label="Name">
               <b-form-input
@@ -167,8 +177,8 @@ export default {
         }
         this.submitStatus = "PENDING";
         // setTimeout(() => {
-          this.submitStatus = "OK";
-          this.$router.push("/app/sites/");
+        this.submitStatus = "OK";
+        this.$router.push("/app/sites/");
         // }, 1000);
       }
     },

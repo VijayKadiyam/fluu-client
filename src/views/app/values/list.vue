@@ -28,10 +28,15 @@
 
         <template slot="table-row" slot-scope="props">
           <span v-if="props.column.field == 'button'">
-            <a :href="'/app/values/' + props.row.id">
-              <i class="i-Eraser-2 text-25 text-success mr-2"></i>
-              {{ props.row.button }}</a
+            <router-link
+              :to="'/app/values/' + props.row.id"
+              class="btn btn-primary d-none d-sm-block mb-2 mr-2"
+              v-b-tooltip.hover
+              title="Edit Value Details"
+              style="float: right; width: 20%;"
             >
+              <i class="i-Eraser-2"></i> EDIT
+            </router-link>
           </span>
         </template>
       </vue-good-table>

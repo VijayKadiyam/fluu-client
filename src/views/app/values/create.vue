@@ -4,7 +4,17 @@
 
     <b-row class="justify-content-md-center">
       <b-col md="9">
-        <b-card>
+        <b-card title="Value">
+          <b-row>
+            <b-col md="12">
+              <b-button
+                style="float: right; margin-top: -45px"
+                @click="$router.back()"
+                variant="primary"
+                ><i class="i-Arrow-Back-3"></i> Back</b-button
+              >
+            </b-col>
+          </b-row>
           <b-form @submit.prevent="submit">
             <b-form-group label="Name">
               <b-form-input
@@ -24,7 +34,6 @@
                 {{ $v.form.name.$params.minLength.min }} letters.</b-alert
               >
             </b-form-group>
-
 
             <b-button
               type="submit"
@@ -49,32 +58,30 @@
   </div>
 </template>
 
-
 <script>
 import axios from "axios";
 
-import {required,  minLength } from "vuelidate/lib/validators";
+import { required, minLength } from "vuelidate/lib/validators";
 export default {
   metaInfo: {
     // if no subcomponents specify a metaInfo.title, this title will be used
-    title: "Value | Create"
+    title: "Value | Create",
   },
   data() {
     return {
-      form:{
+      form: {
         name: "",
       },
       submitStatus: null,
-      
     };
   },
   validations: {
-    form:{
+    form: {
       name: {
-      required,
-      minLength: minLength(4)
+        required,
+        minLength: minLength(4),
+      },
     },
-    }
   },
   methods: {
     //   validate form
@@ -89,14 +96,13 @@ export default {
           this.isLoading = true;
           await axios.post("/values", this.form);
           this.isLoading = false;
-          
         } catch (e) {
           this.isLoading = false;
         }
         this.submitStatus = "PENDING";
         // setTimeout(() => {
-          this.$router.push('/app/values')
-          this.submitStatus = "OK";
+        this.$router.push("/app/values");
+        this.submitStatus = "OK";
         // }, 1000);
       }
     },
@@ -104,22 +110,21 @@ export default {
       this.$bvToast.toast("Please fill the form correctly.", {
         title: `Variant ${variant || "default"}`,
         variant: variant,
-        solid: true
+        solid: true,
       });
     },
     makeToastTwo(variant = null) {
       this.$bvToast.toast("Successfully Submitted", {
         title: `Variant ${variant || "default"}`,
         variant: variant,
-        solid: true
-
+        solid: true,
       });
     },
 
     inputSubmit() {
       console.log("submitted");
-    }
-  }
+    },
+  },
 };
 </script>
 <style>
