@@ -29,10 +29,14 @@
         <template slot="table-row" slot-scope="props" >
          
           <span v-if="props.column.field == 'button'" >
-            <a :href="'/app/users/' + props.row.id">
-              <i class="i-Eraser-2 text-25 text-success mr-2"></i>
-              {{ props.row.button }}</a
+            <router-link
+              :to="'/app/users/' + props.row.id"
+              class="btn btn-primary d-none d-sm-block mb-2 mr-2"
+              v-b-tooltip.hover
+              title="Edit User Details"
             >
+              <i class="i-Eraser-2"></i> EDIT
+            </router-link>
           </span>
           <span v-else-if="props.column.field == 'gender'">
             {{ props.row.gender == 0 ? "Male" : "Female" }}

@@ -19,16 +19,21 @@
       >
         <div slot="table-actions" class="mb-3">
           <b-button variant="primary" class="btn-rounded d-none d-sm-block"  to="/app/viq-chapters/create"
-            ><i class="i-Add text-white mr-2"> </i>Add Viq Chapter
+            ><i class="i-Add text-white mr-2"> </i>Add VIQ Chapter
           </b-button>
         </div>
 
         <template slot="table-row" slot-scope="props">
           <span v-if="props.column.field == 'button'">
-            <router-link :to="'/app/viq-chapters/' + props.row.id">
-              <i class="i-Eraser-2 text-25 text-success mr-2"></i>
-              {{ props.row.button }}</router-link
+            <router-link
+              :to="'/app/viq-chapters/' + props.row.id"
+              class="btn btn-primary d-none d-sm-block mb-2 mr-2"
+              v-b-tooltip.hover
+              title="Edit VIQ Chapter Details"
+              style="float: right; width: 20%;"
             >
+              <i class="i-Eraser-2"></i> EDIT
+            </router-link>
           </span>
         </template>
       </vue-good-table>
