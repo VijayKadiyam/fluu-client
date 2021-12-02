@@ -4,7 +4,17 @@
 
     <b-row class="justify-content-md-center">
       <b-col md="9">
-        <b-card title="VIQ Chapter">
+        <b-card title="VIQ Chapter Update">
+          <b-row>
+            <b-col md="12">
+              <b-button
+                style="float: right; margin-top: -45px"
+                @click="$router.back()"
+                variant="primary"
+                ><i class="i-Arrow-Back-3"></i> Back</b-button
+              >
+            </b-col>
+          </b-row>
           <b-form @submit.prevent="submit">
             <b-form-group label="Serial Number">
               <b-form-input
@@ -65,9 +75,7 @@
 
 <script>
 import axios from "axios";
-import {
-  required,
-} from "vuelidate/lib/validators";
+import { required } from "vuelidate/lib/validators";
 export default {
   metaInfo: {
     // if no subcomponents specify a metaInfo.title, this title will be used
@@ -114,20 +122,20 @@ export default {
         // do your submit logic here
         try {
           this.submitStatus = "PENDING";
-        this.isLoading = true;
-        await axios.patch(`/viq_chapters/${this.$route.params.id}`, this.form);
+          this.isLoading = true;
+          await axios.patch(
+            `/viq_chapters/${this.$route.params.id}`,
+            this.form
+          );
           this.submitStatus = "OK";
-        // setTimeout(() => {
-        this.$router.push("/app/viq-chapters/");
-        // }, 1000);
-        this.isLoading = false;
-        
-      } catch (e) {
-        this.isLoading = false;
-        this.submitStatus = "ERROR";
-      }
-        
-        
+          // setTimeout(() => {
+          this.$router.push("/app/viq-chapters/");
+          // }, 1000);
+          this.isLoading = false;
+        } catch (e) {
+          this.isLoading = false;
+          this.submitStatus = "ERROR";
+        }
       }
     },
     makeToast(variant = null) {

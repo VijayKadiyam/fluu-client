@@ -5,6 +5,16 @@
     <b-row class="justify-content-md-center">
       <b-col md="9">
         <b-card title="VIQ Chapter">
+          <b-row>
+            <b-col md="12">
+              <b-button
+                style="float: right; margin-top: -45px"
+                @click="$router.back()"
+                variant="primary"
+                ><i class="i-Arrow-Back-3"></i> Back</b-button
+              >
+            </b-col>
+          </b-row>
           <b-form @submit.prevent="submit">
             <b-form-group label="Serial Number">
               <b-form-input
@@ -65,9 +75,7 @@
 
 <script>
 import axios from "axios";
-import {
-  required,
-} from "vuelidate/lib/validators";
+import { required } from "vuelidate/lib/validators";
 export default {
   metaInfo: {
     // if no subcomponents specify a metaInfo.title, this title will be used
@@ -114,8 +122,8 @@ export default {
         }
         this.submitStatus = "PENDING";
         // setTimeout(() => {
-          this.submitStatus = "OK";
-          this.$router.push("/app/viq-chapters/");
+        this.submitStatus = "OK";
+        this.$router.push("/app/viq-chapters/");
         // }, 1000);
       }
     },
