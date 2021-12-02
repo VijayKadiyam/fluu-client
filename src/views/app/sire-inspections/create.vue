@@ -5,6 +5,17 @@
     <b-card class="mb-4">
       <div class="content">
         <b-row>
+          <b-col md="12">
+            <b-button
+              @click="$router.back()"
+              class="pull-right"
+              style="margin-top:-5px"
+              variant="primary"
+              ><i class="i-Arrow-Back-3"></i> BACK</b-button
+            >
+          </b-col>
+        </b-row>
+        <b-row>
           <b-col md="3">
             <p class="text-muted mt-2 mb-0">Serial No</p>
             <p class="text-primary text-24 line-height-1 mb-2">
@@ -231,9 +242,8 @@
                         </thead>
                         <tbody>
                           <tr
-                            v-for="(
-                              viqChapterDetail, vqcd
-                            ) in viqChapterDetailArrays[at]"
+                            v-for="(viqChapterDetail,
+                            vqcd) in viqChapterDetailArrays[at]"
                             :key="`viqChapterDetailArray${vqcd}`"
                           >
                             <td>
@@ -294,7 +304,7 @@
                             <td v-if="viqChapterDetail.is_closed == 1">
                               <b-form-group>
                                 <b-form-file
-                                  :id="`evidence${vqcd +`_`+ viqChapter.id}`"
+                                  :id="`evidence${vqcd + `_` + viqChapter.id}`"
                                   name="evidence"
                                   ref="evidence"
                                 ></b-form-file>
@@ -419,7 +429,6 @@ export default {
       viqChapters: [],
       viqChapterDetails: [],
       viqChapterDetailArrays: [],
-     
 
       columns: [
         {
@@ -583,7 +592,7 @@ export default {
         let sire_inspection_detail_id = dd.id;
         let d_id = "sire_inspection_detail_id" + index;
         let evidencepath = this.$refs.evidence[index].files[0];
-  // console.log(evidencepath);
+        // console.log(evidencepath);
         let path_name = "evidencepath" + index;
 
         formData.append(d_id, sire_inspection_detail_id);
@@ -597,7 +606,7 @@ export default {
             "Content-Type": "multipart/form-data",
           },
         })
-        .catch(function () {
+        .catch(function() {
           console.log("FAILURE!!");
         });
     },

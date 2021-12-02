@@ -5,6 +5,17 @@
     <b-card class="mb-4">
       <div class="content">
         <b-row>
+          <b-col md="12">
+            <b-button
+              @click="$router.back()"
+              class="pull-right"
+              style="margin-top:-5px"
+              variant="primary"
+              ><i class="i-Arrow-Back-3"></i> BACK</b-button
+            >
+          </b-col>
+        </b-row>
+        <b-row>
           <b-col md="3">
             <p class="text-muted mt-2 mb-0">Serial No</p>
             <p class="text-primary text-24 line-height-1 mb-2">

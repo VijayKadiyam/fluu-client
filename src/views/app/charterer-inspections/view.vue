@@ -5,6 +5,39 @@
       :folder="'Charterer Inspection'"
     />
     <b-card class="mb-4" title="Charterer Inspection Details">
+      <b-row>
+        <b-col md="12">
+          <b-button
+            @click="$router.back()"
+            class="mb-2 pull-right"
+            style="margin-top:-48px"
+            variant="primary"
+            ><i class="i-Arrow-Back-3"></i> BACK</b-button
+          >
+        </b-col>
+      </b-row>
+      <b-row>
+        <b-col md="12">
+          <b-button
+            @click="$router.back()"
+            class="mb-2 pull-right"
+            style="margin-top:-48px"
+            variant="primary"
+            ><i class="i-Arrow-Back-3"></i> BACK</b-button
+          >
+        </b-col>
+      </b-row>
+      <b-row>
+        <b-col md="12">
+          <b-button
+            @click="$router.back()"
+            class="mb-2 pull-right"
+            style="margin-top:-48px"
+            variant="primary"
+            ><i class="i-Arrow-Back-3"></i> BACK</b-button
+          >
+        </b-col>
+      </b-row>
       <div role="tablist">
         <b-card no-body class="ul-card__border-radius">
           <b-card-header header-tag="header" class="p-1" role="tab">

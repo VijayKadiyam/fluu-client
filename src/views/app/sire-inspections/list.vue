@@ -49,15 +49,23 @@
         :rows="sire_inspections"
       >
         <div slot="table-actions" class="mb-3">
-          <b-button
-            v-b-tooltip.hover
-            title="Add Sire Inspcteion"
-            variant="primary"
-            class="btn-rounded d-none d-sm-block"
-            :to="'/app/vessels/' + vessel.id + '/sire-inspections/create'"
-            ><i class="i-Add-User text-white mr-2"> </i>Add SIRE / CDI
-            Inspection
-          </b-button>
+          <b-row>
+            <b-button
+              @click="$router.back()"
+              variant="primary"
+              class="btn-rounded d-none d-sm-block mr-2"
+              ><i class="i-Arrow-Back-3"></i> BACK</b-button
+            >
+            <b-button
+              v-b-tooltip.hover
+              title="Add Sire Inspcteion"
+              variant="primary"
+              class="btn-rounded d-none d-sm-block"
+              :to="'/app/vessels/' + vessel.id + '/sire-inspections/create'"
+              ><i class="i-Add-User text-white mr-2"> </i>Add SIRE / CDI
+              Inspection
+            </b-button>
+          </b-row>
         </div>
 
         <template slot="table-row" slot-scope="props">
@@ -68,9 +76,9 @@
                 title="View Sire Inspcteion"
                 :to="
                   '/app/vessels/' +
-                  props.row.vessel_id +
-                  '/sire-inspections/view/' +
-                  props.row.id
+                    props.row.vessel_id +
+                    '/sire-inspections/view/' +
+                    props.row.id
                 "
                 class="btn btn-primary btn-rounded d-none d-sm-block"
               >
@@ -84,9 +92,9 @@
                 title="Edit Sire Inspcteion"
                 :to="
                   '/app/vessels/' +
-                  props.row.vessel_id +
-                  '/sire-inspections/' +
-                  props.row.id
+                    props.row.vessel_id +
+                    '/sire-inspections/' +
+                    props.row.id
                 "
                 class="btn btn-primary btn-rounded d-none d-sm-block"
               >
@@ -110,19 +118,27 @@
             {{ props.row.oil_major.description }}
           </span> -->
           <span v-if="props.column.field == 'inspector'">
-            {{ props.row.inspector.user_name ? props.row.inspector.user_name: '' }}
+            {{
+              props.row.inspector.user_name ? props.row.inspector.user_name : ""
+            }}
           </span>
           <span v-if="props.column.field == 'date_of_inspection'">
-            {{ props.row.date_of_inspection ? props.row.date_of_inspection : '' }}
+            {{
+              props.row.date_of_inspection ? props.row.date_of_inspection : ""
+            }}
           </span>
           <span v-if="props.column.field == 'country'">
-            {{ props.row.country.description ? props.row.country.description : ''}}
+            {{
+              props.row.country.description ? props.row.country.description : ""
+            }}
           </span>
           <span v-if="props.column.field == 'port'">
-            {{ props.row.port.description  ? props.row.port.description : ''}}
+            {{ props.row.port.description ? props.row.port.description : "" }}
           </span>
           <span v-if="props.column.field == 'total_observations'">
-            {{ props.row.total_observations  ? props.row.total_observations : ''}}
+            {{
+              props.row.total_observations ? props.row.total_observations : ""
+            }}
           </span>
         </template>
       </vue-good-table>

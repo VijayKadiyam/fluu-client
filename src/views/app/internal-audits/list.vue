@@ -49,12 +49,20 @@
         :rows="internal_audits"
       >
         <div slot="table-actions" class="mb-3">
-          <b-button
-            variant="primary"
-            class="btn-rounded d-none d-sm-block"
-            :to="'/app/vessels/' + vessel.id + '/internal-audits/create'"
-            ><i class="i-Add-User text-white mr-2"> </i>Add Internal Audit
-          </b-button>
+          <b-row>
+            <b-button
+              @click="$router.back()"
+              variant="primary"
+              class="btn-rounded d-none d-sm-block mr-2"
+              ><i class="i-Arrow-Back-3"></i> BACK</b-button
+            >
+            <b-button
+              variant="primary"
+              class="btn-rounded d-none d-sm-block"
+              :to="'/app/vessels/' + vessel.id + '/internal-audits/create'"
+              ><i class="i-Add-User text-white mr-2"> </i>Add Internal Audit
+            </b-button>
+          </b-row>
         </div>
 
         <template slot="table-row" slot-scope="props">

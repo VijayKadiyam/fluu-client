@@ -1,6 +1,9 @@
 <template>
   <div class="main-content">
-    <breadcumb :page="'Terminal Inspection List'" :folder="'Terminal Inspections'" />
+    <breadcumb
+      :page="'Terminal Inspection List'"
+      :folder="'Terminal Inspections'"
+    />
     <!-- Vessel Details card -->
     <b-card class="mb-4">
       <div class="content">
@@ -49,25 +52,34 @@
         :rows="terminal_inspections"
       >
         <div slot="table-actions" class="mb-3">
-          <b-button
-            variant="primary"
-            class="btn-rounded d-none d-sm-block"
-            :to="'/app/vessels/' + vessel.id + '/terminal-inspections/create'"
-            ><i class="i-Add-User text-white mr-2"> </i>Add Terminal Inspection
-          </b-button>
+          <b-row>
+            <b-button
+              @click="$router.back()"
+              variant="primary"
+              class="btn-rounded d-none d-sm-block mr-2"
+              ><i class="i-Arrow-Back-3"></i> BACK</b-button
+            >
+            <b-button
+              variant="primary"
+              class="btn-rounded d-none d-sm-block"
+              :to="'/app/vessels/' + vessel.id + '/terminal-inspections/create'"
+              ><i class="i-Add-User text-white mr-2"> </i>Add Terminal
+              Inspection
+            </b-button>
+          </b-row>
         </div>
 
         <template slot="table-row" slot-scope="props">
-         <span v-if="props.column.field == 'button'" class="row">
+          <span v-if="props.column.field == 'button'" class="row">
             <b-col md="6">
               <router-link
                 v-b-tooltip.hover
                 title="View Terminal Inspcteion"
                 :to="
                   '/app/vessels/' +
-                  props.row.vessel_id +
-                  '/terminal-inspections/view/' +
-                  props.row.id
+                    props.row.vessel_id +
+                    '/terminal-inspections/view/' +
+                    props.row.id
                 "
                 class="btn btn-primary btn-rounded d-none d-sm-block"
               >
@@ -81,9 +93,9 @@
                 title="Edit Terminal Inspcteion"
                 :to="
                   '/app/vessels/' +
-                  props.row.vessel_id +
-                  '/terminal-inspections/' +
-                  props.row.id
+                    props.row.vessel_id +
+                    '/terminal-inspections/' +
+                    props.row.id
                 "
                 class="btn btn-primary btn-rounded d-none d-sm-block"
               >

@@ -2,9 +2,20 @@
   <div class="main-content">
     <breadcumb :page="'Update SIRE Inspection'" :folder="'SIRE Inspections'" />
     <!-- Vessel Details card -->
-    <b-card class="mb-4">
+    <b-card class="mb-4" title="Vessel">
       <div class="content">
-        <h4>Vessel</h4>
+        <!-- <h4>Vessel</h4> -->
+        <b-row>
+          <b-col md="12">
+            <b-button
+              @click="$router.back()"
+              class="pull-right"
+              style="margin-top:-45px"
+              variant="primary"
+              ><i class="i-Arrow-Back-3"></i> BACK</b-button
+            >
+          </b-col>
+        </b-row>
         <b-row>
           <b-col md="3">
             <p class="text-muted mt-2 mb-0">Serial No</p>
@@ -149,17 +160,16 @@
         <b-row>
           <b-col md="4">
             <b-row>
-              <b-col md="4">
-              </b-col>
+              <b-col md="4"> </b-col>
               <b-col md="8">
                 <p class="text-muted mt-2 mb-0">is Closed</p>
-            <p class="text-primary text-24 line-height-1 mb-2">
-              {{ sireInspectionDetail.is_closed ? "Yes" : "No" }}
-            </p>
+                <p class="text-primary text-24 line-height-1 mb-2">
+                  {{ sireInspectionDetail.is_closed ? "Yes" : "No" }}
+                </p>
               </b-col>
             </b-row>
           </b-col>
-          
+
           <b-col md="4">
             <p class="text-muted mt-2 mb-0">Observation</p>
             <p class="text-primary text-24 line-height-1 mb-2">
@@ -479,7 +489,7 @@ export default {
             "Content-Type": "multipart/form-data",
           },
         })
-        .catch(function () {
+        .catch(function() {
           console.log("FAILURE!!");
         });
     },

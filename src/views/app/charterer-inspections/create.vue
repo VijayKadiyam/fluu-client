@@ -1,9 +1,23 @@
 <template>
   <div class="main-content">
-    <breadcumb :page="'Create Charterer Inspection'" :folder="'Charterer Inspections'" />
+    <breadcumb
+      :page="'Create Charterer Inspection'"
+      :folder="'Charterer Inspections'"
+    />
     <!-- Vessel Details card -->
     <b-card class="mb-4">
       <div class="content">
+        <b-row>
+          <b-col md="12">
+            <b-button
+              @click="$router.back()"
+              class="pull-right"
+              style="margin-top:-5px"
+              variant="primary"
+              ><i class="i-Arrow-Back-3"></i> BACK</b-button
+            >
+          </b-col>
+        </b-row>
         <b-row>
           <b-col md="3">
             <p class="text-muted mt-2 mb-0">Vessel Name</p>
@@ -172,7 +186,7 @@
                 md="6"
                 v-if="
                   form.no_of_issued_deficiencies ==
-                  form.no_of_closed_deficiencies
+                    form.no_of_closed_deficiencies
                 "
               >
                 <b-form-group label="Are All Deficienies Closed">
@@ -517,7 +531,7 @@ export default {
             "Content-Type": "multipart/form-data",
           },
         })
-        .catch(function () {
+        .catch(function() {
           console.log("FAILURE!!");
         });
     },
