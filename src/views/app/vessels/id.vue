@@ -482,7 +482,7 @@ export default {
         // required,
         decimal,
         // numeric,
-        maxLength: maxLength(7),
+        maxLength: maxLength(9),
       },
       imo_no: {
         // required,
@@ -613,6 +613,7 @@ export default {
     //   validate form
     async submit() {
       console.log("submit!");
+      this.form.dwt = parseFloat(this.form.dwt).toFixed(2)
       if (this.selectedVesselType[0]) {
         this.form.vessel_type_id = this.selectedVesselType[0].id;
       }

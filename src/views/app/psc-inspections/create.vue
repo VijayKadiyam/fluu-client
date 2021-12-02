@@ -383,6 +383,12 @@ export default {
   },
   methods: {
     Deficiency(number) {
+      if(number > this.form.no_of_issued_deficiencies) {
+        alert('No of closed deficiency should be less than or equal to No of issued deficiency.')
+        this.form.no_of_closed_deficiencies = 0
+        this.deficiency_details = []
+        return
+      }
       let current_len = this.deficiency_details.length;
       console.log(current_len);
       console.log(number);
