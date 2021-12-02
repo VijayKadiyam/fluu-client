@@ -12,7 +12,7 @@
             <b-button
               @click="$router.back()"
               class="pull-right"
-              style="margin-top:-5px"
+              style="margin-top: -5px"
               variant="primary"
               ><i class="i-Arrow-Back-3"></i> BACK</b-button
             >
@@ -186,7 +186,7 @@
                 md="6"
                 v-if="
                   form.no_of_issued_deficiencies ==
-                    form.no_of_closed_deficiencies
+                  form.no_of_closed_deficiencies
                 "
               >
                 <b-form-group label="Are All Deficienies Closed">
@@ -542,7 +542,7 @@ export default {
             "Content-Type": "multipart/form-data",
           },
         })
-        .catch(function() {
+        .catch(function () {
           console.log("FAILURE!!");
         });
     },
@@ -550,26 +550,29 @@ export default {
       console.log("submitted");
     },
     async searchSelectedCountry() {
-      if (this.selectedCountry.length > 0) {  
-        this.country_name=this.selectedCountry[0].text // IRAQ Valuelist desc 
-        this.countryData=this.valueCountryItems.find((sp) => sp.text == this.country_name); // 99->data
+      if (this.selectedCountry.length > 0) {
+        this.country_name = this.selectedCountry[0].text; // IRAQ Valuelist desc
+        this.countryData = this.valueCountryItems.find(
+          (sp) => sp.text == this.country_name
+        ); // 99->data
         console.log(this.countryData);
         let ports = await axios.get(
           `/values/${this.countryData.id}/value_lists`
         );
         this.ports = ports.data.data;
-        console.log(this.country_name);
         this.ports.forEach((port) => {
           this.portItems.push({
             id: port.id,
             text: port.description,
           });
         });
+
+        console.log(this.portItems);
       } else {
         // console.log('clean all');
         this.ports = [];
-        this.searchPort = [];
-        // this.selectedProgramPost=[];
+        this.portItems = [];
+        this.selectedPort = [];
       }
     },
   },
