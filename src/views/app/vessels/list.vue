@@ -79,7 +79,7 @@
                 </b-dropdown-item>
                 <b-dropdown-item>
                   <router-link
-                    :to="'/app/vessels/' + props.row.id + '/psc-inspections'"
+                    :to="'/app/vessels/' + props.row.id + '/internal-audits'"
                   >
                     Internal Audit
                   </router-link>
