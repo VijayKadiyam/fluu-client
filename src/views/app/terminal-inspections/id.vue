@@ -5,14 +5,14 @@
       :folder="'Terminal Inspections'"
     />
     <!-- Vessel Details card -->
-        <b-card class="mb-4">
+    <b-card class="mb-4">
       <div class="content">
         <b-row>
           <b-col md="12">
             <b-button
               @click="$router.back()"
               class="pull-right"
-              style="margin-top:-5px"
+              style="margin-top: -5px"
               variant="primary"
               ><i class="i-Arrow-Back-3"></i> BACK</b-button
             >
@@ -368,6 +368,8 @@ export default {
       searchCountry: "",
       selectedCountry: [],
       countryItems: [],
+      valueCountryItems: [],
+
 
       submitStatus: null,
       vessel: {},
@@ -387,6 +389,10 @@ export default {
         numeric,
       },
     },
+  },
+  watch: {
+    // selectedUser: "searchSelectedUser",
+    selectedCountry: "searchSelectedCountry",
   },
   mounted() {
     this.form.vessel_id = this.$route.params.vessel_id;
@@ -432,6 +438,12 @@ export default {
         this.countryItems.push({
           id: country.id,
           text: country.description,
+        });
+      });
+      masters.valueCountry.forEach((country) => {
+        this.valueCountryItems.push({
+          id: country.id,
+          text: country.name,
         });
       });
       this.isLoading = false;
@@ -505,36 +517,38 @@ export default {
       formData.append("terminal_inspection_id", terminal_inspection_id);
       formData.append("reportpath", reportpath);
       let evidence_count = 0;
-      this.terminal_inspection.terminal_inspection_deficiencies.forEach((dd, index) => {
-        let deficiency_id = dd.id;
-        let d_id = "deficiency_id" + index;
-        if (this.$refs.evidence_a[index]) {
-          let evidencepath_A = this.$refs.evidence_a[index].files[0];
-          let evidencepath_A_name = "evidencepath_A_" + index;
+      this.terminal_inspection.terminal_inspection_deficiencies.forEach(
+        (dd, index) => {
+          let deficiency_id = dd.id;
+          let d_id = "deficiency_id" + index;
+          if (this.$refs.evidence_a[index]) {
+            let evidencepath_A = this.$refs.evidence_a[index].files[0];
+            let evidencepath_A_name = "evidencepath_A_" + index;
 
-          formData.append(evidencepath_A_name, evidencepath_A);
-        }
-        if (this.$refs.evidence_b[index]) {
-          let evidencepath_B = this.$refs.evidence_b[index].files[0];
-          let evidencepath_B_name = "evidencepath_B_" + index;
+            formData.append(evidencepath_A_name, evidencepath_A);
+          }
+          if (this.$refs.evidence_b[index]) {
+            let evidencepath_B = this.$refs.evidence_b[index].files[0];
+            let evidencepath_B_name = "evidencepath_B_" + index;
 
-          formData.append(evidencepath_B_name, evidencepath_B);
-        }
-        if (this.$refs.evidence_c[index]) {
-          let evidencepath_C = this.$refs.evidence_c[index].files[0];
-          let evidencepath_C_name = "evidencepath_C_" + index;
+            formData.append(evidencepath_B_name, evidencepath_B);
+          }
+          if (this.$refs.evidence_c[index]) {
+            let evidencepath_C = this.$refs.evidence_c[index].files[0];
+            let evidencepath_C_name = "evidencepath_C_" + index;
 
-          formData.append(evidencepath_C_name, evidencepath_C);
-        }
-        if (this.$refs.evidence_d[index]) {
-          let evidencepath_D = this.$refs.evidence_d[index].files[0];
-          let evidencepath_D_name = "evidencepath_D_" + index;
+            formData.append(evidencepath_C_name, evidencepath_C);
+          }
+          if (this.$refs.evidence_d[index]) {
+            let evidencepath_D = this.$refs.evidence_d[index].files[0];
+            let evidencepath_D_name = "evidencepath_D_" + index;
 
-          formData.append(evidencepath_D_name, evidencepath_D);
+            formData.append(evidencepath_D_name, evidencepath_D);
+          }
+          evidence_count++;
+          formData.append(d_id, deficiency_id);
         }
-        evidence_count++;
-        formData.append(d_id, deficiency_id);
-      });
+      );
       formData.append("evidence_count", evidence_count);
       await axios
         .post("upload_terminal_inspection_report", formData, {
@@ -545,6 +559,32 @@ export default {
         .catch(function () {
           console.log("FAILURE!!");
         });
+    },
+    async searchSelectedCountry() {
+      if (this.selectedCountry.length > 0) {
+        this.country_name = this.selectedCountry[0].text; // IRAQ Valuelist desc
+        this.countryData = this.valueCountryItems.find(
+          (sp) => sp.text == this.country_name
+        ); // 99->data
+        console.log(this.countryData);
+        let ports = await axios.get(
+          `/values/${this.countryData.id}/value_lists`
+        );
+        this.ports = ports.data.data;
+        this.ports.forEach((port) => {
+          this.portItems.push({
+            id: port.id,
+            text: port.description,
+          });
+        });
+
+        console.log(this.portItems);
+      } else {
+        // console.log('clean all');
+        this.ports = [];
+        this.portItems = [];
+        this.selectedPort = [];
+      }
     },
     makeToast(variant = null) {
       this.$bvToast.toast("Please fill the form correctly.", {
