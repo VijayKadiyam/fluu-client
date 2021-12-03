@@ -333,9 +333,15 @@ export default {
   },
   data() {
     return {
-      vessel: {},
+      vessel: {
+        vessel_type: {},
+        place_of_built: {},
+      },
       countryItems: [],
-
+      psc_inspection: {
+        port: {},
+        country: {},
+      },
       submitStatus: null,
     };
   },

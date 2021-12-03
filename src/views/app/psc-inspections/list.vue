@@ -167,7 +167,9 @@ export default {
         },
       ],
       psc_inspections: [],
-      vessel: {},
+      vessel: {
+        vessel_type:{},
+      },
     };
   },
   mounted() {
