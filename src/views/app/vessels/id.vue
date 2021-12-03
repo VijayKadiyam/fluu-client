@@ -463,7 +463,7 @@ export default {
       searchBuiltPlace: "",
       selectedBuiltPlace: [],
 
-      searchOfficierNationality: "",
+      searchOfficerNationality: "",
       selectedOfficerNationality: [],
 
       searchRatingNationality: "",
@@ -538,12 +538,12 @@ export default {
         );
       });
     },
-    filteredOfficierNationalityItems() {
+    filteredOfficerNationalityItems() {
       return this.countryItems.filter((c) => {
         return (
           c.text
             .toLowerCase()
-            .indexOf(this.searchOfficierNationality.toLowerCase()) !== -1
+            .indexOf(this.searchOfficerNationality.toLowerCase()) !== -1
         );
       });
     },
