@@ -2,7 +2,7 @@
   <div class="main-content">
     <breadcumb :page="'Update PSC Inspection'" :folder="'PSC Inspections'" />
     <!-- Vessel Details card -->
-        <b-card class="mb-4">
+    <b-card class="mb-4">
       <div class="content">
         <b-row>
           <b-col md="12">
@@ -354,7 +354,9 @@ export default {
       countryItems: [],
 
       submitStatus: null,
-      vessel: {},
+      vessel: {
+        vessel_type: {},
+      },
     };
   },
   validations: {
