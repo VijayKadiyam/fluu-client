@@ -116,20 +116,27 @@
                       {{ terminal_inspection.date }}
                     </p>
                   </b-col>
-                  <b-col md="4">
-                    <p class="text-muted mt-2 mb-0">Port</p>
-                    <p class="text-primary text-24 line-height-1 mb-2">
-                      {{ terminal_inspection.port.description }}
-                    </p>
-                  </b-col>
-                  <b-col md="4">
+                   <b-col md="4">
                     <p class="text-muted mt-2 mb-0">Country</p>
                     <p class="text-primary text-24 line-height-1 mb-2">
                       {{ terminal_inspection.country.description }}
                     </p>
                   </b-col>
+                  <b-col md="4">
+                    <p class="text-muted mt-2 mb-0">Port</p>
+                    <p class="text-primary text-24 line-height-1 mb-2">
+                      {{ terminal_inspection.port? terminal_inspection.port.description: '' }}
+                    </p>
+                  </b-col>
+                  
                 </b-row>
                 <b-row>
+                  <b-col md="4">
+                    <p class="text-muted mt-2 mb-0">Terminal Name</p>
+                    <p class="text-primary text-24 line-height-1 mb-2">
+                      {{ terminal_inspection.terminal_name }}
+                    </p>
+                  </b-col>
                   <b-col md="4">
                     <p class="text-muted mt-2 mb-0">No Of Issued Deficienies</p>
                     <p class="text-primary text-24 line-height-1 mb-2">
@@ -142,6 +149,9 @@
                       {{ terminal_inspection.no_of_closed_deficiencies }}
                     </p>
                   </b-col>
+                  
+                </b-row>
+                <b-row>
                   <b-col md="4">
                     <p class="text-muted mt-2 mb-0">Report</p>
                     <p class="text-primary text-18 line-height-1 mb-2">
@@ -154,8 +164,6 @@
                       </a>
                     </p>
                   </b-col>
-                </b-row>
-                <b-row>
                   <b-col md="4">
                     <p class="text-muted mt-2 mb-0">Additional Comments</p>
                     <p class="text-primary text-24 line-height-1 mb-2">
@@ -322,9 +330,15 @@ export default {
   },
   data() {
     return {
-      vessel: {},
+      vessel: {
+        vessel_type:{},
+         place_of_built: {},
+      },
       countryItems: [],
-
+terminal_inspection:{
+port:{},
+country:{},
+},
       submitStatus: null,
     };
   },
