@@ -49,6 +49,37 @@
         <b-card>
           <b-form @submit.prevent="submit">
             <b-row>
+              <b-col md="6">
+                <b-form-group label="Type Of Audit">
+                  <b-form-select
+                    v-model="form.audit_type"
+                    :options="auditTypeItems"
+                    id="inline-form-custom-select-pref1"
+                  >
+                  </b-form-select>
+                  <b-alert
+                    show
+                    variant="danger"
+                    class="error mt-1"
+                    v-if="!$v.form.audit_type.required"
+                    >Field is required</b-alert
+                  >
+                </b-form-group>
+              </b-col>
+              <b-col md="6" v-if="form.audit_type == 10">
+                <b-form-group label="Others">
+                  <b-form-input
+                    class="mb-2 other"
+                    label="Others"
+                    id="Other-type"
+                    placeholder="Enter Other Audit "
+                    v-model="form.other_type"
+                  >
+                  </b-form-input>
+                </b-form-group>
+              </b-col>
+            </b-row>
+            <b-row>
               <b-col md="4">
                 <b-form-group label="Start Date">
                   <b-form-datepicker
@@ -134,17 +165,45 @@
                   />
                 </b-form-group>
               </b-col>
+              <b-col md="6" v-else>
+                <b-row>
+                  <b-col md="6">
+                    <b-form-group label="From">
+                      <b-form-input
+                        class="mb-2"
+                        label="from"
+                        placeholder="Enter from"
+                        v-model.trim="form.from"
+                      >
+                      </b-form-input>
+                    </b-form-group>
+                  </b-col>
+                  <b-col md="6">
+                    <b-form-group label="To">
+                      <b-form-input
+                        class="mb-2"
+                        label="To"
+                        placeholder="Enter To"
+                        v-model.trim="form.to"
+                      >
+                      </b-form-input>
+                    </b-form-group>
+                  </b-col>
+                </b-row>
+              </b-col>
             </b-row>
             <b-row>
-              <b-col md="4">
+              <b-col md="6">
                 <b-form-group label="No. Of Issued Deficiency">
                   <b-form-input
                     class="mb-2"
                     label="No. Of Issued Deficiency"
                     placeholder="Enter No. Of Issued Deficiency"
                     v-model.trim="$v.form.no_of_issued_deficiencies.$model"
+                    @change="
+                      Deficiency(parseInt(form.no_of_issued_deficiencies))
+                    "
                   >
-                    <!-- @change="Deficiency(parseInt(form.no_of_closed_deficiencies))" -->
                   </b-form-input>
                   <b-alert
                     show
@@ -162,7 +221,7 @@
                   >
                 </b-form-group>
               </b-col>
-              <b-col md="4">
+              <!-- <b-col md="4">
                 <b-form-group label="No. Of Closed Deficiency">
                   <b-form-input
                     class="mb-2"
@@ -189,8 +248,8 @@
                     >Only Numeric Value</b-alert
                   >
                 </b-form-group>
-              </b-col>
-              <b-col md="4">
+              </b-col> -->
+              <b-col md="6">
                 <b-form-group label="Report">
                   <b-form-file
                     id="file-default"
@@ -200,7 +259,7 @@
                 </b-form-group>
               </b-col>
             </b-row>
-            <b-row>
+            <!-- <b-row>
               <b-col
                 md="6"
                 v-if="
@@ -224,7 +283,7 @@
                   </b-row>
                 </b-form-group>
               </b-col>
-            </b-row>
+            </b-row> -->
             <div>
               <!-- v-if="
                 form.is_deficiency_closed == 1 &&
@@ -236,75 +295,120 @@
                 :key="`deficiency_detail${dd}`"
               >
                 <b-row>
-                  <b-col md="6">
+                  <b-col md="4">
                     <b-row>
                       <b-col md="1">
                         <span> {{ dd + 1 }} </span>
                       </b-col>
                       <b-col md="11">
-                        <b-form-group label="Date Of Closure">
+                        <b-form-group label="Date Of Issued">
                           <b-form-datepicker
-                            :id="`date_of_closure${dd}`"
-                            v-model="deficiency_detail.date_of_closure"
+                            :id="`date_of_issued${dd}`"
+                            v-model="deficiency_detail.date_of_issued"
                             class="mb-2"
                             :max="max"
-                            placeholder="Date Of Closure"
+                            placeholder="Date Of Issued"
                           ></b-form-datepicker>
                         </b-form-group>
                       </b-col>
                     </b-row>
                   </b-col>
-                  <b-col md="6">
-                    <b-form-group label="Remarks">
+                  <b-col md="4">
+                    <b-form-group label="Serial No">
                       <b-form-input
                         class="mb-2"
-                        label="Remarks"
-                        placeholder="Enter Remarks"
-                        v-model.trim="deficiency_detail.details"
+                        label="Serial No"
+                        placeholder="Enter Serial No"
+                        v-model.trim="deficiency_detail.serial_no"
+                      >
+                      </b-form-input>
+                    </b-form-group>
+                  </b-col>
+                  <b-col md="4">
+                    <b-form-group label="Reference No">
+                      <b-form-input
+                        class="mb-2"
+                        label="Reference No"
+                        placeholder="Enter Reference No"
+                        v-model.trim="deficiency_detail.reference_no"
                       >
                       </b-form-input>
                     </b-form-group>
                   </b-col>
                 </b-row>
                 <b-row>
-                  <b-col md="3">
+                  <b-col md="4">
                     <b-row>
-                      <b-col md="2"> </b-col>
-                      <b-col md="10">
-                        <b-form-group label="Evidence 1">
-                          <b-form-file
-                            :id="`evidence_a${dd}`"
-                            name="evidence_a"
-                            ref="evidence_a"
-                          ></b-form-file>
+                      <b-col md="1"> </b-col>
+                      <b-col md="11">
+                        <b-form-group label="Nature of Deficiency">
+                          <b-form-select
+                            v-model="deficiency_detail.nature_of_deficiency"
+                            :options="natureofDeficiencyItems"
+                            id="inline-form-custom-select-pref1"
+                          >
+                          </b-form-select>
                         </b-form-group>
                       </b-col>
                     </b-row>
                   </b-col>
-                  <b-col md="3">
-                    <b-form-group label="Evidence 2">
+                  <b-col md="4">
+                    <b-form-group label="Deficiency Details">
+                      <b-form-input
+                        class="mb-2"
+                        label="Deficiency Details"
+                        placeholder="Enter Deficiency Details"
+                        v-model.trim="deficiency_detail.details"
+                      >
+                      </b-form-input>
+                    </b-form-group>
+                  </b-col>
+                  <b-col md="4">
+                    <b-form-group label="Target Date">
+                      <b-form-datepicker
+                        :id="`target_date${dd}`"
+                        v-model="deficiency_detail.target_date"
+                        class="mb-2"
+                        :max="max"
+                        placeholder="Target Date"
+                      ></b-form-datepicker>
+                    </b-form-group>
+                  </b-col>
+                </b-row>
+                <b-row>
+                  <b-col md="4">
+                    <b-row>
+                      <b-col md="1"> </b-col>
+                      <b-col md="11">
+                        <b-form-group label="Completion Date by Ship">
+                          <b-form-datepicker
+                            :id="`completion_date${dd}`"
+                            v-model="deficiency_detail.completion_date"
+                            class="mb-2"
+                            :max="max"
+                            placeholder="Completion Date By Ship"
+                          ></b-form-datepicker>
+                        </b-form-group>
+                      </b-col>
+                    </b-row>
+                  </b-col>
+                  <b-col md="4">
+                    <b-form-group label="Verification Date Of Office">
+                      <b-form-datepicker
+                        :id="`verfication_date${dd}`"
+                        v-model="deficiency_detail.verfication_date"
+                        class="mb-2"
+                        :max="max"
+                        placeholder="Verification Date Of Office"
+                      ></b-form-datepicker>
+                    </b-form-group>
+                  </b-col>
+                  <b-col md="4">
+                    <b-form-group label="Evidence">
                       <b-form-file
                         :id="`evidence_b${dd}`"
                         name="evidence_b"
                         ref="evidence_b"
-                      ></b-form-file>
-                    </b-form-group>
-                  </b-col>
-                  <b-col md="3">
-                    <b-form-group label="Evidence 3">
-                      <b-form-file
-                        :id="`evidence_c${dd}`"
-                        name="evidence_c"
-                        ref="evidence_c"
-                      ></b-form-file>
-                    </b-form-group>
-                  </b-col>
-                  <b-col md="3">
-                    <b-form-group label="Evidence 4">
-                      <b-form-file
-                        :id="`evidence_d${dd}`"
-                        name="evidence_d"
-                        ref="evidence_d"
                       ></b-form-file>
                     </b-form-group>
                   </b-col>
@@ -358,6 +462,7 @@ export default {
         vessel_id: "",
         start_date: "",
         complition_date: "",
+        audit_type: "",
         location: "",
         no_of_closed_deficiencies: 0,
         is_deficiency_closed: 0,
@@ -370,7 +475,24 @@ export default {
       portItems: [],
       searchPort: "",
       selectedPort: [],
-
+      auditTypeItems: [
+        { value: "", text: " select an option" },
+        { value: "1", text: "ISM" },
+        { value: "2", text: "ISPS" },
+        { value: "3", text: "MLC" },
+        { value: "4", text: "ISO" },
+        { value: "5", text: "TMSA" },
+        { value: "6", text: "Navigational" },
+        { value: "7", text: "Cargo" },
+        { value: "8", text: "Muuring" },
+        { value: "9", text: "Bunkering" },
+        { value: "10", text: "Other" },
+      ],
+      natureofDeficiencyItems: [
+        { value: "", text: " select an option" },
+        { value: "1", text: "NC" },
+        { value: "2", text: "OBS" },
+      ],
       searchCountry: "",
       selectedCountry: [],
       countryItems: [],
@@ -383,12 +505,17 @@ export default {
         { value: "4", text: "At Lay Up/Dry Dock" },
       ],
       submitStatus: null,
-      vessel: {},
+      vessel: {
+        vessel_type: {},
+      },
     };
   },
   validations: {
     form: {
       start_date: {
+        required,
+      },
+      audit_type: {
         required,
       },
       complition_date: {
