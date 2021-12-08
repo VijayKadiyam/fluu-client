@@ -16,28 +16,6 @@
           >
         </b-col>
       </b-row>
-      <b-row>
-        <b-col md="12">
-          <b-button
-            @click="$router.back()"
-            class="mb-2 pull-right"
-            style="margin-top:-48px"
-            variant="primary"
-            ><i class="i-Arrow-Back-3"></i> BACK</b-button
-          >
-        </b-col>
-      </b-row>
-      <b-row>
-        <b-col md="12">
-          <b-button
-            @click="$router.back()"
-            class="mb-2 pull-right"
-            style="margin-top:-48px"
-            variant="primary"
-            ><i class="i-Arrow-Back-3"></i> BACK</b-button
-          >
-        </b-col>
-      </b-row>
       <div role="tablist">
         <b-card no-body class="ul-card__border-radius">
           <b-card-header header-tag="header" class="p-1" role="tab">
@@ -139,19 +117,26 @@
                     </p>
                   </b-col>
                   <b-col md="4">
-                    <p class="text-muted mt-2 mb-0">Port</p>
+                    <p class="text-muted mt-2 mb-0">Charterer Name</p>
                     <p class="text-primary text-24 line-height-1 mb-2">
-                      {{ charterer_inspection.port.description }}
+                      {{ charterer_inspection.charterer_name}}
                     </p>
                   </b-col>
                   <b-col md="4">
                     <p class="text-muted mt-2 mb-0">Country</p>
                     <p class="text-primary text-24 line-height-1 mb-2">
-                      {{ charterer_inspection.country.description }}
+                      {{ charterer_inspection.country?charterer_inspection.country.description :''}}
                     </p>
                   </b-col>
+                  
                 </b-row>
                 <b-row>
+                  <b-col md="4">
+                    <p class="text-muted mt-2 mb-0">Port</p>
+                    <p class="text-primary text-24 line-height-1 mb-2">
+                      {{ charterer_inspection.port?charterer_inspection.port.description:'' }}
+                    </p>
+                  </b-col>
                   <b-col md="4">
                     <p class="text-muted mt-2 mb-0">No Of Issued Deficienies</p>
                     <p class="text-primary text-24 line-height-1 mb-2">
@@ -164,6 +149,8 @@
                       {{ charterer_inspection.no_of_closed_deficiencies }}
                     </p>
                   </b-col>
+                </b-row>
+                <b-row>
                   <b-col md="4">
                     <p class="text-muted mt-2 mb-0">Report</p>
                     <p class="text-primary text-18 line-height-1 mb-2">
@@ -176,8 +163,6 @@
                       </a>
                     </p>
                   </b-col>
-                </b-row>
-                <b-row>
                   <b-col md="4">
                     <p class="text-muted mt-2 mb-0">Additional Comments</p>
                     <p class="text-primary text-24 line-height-1 mb-2">
@@ -221,9 +206,8 @@
                     <div class="ul-widget-s7n">
                       <div
                         class="ul-widget-s7__items mb-30"
-                        v-for="(
-                          deficiency_detail, dd
-                        ) in charterer_inspection.charterer_inspection_deficiencies"
+                        v-for="(deficiency_detail,
+                        dd) in charterer_inspection.charterer_inspection_deficiencies"
                         :key="`deficiency_detail${dd}`"
                       >
                         <span class="ul-widget-s7__item-time ul-middle">{{
@@ -266,7 +250,9 @@
                                 class="text-primary text-18 line-height-1 mb-2"
                               >
                                 <a
-                                  :href="`${mediaUrl}${deficiency_detail.evidencepath1}`"
+                                  :href="
+                                    `${mediaUrl}${deficiency_detail.evidencepath1}`
+                                  "
                                   target="_blank"
                                   style="color: blue"
                                 >
@@ -281,7 +267,9 @@
                                 class="text-primary text-18 line-height-1 mb-2"
                               >
                                 <a
-                                  :href="`${mediaUrl}${deficiency_detail.evidencepath2}`"
+                                  :href="
+                                    `${mediaUrl}${deficiency_detail.evidencepath2}`
+                                  "
                                   target="_blank"
                                   style="color: blue"
                                 >
@@ -296,7 +284,9 @@
                                 class="text-primary text-18 line-height-1 mb-2"
                               >
                                 <a
-                                  :href="`${mediaUrl}${deficiency_detail.evidencepath3}`"
+                                  :href="
+                                    `${mediaUrl}${deficiency_detail.evidencepath3}`
+                                  "
                                   target="_blank"
                                   style="color: blue"
                                 >
@@ -311,7 +301,9 @@
                                 class="text-primary text-18 line-height-1 mb-2"
                               >
                                 <a
-                                  :href="`${mediaUrl}${deficiency_detail.evidencepath4}`"
+                                  :href="
+                                    `${mediaUrl}${deficiency_detail.evidencepath4}`
+                                  "
                                   target="_blank"
                                   style="color: blue"
                                 >
@@ -344,9 +336,15 @@ export default {
   },
   data() {
     return {
-      vessel: {},
+      vessel: {
+        vessel_type: {},
+        place_of_built: {},
+      },
       countryItems: [],
-
+      charterer_inspection: {
+        port: {},
+        country: {},
+      },
       submitStatus: null,
     };
   },
