@@ -52,7 +52,7 @@
         <b-card>
           <b-form @submit.prevent="submit">
             <b-row>
-              <b-col md="4">
+              <b-col md="6">
                 <b-form-group label="Date">
                   <b-form-datepicker
                     id="date"
@@ -70,7 +70,7 @@
                   >
                 </b-form-group>
               </b-col>
-              <b-col md="4">
+              <b-col md="6">
                 <b-form-group label="Country">
                   <vue-tags-input
                     v-model="searchCountry"
@@ -84,7 +84,9 @@
                   />
                 </b-form-group>
               </b-col>
-              <b-col md="4">
+            </b-row>
+            <b-row>
+              <b-col md="6">
                 <b-form-group label="Port">
                   <vue-tags-input
                     v-model="searchPort"
@@ -96,6 +98,24 @@
                     @tags-changed="(newTags) => (selectedPort = newTags)"
                     placeholder="Type Port"
                   />
+                </b-form-group>
+              </b-col>
+                <b-col md="6">
+                <b-form-group label="Terminal Name">
+                  <b-form-input
+                    class="mb-2"
+                    label="Terminal Name"
+                    placeholder="Enter Terminal Name"
+                    v-model.trim="$v.form.terminal_name.$model"
+                  >
+                  </b-form-input>
+                  <b-alert
+                    show
+                    variant="danger"
+                    class="error mt-1"
+                    v-if="!$v.form.terminal_name.required"
+                    >Field is required</b-alert
+                  >
                 </b-form-group>
               </b-col>
             </b-row>
@@ -297,6 +317,7 @@
                 <br />
               </div>
             </div>
+            <b-row>
             <b-col md="12">
               <b-form-group label="Additional Comments">
                 <b-form-textarea
@@ -309,6 +330,7 @@
                 ></b-form-textarea>
               </b-form-group>
             </b-col>
+            </b-row>
             <b-button
               type="submit"
               variant="primary"
@@ -350,14 +372,10 @@ export default {
       form: {
         vessel_id: "",
         date: "",
+        terminal_name:"",
         no_of_closed_deficiencies: 0,
-        // no_of_closed_deficiencies: {
-        //  maxValue: maxValue(this.maxValue)
-        // },
-        // is_detained: 0,
         is_deficiency_closed: 0,
         no_of_issued_deficiencies: 0,
-        // deficiency_details:{},
       },
       maxValue: 3,
       max: maxDate,
@@ -373,7 +391,9 @@ export default {
       valueCountryItems: [],
 
       submitStatus: null,
-      vessel: {},
+      vessel: {
+        vessel_type:{},
+      },
     };
   },
   watch: {
@@ -393,6 +413,9 @@ export default {
         required,
         numeric,
       },
+      terminal_name:{
+        required,
+      }
     },
   },
   mounted() {

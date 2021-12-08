@@ -52,7 +52,7 @@
         <b-card>
           <b-form @submit.prevent="submit">
             <b-row>
-              <b-col md="4">
+              <b-col md="6">
                 <b-form-group label="Date">
                   <b-form-datepicker
                     id="date"
@@ -70,7 +70,7 @@
                   >
                 </b-form-group>
               </b-col>
-              <b-col md="4">
+              <b-col md="6">
                 <b-form-group label="Country">
                   <vue-tags-input
                     v-model="searchCountry"
@@ -84,7 +84,9 @@
                   />
                 </b-form-group>
               </b-col>
-              <b-col md="4">
+            </b-row>
+            <b-row>
+              <b-col md="6">
                 <b-form-group label="Port">
                   <vue-tags-input
                     v-model="searchPort"
@@ -96,6 +98,24 @@
                     @tags-changed="(newTags) => (selectedPort = newTags)"
                     placeholder="Type Port"
                   />
+                </b-form-group>
+              </b-col>
+              <b-col md="6">
+                <b-form-group label="Terminal Name">
+                  <b-form-input
+                    class="mb-2"
+                    label="Terminal Name"
+                    placeholder="Enter Terminal Name"
+                    v-model.trim="$v.form.terminal_name.$model"
+                  >
+                  </b-form-input>
+                  <b-alert
+                    show
+                    variant="danger"
+                    class="error mt-1"
+                    v-if="!$v.form.terminal_name.required"
+                    >Field is required</b-alert
+                  >
                 </b-form-group>
               </b-col>
             </b-row>
@@ -297,6 +317,7 @@
                 <br />
               </div>
             </div>
+            <b-row>
             <b-col md="12">
               <b-form-group label="Additional Comments">
                 <b-form-textarea
@@ -309,6 +330,8 @@
                 ></b-form-textarea>
               </b-form-group>
             </b-col>
+            </b-row>
+            
             <b-button
               type="submit"
               variant="primary"
@@ -350,7 +373,7 @@ export default {
         vessel_id: "",
         date: "",
         no_of_closed_deficiencies: 0,
-        // is_detained: 0,
+        terminal_name:"",
         is_deficiency_closed: 0,
         no_of_issued_deficiencies: 0,
       },
@@ -372,7 +395,9 @@ export default {
 
 
       submitStatus: null,
-      vessel: {},
+      vessel: {
+        vessel_type:{},
+      },  
     };
   },
   validations: {
@@ -388,6 +413,9 @@ export default {
         required,
         numeric,
       },
+      terminal_name:{
+        required,
+      }
     },
   },
   watch: {
@@ -404,8 +432,6 @@ export default {
   methods: {
     Deficiency(number) {
       let current_len = this.deficiency_details.length;
-      console.log(current_len);
-      console.log(number);
       if (current_len < number) {
         // Add
         for (let b = current_len; b < number; b++) {
@@ -415,13 +441,11 @@ export default {
         }
       } else {
         // Remove
-        console.log("remove");
         for (let b = current_len; b >= number; b--) {
           this.deficiency_details.splice(b);
         }
       }
 
-      console.log(this.deficiency_details);
     },
     async getMasters() {
       this.isLoading = true;
@@ -457,10 +481,13 @@ export default {
       this.port = this.form.port;
       this.country = this.form.country;
       this.deficiency_details = this.form.terminal_inspection_deficiencies;
+      if(this.ports){
       this.selectedPort.push({
         id: this.port.id,
         text: this.port.description,
       });
+      }
+     
 
       this.selectedCountry.push({
         id: this.country.id,
@@ -489,7 +516,6 @@ export default {
         try {
           this.isLoading = true;
           this.submitStatus = "PENDING";
-          console.log(this.form);
           let terminal_inspection = await axios.post(
             `/vessels/${this.$route.params.vessel_id}/terminal_inspections/${this.$route.params.id}`,
             this.form
@@ -510,7 +536,6 @@ export default {
       }
     },
     async handleFileUpload() {
-      console.log("File UPload");
       let reportpath = this.$refs.report.files[0];
       const terminal_inspection_id = this.terminal_inspection.id;
       let formData = new FormData();
@@ -562,11 +587,10 @@ export default {
     },
     async searchSelectedCountry() {
       if (this.selectedCountry.length > 0) {
-        this.country_name = this.selectedCountry[0].text; // IRAQ Valuelist desc
+        this.country_name = this.selectedCountry[0].text; 
         this.countryData = this.valueCountryItems.find(
           (sp) => sp.text == this.country_name
-        ); // 99->data
-        console.log(this.countryData);
+        ); 
         let ports = await axios.get(
           `/values/${this.countryData.id}/value_lists`
         );
@@ -578,9 +602,7 @@ export default {
           });
         });
 
-        console.log(this.portItems);
       } else {
-        // console.log('clean all');
         this.ports = [];
         this.portItems = [];
         this.selectedPort = [];
