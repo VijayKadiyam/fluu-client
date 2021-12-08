@@ -52,7 +52,7 @@
         <b-card>
           <b-form @submit.prevent="submit">
             <b-row>
-              <b-col md="4">
+              <b-col md="6">
                 <b-form-group label="Date">
                   <b-form-datepicker
                     id="date"
@@ -70,7 +70,27 @@
                   >
                 </b-form-group>
               </b-col>
-              <b-col md="4">
+              <b-col md="6">
+                <b-form-group label="Charterer Name">
+                  <b-form-input
+                    class="mb-2"
+                    label="Charterer Name"
+                    placeholder="Enter Charterer Name"
+                    v-model.trim="$v.form.charterer_name.$model"
+                  >
+                  </b-form-input>
+                  <b-alert
+                    show
+                    variant="danger"
+                    class="error mt-1"
+                    v-if="!$v.form.charterer_name.required"
+                    >Field is required</b-alert
+                  >
+                </b-form-group>
+              </b-col>
+              </b-row>
+            <b-row>
+              <b-col md="6">
                 <b-form-group label="Country">
                   <vue-tags-input
                     v-model="searchCountry"
@@ -84,7 +104,7 @@
                   />
                 </b-form-group>
               </b-col>
-              <b-col md="4">
+              <b-col md="6">
                 <b-form-group label="Port">
                   <vue-tags-input
                     v-model="searchPort"
@@ -297,7 +317,8 @@
                 <br />
               </div>
             </div>
-            <b-col md="12">
+             <b-row>
+<b-col md="12">
               <b-form-group label="Additional Comments">
                 <b-form-textarea
                   label="Additional Comments"
@@ -309,6 +330,7 @@
                 ></b-form-textarea>
               </b-form-group>
             </b-col>
+            </b-row>
             <b-button
               type="submit"
               variant="primary"
@@ -350,7 +372,7 @@ export default {
         vessel_id: "",
         date: "",
         no_of_closed_deficiencies: 0,
-        // is_detained: 0,
+        charterer_name:'',  
         is_deficiency_closed: 0,
         no_of_issued_deficiencies: 0,
       },
@@ -370,7 +392,9 @@ export default {
       countryItems: [],
 
       submitStatus: null,
-      vessel: {},
+      vessel: {
+        vessel_type:{},
+      },
     };
   },
   validations: {
@@ -385,7 +409,11 @@ export default {
       no_of_issued_deficiencies: {
         required,
         numeric,
-      },
+      }, 
+      charterer_name:{
+          required
+        },        
+      
     },
   },
   mounted() {

@@ -110,15 +110,16 @@
               {{ props.row.button }}</a
             > -->
           </span>
-          <span v-if="props.column.field == 'port'">
-            {{ props.row.port.description }}
+          
+          <span v-if="props.column.field == 'charterer_name'">
+            {{ props.row.charterer_name }}
           </span>
-          <span v-if="props.column.field == 'country'">
+          <span v-if="props.column.field == 'country' && props.row.country">
             {{ props.row.country.description }}
           </span>
-          <!-- <span v-if="props.column.field == 'is_detained'">
-            {{ props.row.is_detained == 1 ? "Yes" : "No" }}
-          </span> -->
+          <span v-if="props.column.field == 'port' && props.row.port">
+            {{ props.row.port.description }}
+          </span>
           <span v-if="props.column.field == 'is_deficiency_closed'">
             {{ props.row.is_deficiency_closed == 1 ? "Yes" : "No" }}
           </span>
@@ -145,6 +146,10 @@ export default {
     return {
       columns: [
         {
+          label: "Charterer Name",
+          field: "charterer_name",
+        },
+        {
           label: "Port",
           field: "port",
         },
@@ -152,10 +157,6 @@ export default {
           label: "Country",
           field: "country",
         },
-        // {
-        //   label: "Detained Status",
-        //   field: "is_detained",
-        // },
         {
           label: "No Of Issued Deficiency",
           field: "no_of_issued_deficiencies",
