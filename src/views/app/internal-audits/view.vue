@@ -109,7 +109,22 @@
           <b-collapse id="management" accordion="my-accordion" role="tabpanel">
             <b-card-body>
               <b-card-text
-                ><b-row>
+                >
+                <b-row>
+                  <b-col md="4">
+                    <p class="text-muted mt-2 mb-0">Audit Type</p>
+                    <p class="text-primary text-24 line-height-1 mb-2">
+                      {{ internal_audit.audit_type.description }}
+                    </p>
+                  </b-col>
+                  <b-col md="4" v-if="internal_audit.other_audit_type">
+                    <p class="text-muted mt-2 mb-0">Other Audit Type</p>
+                    <p class="text-primary text-24 line-height-1 mb-2">
+                      {{ internal_audit.other_audit_type }}
+                    </p>
+                  </b-col>
+                </b-row>
+                <b-row>
                   <b-col md="4">
                     <p class="text-muted mt-2 mb-0">Start Date</p>
                     <p class="text-primary text-24 line-height-1 mb-2">
@@ -117,41 +132,15 @@
                     </p>
                   </b-col>
                   <b-col md="4">
-                    <p class="text-muted mt-2 mb-0">Complition Date</p>
+                    <p class="text-muted mt-2 mb-0">Completion Date</p>
                     <p class="text-primary text-24 line-height-1 mb-2">
-                      {{ internal_audit.complition_date }}
+                      {{ internal_audit.completion_date }}
                     </p>
                   </b-col>
                   <b-col md="4">
                     <p class="text-muted mt-2 mb-0">Country</p>
                     <p class="text-primary text-24 line-height-1 mb-2">
-                      {{ internal_audit.country.description }}
-                    </p>
-                  </b-col>
-                </b-row>
-                <b-row>
-                  <b-col md="4">
-                    <p class="text-muted mt-2 mb-0">No Of Issued Deficienies</p>
-                    <p class="text-primary text-24 line-height-1 mb-2">
-                      {{ internal_audit.no_of_issued_deficiencies }}
-                    </p>
-                  </b-col>
-                  <b-col md="4">
-                    <p class="text-muted mt-2 mb-0">No Of Closed Deficienies</p>
-                    <p class="text-primary text-24 line-height-1 mb-2">
-                      {{ internal_audit.no_of_closed_deficiencies }}
-                    </p>
-                  </b-col>
-                  <b-col md="4">
-                    <p class="text-muted mt-2 mb-0">Report</p>
-                    <p class="text-primary text-18 line-height-1 mb-2">
-                      <a
-                        :href="`${mediaUrl}${internal_audit.reportpath}`"
-                        target="_blank"
-                        style="color: blue"
-                      >
-                        Click to see : {{ internal_audit.reportpath }}
-                      </a>
+                      {{ internal_audit.country?internal_audit.country.description:'' }}
                     </p>
                   </b-col>
                 </b-row>
@@ -169,7 +158,23 @@
                       >
                     </p>
                   </b-col>
-                  <b-col md="4" v-if="internal_audit.location != 1">
+                  <b-col md="4" v-if="internal_audit.location == 1">
+                    <p class="text-muted mt-2 mb-0">
+                      From
+                    </p>
+                    <p class="text-primary text-24 line-height-1 mb-2">
+                      {{ internal_audit.from}}
+                    </p>
+                  </b-col>
+                  <b-col md="4" v-if="internal_audit.location == 1">
+                    <p class="text-muted mt-2 mb-0">
+                      To
+                    </p>
+                    <p class="text-primary text-24 line-height-1 mb-2">
+                      {{ internal_audit.to}}
+                    </p>
+                  </b-col>
+                  <b-col md="4" v-else>
                     <p class="text-muted mt-2 mb-0">
                       Port
                     </p>
@@ -177,14 +182,24 @@
                       {{ internal_audit.port.description }}
                     </p>
                   </b-col>
+                </b-row>
+                <b-row>
                   <b-col md="4">
-                    <p class="text-muted mt-2 mb-0">
-                      Are All Deficienies Closed
-                    </p>
+                    <p class="text-muted mt-2 mb-0">No Of Issued Deficienies</p>
                     <p class="text-primary text-24 line-height-1 mb-2">
-                      {{
-                        internal_audit.is_deficiency_closed == 0 ? "NO" : "YES"
-                      }}
+                      {{ internal_audit.no_of_issued_deficiencies }}
+                    </p>
+                  </b-col>
+                  <b-col md="4">
+                    <p class="text-muted mt-2 mb-0">Report</p>
+                    <p class="text-primary text-18 line-height-1 mb-2">
+                      <a
+                        :href="`${mediaUrl}${internal_audit.reportpath}`"
+                        target="_blank"
+                        style="color: blue"
+                      >
+                        Click to see : {{ internal_audit.reportpath }}
+                      </a>
                     </p>
                   </b-col>
                 </b-row>
@@ -224,20 +239,58 @@
                         </div>
                         <div class="ul-widget-s7__item-text">
                           <div class="row">
-                            <div class="col-md-6">
+                            <div class="col-md-4">
                               <p class="text-muted mt-2 mb-0">
-                                Date of Closure
+                                Date of Issued
                               </p>
                               <p
                                 class="text-primary text-24 line-height-1 mb-2"
                               >
-                                {{ deficiency_detail.date_of_closure }}
+                                {{ deficiency_detail.issued_date }}
                               </p>
                             </div>
-                            <div class="col-md-6">
+                            <div class="col-md-4">
                               <div class="ul-widget-s7__item-text">
                                 <p class="text-muted mt-2 mb-0">
-                                  Remarks
+                                  Serial No
+                                </p>
+                                <p
+                                  class="text-primary text-24 line-height-1 mb-2"
+                                >
+                                  {{ deficiency_detail.serial_no }}
+                                </p>
+                              </div>
+                            </div>
+                            <div class="col-md-4">
+                              <div class="ul-widget-s7__item-text">
+                                <p class="text-muted mt-2 mb-0">
+                                  Reference No
+                                </p>
+                                <p
+                                  class="text-primary text-24 line-height-1 mb-2"
+                                >
+                                  {{ deficiency_detail.reference_no }}
+                                </p>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="row">
+                            <div class="col-md-4">
+                              <div class="ul-widget-s7__item-text">
+                                <p class="text-muted mt-2 mb-0">
+                                  Nature Of Deficiency
+                                </p>
+                                <p
+                                  class="text-primary text-24 line-height-1 mb-2"
+                                >
+                                  {{ deficiency_detail.deficiency_nature==1?"NC":"OBS" }}
+                                </p>
+                              </div>
+                            </div>
+                            <div class="col-md-4">
+                              <div class="ul-widget-s7__item-text">
+                                <p class="text-muted mt-2 mb-0">
+                                  Deficiency Details
                                 </p>
                                 <p
                                   class="text-primary text-24 line-height-1 mb-2"
@@ -246,84 +299,64 @@
                                 </p>
                               </div>
                             </div>
+                            <div class="col-md-4">
+                              <div class="ul-widget-s7__item-text">
+                                <p class="text-muted mt-2 mb-0">
+                                  Target Date
+                                </p>
+                                <p
+                                  class="text-primary text-24 line-height-1 mb-2"
+                                >
+                                  {{ deficiency_detail.target_date }}
+                                </p>
+                              </div>
+                            </div>
                           </div>
                           <div class="row">
-                            <div class="col-md-3">
+                            <div class="col-md-4">
+                              <div class="ul-widget-s7__item-text">
+                                <p class="text-muted mt-2 mb-0">
+                                  Completion Date
+                                </p>
+                                <p
+                                  class="text-primary text-24 line-height-1 mb-2"
+                                >
+                                  {{ deficiency_detail.completion_date }}
+                                </p>
+                              </div>
+                            </div>
+                            <div class="col-md-4">
+                              <div class="ul-widget-s7__item-text">
+                                <p class="text-muted mt-2 mb-0">
+                                  Verification Date
+                                </p>
+                                <p
+                                  class="text-primary text-24 line-height-1 mb-2"
+                                >
+                                  {{ deficiency_detail.verification_date }}
+                                </p>
+                              </div>
+                            </div>
+                            <div class="col-md-4">
                               <p class="text-muted mt-2 mb-0">
-                                Evidence 1
+                                Evidence 
                               </p>
                               <p
                                 class="text-primary text-18 line-height-1 mb-2"
                               >
                                 <a
                                   :href="
-                                    `${mediaUrl}${deficiency_detail.evidencepath1}`
+                                    `${mediaUrl}${deficiency_detail.evidencepath}`
                                   "
                                   target="_blank"
                                   style="color: blue"
                                 >
                                   Click to see :
-                                  {{ deficiency_detail.evidencepath1 }}
+                                  {{ deficiency_detail.evidencepath }}
                                 </a>
                               </p>
                             </div>
-                            <div class="col-md-3">
-                              <p class="text-muted mt-2 mb-0">
-                                Evidence 2
-                              </p>
-                              <p
-                                class="text-primary text-18 line-height-1 mb-2"
-                              >
-                                <a
-                                  :href="
-                                    `${mediaUrl}${deficiency_detail.evidencepath2}`
-                                  "
-                                  target="_blank"
-                                  style="color: blue"
-                                >
-                                  Click to see :
-                                  {{ deficiency_detail.evidencepath2 }}
-                                </a>
-                              </p>
-                            </div>
-                            <div class="col-md-3">
-                              <p class="text-muted mt-2 mb-0">
-                                Evidence 3
-                              </p>
-                              <p
-                                class="text-primary text-18 line-height-1 mb-2"
-                              >
-                                <a
-                                  :href="
-                                    `${mediaUrl}${deficiency_detail.evidencepath3}`
-                                  "
-                                  target="_blank"
-                                  style="color: blue"
-                                >
-                                  Click to see :
-                                  {{ deficiency_detail.evidencepath3 }}
-                                </a>
-                              </p>
-                            </div>
-                            <div class="col-md-3">
-                              <p class="text-muted mt-2 mb-0">
-                                Evidence 4
-                              </p>
-                              <p
-                                class="text-primary text-18 line-height-1 mb-2"
-                              >
-                                <a
-                                  :href="
-                                    `${mediaUrl}${deficiency_detail.evidencepath4}`
-                                  "
-                                  target="_blank"
-                                  style="color: blue"
-                                >
-                                  Click to see :
-                                  {{ deficiency_detail.evidencepath4 }}
-                                </a>
-                              </p>
-                            </div>
+                            
                           </div>
                         </div>
                       </div>
@@ -353,7 +386,11 @@ export default {
         place_of_built: {},
       },
       countryItems: [],
-
+internal_audit:{
+  port:{},
+  country:{},
+  audit_type:{}
+},
       submitStatus: null,
     };
   },
