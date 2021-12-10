@@ -100,20 +100,26 @@
               {{ props.row.button }}</a
             > -->
           </span>
-          <span v-if="props.column.field == 'port' && props.row.port_id">
-            {{ props.row.port.description || "" }}
-          </span>
           <span v-if="props.column.field == 'country'">
             {{ props.row.country.description }}
           </span>
-          <span v-if="props.column.field == 'is_deficiency_closed'">
-            {{ props.row.is_deficiency_closed == 1 ? "Yes" : "No" }}
+          <span v-if="props.column.field == 'location'">
+            <span v-if="props.row.location==1">At Sea</span>
+            <span v-else-if="props.row.location==2">At Berth</span>
+            <span v-else-if="props.row.location==3">At Anchorage</span> 
+            <span v-else-if="props.row.location==4">At Lay Up/Dry Dock</span> 
           </span>
           <span v-if="props.column.field == 'no_of_issued_deficiencies'">
             {{ props.row.no_of_issued_deficiencies }}
           </span>
-          <span v-if="props.column.field == 'no_of_closed_deficiencies'">
-            {{ props.row.no_of_closed_deficiencies }}
+          <span v-if="props.column.field == 'audit_type'">
+            {{ props.row.audit_type.description }}
+          </span>
+          <span v-if="props.column.field == 'start_date'">
+            {{ props.row.start_date }}
+          </span>
+          <span v-if="props.column.field == 'completion_date'">
+            {{ props.row.completion_date }}
           </span>
         </template>
       </vue-good-table>
@@ -132,24 +138,28 @@ export default {
     return {
       columns: [
         {
-          label: "Port",
-          field: "port",
+          label: "Audit type",
+          field: "audit_type",
+        },
+        {
+          label: "Start Date",
+          field: "start_date",
+        },
+        {
+          label: "Completion Date",
+          field: "completion_date",
         },
         {
           label: "Country",
           field: "country",
         },
         {
+          label: "Location",
+          field: "location",
+        },
+        {
           label: "No Of Issued Deficiency",
           field: "no_of_issued_deficiencies",
-        },
-        {
-          label: "No Of Closed Deficiency",
-          field: "no_of_closed_deficiencies",
-        },
-        {
-          label: "Deficiency Closed Status",
-          field: "is_deficiency_closed",
         },
         {
           label: "Action",

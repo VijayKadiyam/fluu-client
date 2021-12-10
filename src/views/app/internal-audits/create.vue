@@ -52,7 +52,7 @@
               <b-col md="6">
                 <b-form-group label="Type Of Audit">
                   <b-form-select
-                    v-model="form.audit_type"
+                    v-model="form.audit_type_id"
                     :options="auditTypeItems"
                     id="inline-form-custom-select-pref1"
                   >
@@ -61,19 +61,19 @@
                     show
                     variant="danger"
                     class="error mt-1"
-                    v-if="!$v.form.audit_type.required"
+                    v-if="!$v.form.audit_type_id.required"
                     >Field is required</b-alert
                   >
                 </b-form-group>
               </b-col>
-              <b-col md="6" v-if="form.audit_type == 10">
-                <b-form-group label="Others">
+              <b-col md="6" v-if="DefineAuditType(form.audit_type_id)">
+                <b-form-group label="Other Audit Type">
                   <b-form-input
                     class="mb-2 other"
-                    label="Others"
+                    label="Other Audit Type"
                     id="Other-type"
-                    placeholder="Enter Other Audit "
-                    v-model="form.other_type"
+                    placeholder="Enter Other Audit Type "
+                    v-model="form.other_audit_type"
                   >
                   </b-form-input>
                 </b-form-group>
@@ -99,20 +99,20 @@
                 </b-form-group>
               </b-col>
               <b-col md="4">
-                <b-form-group label="Complition Date">
+                <b-form-group label="Completion Date">
                   <b-form-datepicker
-                    id="complition_date"
-                    v-model="form.complition_date"
+                    id="completion_date"
+                    v-model="form.completion_date"
                     class="mb-2"
                     :max="max"
                     :min="form.start_date"
-                    placeholder="Complition Date"
+                    placeholder="Completion Date"
                   ></b-form-datepicker>
                   <b-alert
                     show
                     variant="danger"
                     class="error mt-1"
-                    v-if="!$v.form.complition_date.required"
+                    v-if="!$v.form.completion_date.required"
                     >Field is required</b-alert
                   >
                 </b-form-group>
@@ -284,12 +284,6 @@
                 </b-form-group>
               </b-col>
             </b-row> -->
-            <div>
-              <!-- v-if="
-                form.is_deficiency_closed == 1 &&
-                  form.no_of_issued_deficiencies ==
-                    form.no_of_closed_deficiencies
-              " -->
               <div
                 v-for="(deficiency_detail, dd) in deficiency_details"
                 :key="`deficiency_detail${dd}`"
@@ -303,8 +297,8 @@
                       <b-col md="11">
                         <b-form-group label="Date Of Issued">
                           <b-form-datepicker
-                            :id="`date_of_issued${dd}`"
-                            v-model="deficiency_detail.date_of_issued"
+                            :id="`issued_date${dd}`"
+                            v-model="deficiency_detail.issued_date"
                             class="mb-2"
                             :max="max"
                             placeholder="Date Of Issued"
@@ -343,7 +337,7 @@
                       <b-col md="11">
                         <b-form-group label="Nature of Deficiency">
                           <b-form-select
-                            v-model="deficiency_detail.nature_of_deficiency"
+                            v-model="deficiency_detail.deficiency_nature"
                             :options="natureofDeficiencyItems"
                             id="inline-form-custom-select-pref1"
                           >
@@ -369,7 +363,7 @@
                         :id="`target_date${dd}`"
                         v-model="deficiency_detail.target_date"
                         class="mb-2"
-                        :max="max"
+                        :min="deficiency_detail.issued_date"
                         placeholder="Target Date"
                       ></b-form-datepicker>
                     </b-form-group>
@@ -385,6 +379,7 @@
                             :id="`completion_date${dd}`"
                             v-model="deficiency_detail.completion_date"
                             class="mb-2"
+                            :min="deficiency_detail.issued_date"
                             :max="max"
                             placeholder="Completion Date By Ship"
                           ></b-form-datepicker>
@@ -393,22 +388,23 @@
                     </b-row>
                   </b-col>
                   <b-col md="4">
-                    <b-form-group label="Verification Date Of Office">
+                    <b-form-group label="Verification Date by Office">
                       <b-form-datepicker
-                        :id="`verfication_date${dd}`"
-                        v-model="deficiency_detail.verfication_date"
+                        :id="`verification_date${dd}`"
+                        v-model="deficiency_detail.verification_date"
                         class="mb-2"
+                        :min="deficiency_detail.completion_date"
                         :max="max"
-                        placeholder="Verification Date Of Office"
+                        placeholder="Verification Date by Office"
                       ></b-form-datepicker>
                     </b-form-group>
                   </b-col>
                   <b-col md="4">
                     <b-form-group label="Evidence">
                       <b-form-file
-                        :id="`evidence_b${dd}`"
-                        name="evidence_b"
-                        ref="evidence_b"
+                        :id="`evidence${dd}`"
+                        name="evidence"
+                        ref="evidence"
                       ></b-form-file>
                     </b-form-group>
                   </b-col>
@@ -419,7 +415,6 @@
                 </div>
                 <br />
               </div>
-            </div>
             <b-button
               type="submit"
               variant="primary"
@@ -461,33 +456,38 @@ export default {
       form: {
         vessel_id: "",
         start_date: "",
-        complition_date: "",
-        audit_type: "",
+        completion_date: "",
+        audit_type_id: "",
+        other_audit_type: "",
         location: "",
-        no_of_closed_deficiencies: 0,
-        is_deficiency_closed: 0,
+        country_id:"",
+        port_id:"",
+        from:"",
+        to:"",
         no_of_issued_deficiencies: 0,
       },
       maxValue: 3,
       max: maxDate,
       deficiency_details: [],
-      // deficiency_count:0,
       portItems: [],
       searchPort: "",
       selectedPort: [],
-      auditTypeItems: [
-        { value: "", text: " select an option" },
-        { value: "1", text: "ISM" },
-        { value: "2", text: "ISPS" },
-        { value: "3", text: "MLC" },
-        { value: "4", text: "ISO" },
-        { value: "5", text: "TMSA" },
-        { value: "6", text: "Navigational" },
-        { value: "7", text: "Cargo" },
-        { value: "8", text: "Muuring" },
-        { value: "9", text: "Bunkering" },
-        { value: "10", text: "Other" },
-      ],
+
+      auditTypeItems:[],
+      // auditTypeItems: [
+      //   { value: "", text: " select an option" },
+      //   { value: "1", text: "ISM" },
+      //   { value: "2", text: "ISPS" },
+      //   { value: "3", text: "MLC" },
+      //   { value: "4", text: "ISO" },
+      //   { value: "5", text: "TMSA" },
+      //   { value: "6", text: "Navigational" },
+      //   { value: "7", text: "Cargo" },
+      //   { value: "8", text: "Muuring" },
+      //   { value: "9", text: "Bunkering" },
+      //   { value: "10", text: "Other" },
+      // ],
+      
       natureofDeficiencyItems: [
         { value: "", text: " select an option" },
         { value: "1", text: "NC" },
@@ -515,18 +515,14 @@ export default {
       start_date: {
         required,
       },
-      audit_type: {
+      audit_type_id: {
         required,
       },
-      complition_date: {
+      completion_date: {
         required,
       },
       location: {
         required,
-      },
-      no_of_closed_deficiencies: {
-        required,
-        numeric,
       },
       no_of_issued_deficiencies: {
         required,
@@ -541,6 +537,19 @@ export default {
     this.getData();
   },
   methods: {
+    DefineAuditType(audit_id){
+    let status=false
+    if(audit_id){
+    let Audit = this.auditTypeItems.find((sp) => sp.id == audit_id);
+      if(Audit.text=='OTHER'){
+        status=true
+      }else{
+        this.form.other_audit_type=''
+      }
+        
+    }
+    return status     
+    },
     Deficiency(number) {
       let current_len = this.deficiency_details.length;
       if (current_len < number) {
@@ -574,6 +583,14 @@ export default {
         this.countryItems.push({
           id: country.id,
           text: country.description,
+        });
+      });
+
+      masters.auditTypes.forEach((auditType) => {
+        this.auditTypeItems.push({
+          id: auditType.id,
+          value: auditType.id,
+          text: auditType.description,
         });
       });
       this.isLoading = false;
@@ -645,20 +662,20 @@ export default {
         let deficiency_id = dd.id;
         let d_id = "deficiency_id" + index;
 
-        let evidencepath_A = this.$refs.evidence_a[index].files[0];
+        let evidencepath_A = this.$refs.evidence[index].files[0];
         let evidencepath_A_name = "evidencepath_A_" + index;
-        let evidencepath_B = this.$refs.evidence_b[index].files[0];
-        let evidencepath_B_name = "evidencepath_B_" + index;
-        let evidencepath_C = this.$refs.evidence_c[index].files[0];
-        let evidencepath_C_name = "evidencepath_C_" + index;
-        let evidencepath_D = this.$refs.evidence_d[index].files[0];
-        let evidencepath_D_name = "evidencepath_D_" + index;
+        // let evidencepath_B = this.$refs.evidence_b[index].files[0];
+        // let evidencepath_B_name = "evidencepath_B_" + index;
+        // let evidencepath_C = this.$refs.evidence_c[index].files[0];
+        // let evidencepath_C_name = "evidencepath_C_" + index;
+        // let evidencepath_D = this.$refs.evidence_d[index].files[0];
+        // let evidencepath_D_name = "evidencepath_D_" + index;
 
         formData.append(d_id, deficiency_id);
         formData.append(evidencepath_A_name, evidencepath_A);
-        formData.append(evidencepath_B_name, evidencepath_B);
-        formData.append(evidencepath_C_name, evidencepath_C);
-        formData.append(evidencepath_D_name, evidencepath_D);
+        // formData.append(evidencepath_B_name, evidencepath_B);
+        // formData.append(evidencepath_C_name, evidencepath_C);
+        // formData.append(evidencepath_D_name, evidencepath_D);
         evidence_count++;
       });
       formData.append("evidence_count", evidence_count);
