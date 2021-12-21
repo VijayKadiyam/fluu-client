@@ -26,9 +26,8 @@
           </b-button>
         </div>
 
-        <template slot="table-row" slot-scope="props" >
-         
-          <span v-if="props.column.field == 'button'" >
+        <template slot="table-row" slot-scope="props">
+          <span v-if="props.column.field == 'button'">
             <router-link
               :to="'/app/users/' + props.row.id"
               class="btn btn-primary d-none d-sm-block mb-2 mr-2"
@@ -62,8 +61,12 @@ export default {
           field: "first_name",
         },
         {
-          label: "User Name",
-          field: "user_name",
+          label: "Last Name",
+          field: "last_name",
+        },
+        {
+          label: "Middle Name",
+          field: "middle_name",
         },
         {
           label: "Gender",
@@ -72,10 +75,6 @@ export default {
         {
           label: "Email",
           field: "email",
-        },
-        {
-          label: "Middle Name",
-          field: "middle_name",
         },
         {
           label: "Date Of Birth",
