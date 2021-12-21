@@ -145,6 +145,86 @@ const routes = [
           },
         ],
       },
+      // Login Questions
+      {
+        path: "/app/login-questions",
+        component: () => import("./views/app/login-questions"),
+        redirect: "/app/login-questions/list",
+        children: [
+          {
+            path: "list",
+            component: () => import("./views/app/login-questions/list"),
+          },
+          {
+            path: "create",
+            component: () => import("./views/app/login-questions/create"),
+          },
+          {
+            path: ":id",
+            component: () => import("./views/app/login-questions/id"),
+          },
+        ],
+      },
+      // User Login Questions
+      {
+        path: "/app/user-login-questions",
+        component: () => import("./views/app/user-login-questions"),
+        redirect: "/app/user-login-questions/list",
+        children: [
+          {
+            path: "list",
+            component: () => import("./views/app/user-login-questions/list"),
+          },
+          {
+            path: "create",
+            component: () => import("./views/app/user-login-questions/create"),
+          },
+          {
+            path: ":id",
+            component: () => import("./views/app/user-login-questions/id"),
+          },
+        ],
+      },
+      // User Notifications
+      {
+        path: "/app/user-notifications",
+        component: () => import("./views/app/user-notifications"),
+        redirect: "/app/user-notifications/list",
+        children: [
+          {
+            path: "list",
+            component: () => import("./views/app/user-notifications/list"),
+          },
+          {
+            path: "create",
+            component: () => import("./views/app/user-notifications/create"),
+          },
+          {
+            path: ":id",
+            component: () => import("./views/app/user-notifications/id"),
+          },
+        ],
+      },
+      // User Stories
+      {
+        path: "/app/user-stories",
+        component: () => import("./views/app/user-stories"),
+        redirect: "/app/user-stories/list",
+        children: [
+          {
+            path: "list",
+            component: () => import("./views/app/user-stories/list"),
+          },
+          {
+            path: "create",
+            component: () => import("./views/app/user-stories/create"),
+          },
+          {
+            path: ":id",
+            component: () => import("./views/app/user-stories/id"),
+          },
+        ],
+      },
     ],
   },
   // sessions

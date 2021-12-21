@@ -104,6 +104,72 @@
             </router-link>
             <div class="triangle"></div>
           </li>
+          <!-- login questions -->
+          <li
+            @mouseenter="toggleSubMenu"
+            class="nav-item"
+            :class="{ active: selectedParentMenu == 'login-questions' }"
+            data-item="login-questions"
+            :data-submenu="true"
+            v-if="this.userPermissions.indexOf(6) != -1"
+          >
+            <router-link class="nav-item-hold" to="/app/login-questions/list">
+              <i class="nav-icon text-20 i-Diploma-2"></i>
+              <span class="nav-text">login Questions</span>
+            </router-link>
+            <div class="triangle"></div>
+          </li>
+          <!-- user login questions -->
+          <li
+            @mouseenter="toggleSubMenu"
+            class="nav-item"
+            :class="{ active: selectedParentMenu == 'user-login-questions' }"
+            data-item="user-login-questions"
+            :data-submenu="true"
+            v-if="this.userPermissions.indexOf(6) != -1"
+          >
+            <router-link
+              class="nav-item-hold"
+              to="/app/user-login-questions/list"
+            >
+              <i class="nav-icon text-20 i-Diploma-2"></i>
+              <span class="nav-text">User login Questions</span>
+            </router-link>
+            <div class="triangle"></div>
+          </li>
+          <!-- user notifications -->
+          <li
+            @mouseenter="toggleSubMenu"
+            class="nav-item"
+            :class="{ active: selectedParentMenu == 'user-notifications' }"
+            data-item="user-notifications"
+            :data-submenu="true"
+            v-if="this.userPermissions.indexOf(6) != -1"
+          >
+            <router-link
+              class="nav-item-hold"
+              to="/app/user-notifications/list"
+            >
+              <i class="nav-icon text-20 i-Diploma-2"></i>
+              <span class="nav-text">User Notifications</span>
+            </router-link>
+            <div class="triangle"></div>
+          </li>
+          <!-- user Stories -->
+          <li
+            @mouseenter="toggleSubMenu"
+            class="nav-item"
+            :class="{ active: selectedParentMenu == 'user-stories' }"
+            data-item="user-stories"
+            :data-submenu="true"
+            v-if="this.userPermissions.indexOf(6) != -1"
+          >
+            <router-link class="nav-item-hold" to="/app/user-stories/list">
+              <i class="nav-icon text-20 i-Diploma-2"></i>
+              <span class="nav-text">User Stories</span>
+            </router-link>
+            <div class="triangle"></div>
+          </li>
         </ul>
       </div>
     </vue-perfect-scrollbar>
@@ -239,6 +305,82 @@
             <router-link tag="a" class to="/app/value-lists/list">
               <i class="nav-icon i-File-Clipboard-Text--Image"></i>
               <span class="item-name">Listing</span>
+            </router-link>
+          </li>
+        </ul>
+        <!-- Submenu Login Question -->
+        <ul
+          class="childNav d-none"
+          data-parent="login-questions"
+          :class="{ 'd-block': selectedParentMenu == 'login-questions' }"
+        >
+          <li class="nav-item">
+            <router-link tag="a" class to="/app/login-questions/list">
+              <i class="nav-icon i-File-Clipboard-Text--Image"></i>
+              <span class="item-name">Listing</span>
+            </router-link>
+          </li>
+          <li class="nav-item">
+            <router-link tag="a" class to="/app/login-questions/create">
+              <i class="nav-icon i-Split-Vertical"></i>
+              <span class="item-name">Add New Login Question</span>
+            </router-link>
+          </li>
+        </ul>
+        <!-- Submenu User Login Question -->
+        <ul
+          class="childNav d-none"
+          data-parent="user-login-questions"
+          :class="{ 'd-block': selectedParentMenu == 'user-login-questions' }"
+        >
+          <li class="nav-item">
+            <router-link tag="a" class to="/app/user-login-questions/list">
+              <i class="nav-icon i-File-Clipboard-Text--Image"></i>
+              <span class="item-name">Listing</span>
+            </router-link>
+          </li>
+          <li class="nav-item">
+            <router-link tag="a" class to="/app/user-login-questions/create">
+              <i class="nav-icon i-Split-Vertical"></i>
+              <span class="item-name">Add New User Login Question</span>
+            </router-link>
+          </li>
+        </ul>
+        <!-- Submenu User Notification -->
+        <ul
+          class="childNav d-none"
+          data-parent="user-notifications"
+          :class="{ 'd-block': selectedParentMenu == 'user-notifications' }"
+        >
+          <li class="nav-item">
+            <router-link tag="a" class to="/app/user-notifications/list">
+              <i class="nav-icon i-File-Clipboard-Text--Image"></i>
+              <span class="item-name">Listing</span>
+            </router-link>
+          </li>
+          <li class="nav-item">
+            <router-link tag="a" class to="/app/user-notifications/create">
+              <i class="nav-icon i-Split-Vertical"></i>
+              <span class="item-name">Add New User Notification</span>
+            </router-link>
+          </li>
+        </ul>
+        <!-- Submenu User Stories -->
+        <ul
+          class="childNav d-none"
+          data-parent="user-stories"
+          :class="{ 'd-block': selectedParentMenu == 'user-stories' }"
+        >
+          <li class="nav-item">
+            <router-link tag="a" class to="/app/user-stories/list">
+              <i class="nav-icon i-File-Clipboard-Text--Image"></i>
+              <span class="item-name">Listing</span>
+            </router-link>
+          </li>
+          <li class="nav-item">
+            <router-link tag="a" class to="/app/user-stories/create">
+              <i class="nav-icon i-Split-Vertical"></i>
+              <span class="item-name">Add New User Story</span>
             </router-link>
           </li>
         </ul>
