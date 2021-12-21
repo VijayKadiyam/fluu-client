@@ -1,9 +1,10 @@
 <template>
   <div class="main-content">
-    <breadcumb :page="'Update User'" :folder="'Users'" />
+    <breadcumb :page="'Create User'" :folder="'Users'" />
+
     <b-row>
       <b-col md="12">
-        <b-card title="User Update">
+        <b-card title="User">
           <b-row>
             <b-col md="12">
               <b-button
@@ -36,26 +37,6 @@
                 </b-form-group>
               </b-col>
               <b-col md="6">
-                <b-form-group label="User Name">
-                  <b-form-input
-                    class="mb-2"
-                    label="User Name"
-                    placeholder="Enter User Name"
-                    v-model.trim="$v.form.user_name.$model"
-                  >
-                  </b-form-input>
-                  <b-alert
-                    show
-                    variant="danger"
-                    class="error mt-1"
-                    v-if="!$v.form.user_name.required"
-                    >Field is required</b-alert
-                  >
-                </b-form-group>
-              </b-col>
-            </b-row>
-            <b-row>
-              <b-col md="6">
                 <b-form-group label="Middle Name">
                   <b-form-input
                     class="mb-2"
@@ -64,6 +45,18 @@
                     v-model="form.middle_name"
                   >
                   </b-form-input>
+                </b-form-group>
+              </b-col>
+            </b-row>
+            <b-row>
+              <b-col md="6">
+                <b-form-group label="Date Of Birth">
+                  <b-form-datepicker
+                    id="dob"
+                    v-model="form.dob"
+                    class="mb-2"
+                    placeholder="Date Of Birth"
+                  ></b-form-datepicker>
                 </b-form-group>
               </b-col>
               <b-col md="6">
@@ -75,35 +68,6 @@
                     v-model="form.last_name"
                   >
                   </b-form-input>
-                </b-form-group>
-              </b-col>
-            </b-row>
-            <b-row>
-              <b-col md="6">
-                <b-form-group label="Gender">
-                  <b-row>
-                    <b-col md="8">
-                      <span>Male</span>
-                      <label class="switch switch-success mr-3 ml-3">
-                        <input
-                          type="checkbox"
-                          checked="checkbox"
-                          v-model="form.gender"
-                        /><span class="slider"></span>
-                      </label>
-                      <span>Female</span>
-                    </b-col>
-                  </b-row>
-                </b-form-group>
-              </b-col>
-              <b-col md="6">
-                <b-form-group label="Date Of Birth">
-                  <b-form-datepicker
-                    id="dob"
-                    v-model="form.dob"
-                    class="mb-2"
-                    placeholder="Date Of Birth"
-                  ></b-form-datepicker>
                 </b-form-group>
               </b-col>
             </b-row>
@@ -135,6 +99,27 @@
                   >
                 </b-form-group>
               </b-col>
+              <b-col md="6">
+                <b-form-group label="Gender">
+                  <b-row>
+                    <b-col md="8">
+                      <span>Male</span>
+                      <label class="switch switch-success mr-3 ml-3">
+                        <input
+                          type="checkbox"
+                          checked="checkbox"
+                          v-model="form.gender"
+                        /><span class="slider"></span>
+                      </label>
+                      <span>Female</span>
+                    </b-col>
+                  </b-row>
+                </b-form-group>
+              </b-col>
+              
+            </b-row>
+            <b-row>
+              
               <b-col md="6">
                 <b-form-group label="Image">
                   <b-form-file
@@ -208,9 +193,9 @@ export default {
       first_name: {
         required,
       },
-      user_name: {
-        required,
-      },
+      // user_name: {
+      //   required,
+      // },
       email: {
         required,
         email,
