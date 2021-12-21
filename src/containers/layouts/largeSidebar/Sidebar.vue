@@ -104,52 +104,6 @@
             </router-link>
             <div class="triangle"></div>
           </li>
-          <!-- viq chapters -->
-          <li
-            @mouseenter="toggleSubMenu"
-            class="nav-item"
-            :class="{ active: selectedParentMenu == 'viq-chapters' }"
-            data-item="viq-chapters"
-            :data-submenu="true"
-            v-if="this.userPermissions.indexOf(7) != -1"
-          >
-            <router-link class="nav-item-hold" to="/app/viq-chapters/list">
-              <i class="nav-icon text-20 i-Diploma-2"></i>
-              <span class="nav-text">Viq Chapters</span>
-            </router-link>
-            <div class="triangle"></div>
-          </li>
-          <!-- Vessels -->
-          <li
-            @mouseenter="toggleSubMenu"
-            :class="{ active: selectedParentMenu == 'vessels' }"
-            class="nav-item"
-            data-item="vessels"
-            :data-submenu="true"
-            v-if="this.userPermissions.indexOf(8) != -1"
-          >
-            <router-link class="nav-item-hold" to="/app/vessels/list">
-              <i class="nav-icon i-Bar-Chart"></i>
-              <span class="nav-text">Vessels</span>
-            </router-link>
-
-            <div class="triangle"></div>
-          </li>
-          <!-- Near Misses -->
-          <!-- <li
-            @mouseenter="toggleSubMenu"
-            :class="{ active: selectedParentMenu == 'near-misses' }"
-            class="nav-item"
-            data-item="near-misses"
-            :data-submenu="true"
-            v-if="this.userPermissions.indexOf(9) != -1"
-          >
-            <router-link class="nav-item-hold" to="/app/near-misses/list">
-              <i class="nav-icon i-Bar-Chart"></i>
-              <span class="nav-text">Near Misses</span>
-            </router-link>
-            <div class="triangle"></div>
-          </li> -->
         </ul>
       </div>
     </vue-perfect-scrollbar>
@@ -204,12 +158,6 @@
               <span class="item-name">Dashboard</span>
             </router-link>
           </li>
-          <li class="nav-item">
-            <router-link tag="a" class to="/app/dashboards/dashboard.v6">
-              <i class="nav-icon i-Clock"></i>
-              <span class="item-name">Near Miss Dashboard</span>
-            </router-link>
-          </li>
         </ul>
         <!-- Submenu Sites -->
         <ul
@@ -262,44 +210,6 @@
             </router-link>
           </li>
         </ul>
-        <!-- Submenu Vessel -->
-        <ul
-          class="childNav d-none"
-          data-parent="vessels"
-          :class="{ 'd-block': selectedParentMenu == 'vessels' }"
-        >
-          <li class="nav-item">
-            <router-link tag="a" class to="/app/vessels/list">
-              <i class="nav-icon i-File-Clipboard-Text--Image"></i>
-              <span class="item-name">Listing</span>
-            </router-link>
-          </li>
-          <li class="nav-item">
-            <router-link tag="a" class to="/app/vessels/create">
-              <i class="nav-icon i-Split-Vertical"></i>
-              <span class="item-name">Add New Vessel</span>
-            </router-link>
-          </li>
-        </ul>
-        <!-- Submenu Near Misses -->
-        <ul
-          class="childNav d-none"
-          data-parent="near-misses"
-          :class="{ 'd-block': selectedParentMenu == 'near-misses' }"
-        >
-          <li class="nav-item">
-            <router-link tag="a" class to="/app/near-misses/list">
-              <i class="nav-icon i-File-Clipboard-Text--Image"></i>
-              <span class="item-name">Listing</span>
-            </router-link>
-          </li>
-          <li class="nav-item">
-            <router-link tag="a" class to="/app/near-misses/create">
-              <i class="nav-icon i-Split-Vertical"></i>
-              <span class="item-name">Add New Near Miss</span>
-            </router-link>
-          </li>
-        </ul>
         <!-- Submenu Values -->
         <ul
           class="childNav d-none"
@@ -329,25 +239,6 @@
             <router-link tag="a" class to="/app/value-lists/list">
               <i class="nav-icon i-File-Clipboard-Text--Image"></i>
               <span class="item-name">Listing</span>
-            </router-link>
-          </li>
-        </ul>
-        <!-- Submenu Viq chapters -->
-        <ul
-          class="childNav d-none"
-          data-parent="viq-chapters"
-          :class="{ 'd-block': selectedParentMenu == 'viq-chapters' }"
-        >
-          <li class="nav-item">
-            <router-link tag="a" class to="/app/viq-chapters/list">
-              <i class="nav-icon i-File-Clipboard-Text--Image"></i>
-              <span class="item-name">Listing</span>
-            </router-link>
-          </li>
-          <li class="nav-item">
-            <router-link tag="a" class to="/app/viq-chapters/create">
-              <i class="nav-icon i-Split-Vertical"></i>
-              <span class="item-name">Add New Viq Chapters</span>
             </router-link>
           </li>
         </ul>
