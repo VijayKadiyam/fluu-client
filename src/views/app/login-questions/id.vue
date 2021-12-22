@@ -1,10 +1,10 @@
 <template>
   <div class="main-content">
-    <breadcumb :page="'Create User'" :folder="'Users'" />
+    <breadcumb :page="'Create Login Question'" :folder="'Login Questions'" />
 
     <b-row>
       <b-col md="12">
-        <b-card title="User">
+        <b-card title="Login Question">
           <b-row>
             <b-col md="12">
               <b-button
@@ -18,12 +18,12 @@
           <b-form @submit.prevent="submit">
             <b-row>
               <b-col md="6">
-                <b-form-group label="First Name">
+                <b-form-group label="Description">
                   <b-form-input
                     class="mb-2"
-                    label="First Name"
-                    placeholder="Enter First Name"
-                    v-model.trim="$v.form.first_name.$model"
+                    label="Description"
+                    placeholder="Enter Description"
+                    v-model.trim="$v.form.description.$model"
                   >
                   </b-form-input>
 
@@ -31,18 +31,57 @@
                     show
                     variant="danger"
                     class="error mt-1"
-                    v-if="!$v.form.first_name.required"
+                    v-if="!$v.form.description.required"
                     >Field is required</b-alert
                   >
                 </b-form-group>
               </b-col>
               <b-col md="6">
-                <b-form-group label="Middle Name">
+                <b-row>
+                  <b-col md="6">
+                    <b-form-group label="Is Active">
+                      <b-form-checkbox-group
+                        v-model="form.is_active"
+                        id="checkboxes-4"
+                        :aria-describedby="ariaDescribedby"
+                      >
+                        <b-form-checkbox value="1">Is Active</b-form-checkbox>
+                      </b-form-checkbox-group>
+                    </b-form-group>
+                  </b-col>
+                  <b-col md="6">
+                    <b-form-group label="Is MCQ">
+                      <b-form-checkbox-group
+                        v-model="form.is_mcq"
+                        id="checkboxes-4"
+                        :aria-describedby="ariaDescribedby"
+                      >
+                        <b-form-checkbox value="1">Is MCQ</b-form-checkbox>
+                      </b-form-checkbox-group>
+                    </b-form-group>
+                  </b-col>
+                </b-row>
+              </b-col>
+            </b-row>
+            <b-row>
+              <b-col md="6">
+                <b-form-group label="Option 1">
                   <b-form-input
                     class="mb-2"
-                    label="Middle Name"
-                    placeholder="Enter Middle Name"
-                    v-model="form.middle_name"
+                    label="Option 1"
+                    placeholder="Enter Option 1"
+                    v-model="form.option_1"
+                  >
+                  </b-form-input>
+                </b-form-group>
+              </b-col>
+              <b-col md="6">
+                <b-form-group label="Option 2">
+                  <b-form-input
+                    class="mb-2"
+                    label="Option 2"
+                    placeholder="Enter Option 2"
+                    v-model="form.option_2"
                   >
                   </b-form-input>
                 </b-form-group>
@@ -50,84 +89,25 @@
             </b-row>
             <b-row>
               <b-col md="6">
-                <b-form-group label="Date Of Birth">
-                  <b-form-datepicker
-                    id="dob"
-                    v-model="form.dob"
-                    class="mb-2"
-                    placeholder="Date Of Birth"
-                  ></b-form-datepicker>
-                </b-form-group>
-              </b-col>
-              <b-col md="6">
-                <b-form-group label="Last Name">
+                <b-form-group label="Option 3">
                   <b-form-input
                     class="mb-2"
-                    label="Last Name"
-                    placeholder="Enter Last Name"
-                    v-model="form.last_name"
+                    label="Option 3"
+                    placeholder="Enter Option 3"
+                    v-model="form.option_3"
                   >
                   </b-form-input>
                 </b-form-group>
               </b-col>
-            </b-row>
-            <b-row>
               <b-col md="6">
-                <b-form-group label="Email">
+                <b-form-group label="Option 4">
                   <b-form-input
-                    class="mb-2"
-                    label="Email"
-                    placeholder="email address"
-                    v-model.trim="$v.form.email.$model"
+                    class="mb-4"
+                    label="Option 4"
+                    placeholder="Enter Option 4"
+                    v-model="form.option_4"
                   >
                   </b-form-input>
-
-                  <b-alert
-                    show
-                    variant="danger"
-                    class="error mt-1"
-                    v-if="!$v.form.email.email"
-                  >
-                    {{ $v.form.email.$model }} is invalid.</b-alert
-                  >
-                  <b-alert
-                    show
-                    variant="danger"
-                    class="error mt-1"
-                    v-if="!$v.form.email.required"
-                    >Field is required</b-alert
-                  >
-                </b-form-group>
-              </b-col>
-              <b-col md="6">
-                <b-form-group label="Gender">
-                  <b-row>
-                    <b-col md="8">
-                      <span>Male</span>
-                      <label class="switch switch-success mr-3 ml-3">
-                        <input
-                          type="checkbox"
-                          checked="checkbox"
-                          v-model="form.gender"
-                        /><span class="slider"></span>
-                      </label>
-                      <span>Female</span>
-                    </b-col>
-                  </b-row>
-                </b-form-group>
-              </b-col>
-              
-            </b-row>
-            <b-row>
-              
-              <b-col md="6">
-                <b-form-group label="Image">
-                  <b-form-file
-                    id="file-default"
-                    name="imagepath"
-                    ref="file"
-                    accept="image/*"
-                  ></b-form-file>
                 </b-form-group>
               </b-col>
             </b-row>
@@ -157,15 +137,7 @@
 
 <script>
 import axios from "axios";
-import {
-  email,
-  // numeric,
-  // between,
-  required,
-  // sameAs,
-  // minLength,
-  // maxLength,
-} from "vuelidate/lib/validators";
+import { required } from "vuelidate/lib/validators";
 export default {
   metaInfo: {
     // if no subcomponents specify a metaInfo.title, this title will be used
@@ -174,31 +146,21 @@ export default {
   data() {
     return {
       form: {
-        first_name: "",
-        middle_name: "",
-        last_name: "",
-        user_name: "",
-        dob: "",
-        gender: "",
-        password: "",
-        email: "",
-        active: 1,
-        role_id: 4,
+        description: "",
+        option_1: "",
+        option_2: "",
+        option_3: "",
+        option_4: "",
+        is_active: "",
+        is_mcq: "",
       },
       submitStatus: null,
     };
   },
   validations: {
     form: {
-      first_name: {
+      description: {
         required,
-      },
-      // user_name: {
-      //   required,
-      // },
-      email: {
-        required,
-        email,
       },
     },
 
@@ -230,36 +192,19 @@ export default {
       } else {
         try {
           this.isLoading = true;
-          await axios.patch(`/users/${this.$route.params.id}`, this.form);
-          await this.handleFileUpload();
+          await axios.patch(`/login_questions/${this.$route.params.id}`, this.form);
 
           this.isLoading = false;
-          this.$router.push("/app/users");
+          this.$router.push("/app/login-questions");
         } catch (e) {
           this.isLoading = false;
         }
         this.submitStatus = "PENDING";
         // setTimeout(() => {
-          this.submitStatus = "OK";
-          this.$router.push("/app/users/");
+        this.submitStatus = "OK";
+        this.$router.push("/app/login-questions/");
         // }, 1000);
       }
-    },
-    async handleFileUpload() {
-      let attachment = this.$refs.file?.files[0];
-      const userid = this.form.id;
-      let formData = new FormData();
-      formData.append("userid", userid);
-      formData.append("imagepath", attachment);
-      await axios
-        .post("upload_user_image", formData, {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        })
-        .catch(function () {
-          console.log("FAILURE!!");
-        });
     },
     makeToast(variant = null) {
       this.$bvToast.toast("Please fill the form correctly.", {
@@ -281,7 +226,7 @@ export default {
     },
     async getData() {
       this.isLoading = true;
-      let form = await axios.get(`/users/${this.$route.params.id}`);
+      let form = await axios.get(`/login_questions/${this.$route.params.id}`);
       this.form = form.data.data;
       this.isLoading = false;
     },
