@@ -1,6 +1,6 @@
 <template>
   <div class="main-content">
-    <breadcumb :page="'User List'" :folder="'Users'" />
+    <breadcumb :page="'User Notification List'" :folder="'User Notifications'" />
     <!-- <div class="wrapper"> -->
     <b-card>
       <vue-good-table
@@ -21,24 +21,24 @@
           <b-button
             variant="primary"
             class="btn-rounded d-none d-sm-block"
-            to="/app/users/create"
-            ><i class="i-Add text-white mr-2"> </i>Add User
+            to="/app/user-notifications/create"
+            ><i class="i-Add text-white mr-2"> </i>Add User Notification
           </b-button>
         </div>
 
         <template slot="table-row" slot-scope="props">
           <span v-if="props.column.field == 'button'">
             <router-link
-              :to="'/app/users/' + props.row.id"
+              :to="'/app/user-notifications/' + props.row.id"
               class="btn btn-primary d-none d-sm-block mb-2 mr-2"
               v-b-tooltip.hover
-              title="Edit User Details"
+              title="Edit User Notification Details"
             >
               <i class="i-Eraser-2"></i> EDIT
             </router-link>
           </span>
-          <span v-else-if="props.column.field == 'gender'">
-            {{ props.row.gender == 0 ? "Male" : "Female" }}
+          <span v-else-if="props.column.field == 'is_active'">
+            {{ props.row.is_active == 1 ? "Active" : "InActive" }}
           </span>
         </template>
       </vue-good-table>
@@ -51,37 +51,30 @@ import axios from "axios";
 export default {
   metaInfo: {
     // if no subcomponents specify a metaInfo.title, this title will be used
-    title: "User Lits",
+    title: "User Notification Lits",
   },
   data() {
     return {
       columns: [
         {
           label: "First Name",
-          field: "first_name",
+          field: "user.first_name",
         },
         {
           label: "Last Name",
-          field: "last_name",
+          field: "user.last_name",
         },
         {
           label: "Middle Name",
-          field: "middle_name",
+          field: "user.middle_name",
         },
         {
-          label: "Gender",
-          field: "gender",
+          label: "Notifocation",
+          field: "notifications.description",
         },
         {
-          label: "Email",
-          field: "email",
-        },
-        {
-          label: "Date Of Birth",
-          field: "dob",
-          type: "date",
-          dateInputFormat: "yyyy-MM-dd",
-          dateOutputFormat: "dd-MM-yyyy",
+          label: "Active",
+          field: "is_active",
         },
         {
           label: "Action",
@@ -100,7 +93,7 @@ export default {
   methods: {
     async getData() {
       this.isLoading = true;
-      let users = await axios.get(`users`);
+      let users = await axios.get(`user_notifications`);
       this.users = users.data.data;
       // this.count = users.data.count;
       // this.serialNoStarting = (page - 1) * this.rowsPerPage;
