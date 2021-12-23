@@ -1,10 +1,13 @@
 <template>
   <div class="main-content">
-    <breadcumb :page="'Create User'" :folder="'Users'" />
+    <breadcumb
+      :page="'Create User Login Question'"
+      :folder="'User Login Questions'"
+    />
 
     <b-row>
       <b-col md="12">
-        <b-card title="User">
+        <b-card title="User Login Question">
           <b-row>
             <b-col md="12">
               <b-button
@@ -18,116 +21,57 @@
           <b-form @submit.prevent="submit">
             <b-row>
               <b-col md="6">
-                <b-form-group label="First Name">
-                  <b-form-input
-                    class="mb-2"
-                    label="First Name"
-                    placeholder="Enter First Name"
-                    v-model.trim="$v.form.first_name.$model"
-                  >
-                  </b-form-input>
-
-                  <b-alert
-                    show
-                    variant="danger"
-                    class="error mt-1"
-                    v-if="!$v.form.first_name.required"
-                    >Field is required</b-alert
-                  >
+                <b-form-group label="Select User">
+                  <vue-tags-input
+                    v-model="searchUser"
+                    :tags="selectedUser"
+                    :max-tags="1"
+                    class="tag-custom text-15 mb-2"
+                    :autocomplete-items="filteredUserItems"
+                    :add-only-from-autocomplete="true"
+                    @tags-changed="(newTags) => (selectedUser = newTags)"
+                    placeholder="Type User Name"
+                  />
                 </b-form-group>
               </b-col>
               <b-col md="6">
-                <b-form-group label="Middle Name">
-                  <b-form-input
-                    class="mb-2"
-                    label="Middle Name"
-                    placeholder="Enter Middle Name"
-                    v-model="form.middle_name"
-                  >
-                  </b-form-input>
-                </b-form-group>
-              </b-col>
-            </b-row>
-            <b-row>
-              <b-col md="6">
-                <b-form-group label="Date Of Birth">
-                  <b-form-datepicker
-                    id="dob"
-                    v-model="form.dob"
-                    class="mb-2"
-                    placeholder="Date Of Birth"
-                  ></b-form-datepicker>
-                </b-form-group>
-              </b-col>
-              <b-col md="6">
-                <b-form-group label="Last Name">
-                  <b-form-input
-                    class="mb-2"
-                    label="Last Name"
-                    placeholder="Enter Last Name"
-                    v-model="form.last_name"
-                  >
-                  </b-form-input>
+                <b-form-group label="Select User Login Question">
+                  <vue-tags-input
+                    v-model="searchUserLoginQuestion"
+                    :tags="selectedUserLoginQuestion"
+                    :max-tags="1"
+                    class="tag-custom text-15 mb-2"
+                    :autocomplete-items="filteredUserLoginQuestionItems"
+                    :add-only-from-autocomplete="true"
+                    @tags-changed="
+                      (newTags) => (selectedUserLoginQuestion = newTags)
+                    "
+                    placeholder="Type User Login Question"
+                  />
                 </b-form-group>
               </b-col>
             </b-row>
             <b-row>
               <b-col md="6">
-                <b-form-group label="Email">
+                <b-form-group label="Answer">
                   <b-form-input
                     class="mb-2"
-                    label="Email"
-                    placeholder="email address"
-                    v-model.trim="$v.form.email.$model"
+                    label="Answer"
+                    placeholder="Enter Answer"
+                    v-model="form.answer"
                   >
                   </b-form-input>
-
-                  <b-alert
-                    show
-                    variant="danger"
-                    class="error mt-1"
-                    v-if="!$v.form.email.email"
-                  >
-                    {{ $v.form.email.$model }} is invalid.</b-alert
-                  >
-                  <b-alert
-                    show
-                    variant="danger"
-                    class="error mt-1"
-                    v-if="!$v.form.email.required"
-                    >Field is required</b-alert
-                  >
                 </b-form-group>
               </b-col>
               <b-col md="6">
-                <b-form-group label="Gender">
-                  <b-row>
-                    <b-col md="8">
-                      <span>Male</span>
-                      <label class="switch switch-success mr-3 ml-3">
-                        <input
-                          type="checkbox"
-                          checked="checkbox"
-                          v-model="form.gender"
-                        /><span class="slider"></span>
-                      </label>
-                      <span>Female</span>
-                    </b-col>
-                  </b-row>
-                </b-form-group>
-              </b-col>
-              
-            </b-row>
-            <b-row>
-              
-              <b-col md="6">
-                <b-form-group label="Image">
-                  <b-form-file
-                    id="file-default"
-                    name="imagepath"
-                    ref="file"
-                    accept="image/*"
-                  ></b-form-file>
+                <b-form-group label="Selected Option">
+                  <b-form-input
+                    class="mb-2"
+                    label="Selected Option"
+                    placeholder="Enter Selected Option"
+                    v-model="form.selected_option"
+                  >
+                  </b-form-input>
                 </b-form-group>
               </b-col>
             </b-row>
@@ -157,69 +101,89 @@
 
 <script>
 import axios from "axios";
-import {
-  email,
-  // numeric,
-  // between,
-  required,
-  // sameAs,
-  // minLength,
-  // maxLength,
-} from "vuelidate/lib/validators";
+// import {
+//   email,
+//   // numeric,
+//   // between,
+//   required,
+//   // sameAs,
+//   // minLength,
+//   // maxLength,
+// } from "vuelidate/lib/validators";
 export default {
   metaInfo: {
     // if no subcomponents specify a metaInfo.title, this title will be used
-    title: "User Update",
+    title: "User Login Question Update",
   },
   data() {
     return {
       form: {
-        first_name: "",
-        middle_name: "",
-        last_name: "",
-        user_name: "",
-        dob: "",
-        gender: "",
-        password: "",
-        email: "",
-        active: 1,
-        role_id: 4,
+        user_id: "",
+        login_question_id: "",
+        answer: "",
+        selected_option: "",
       },
       submitStatus: null,
+      searchUser: "",
+      selectedUser: [],
+      userItems: [],
+      searchUserLoginQuestion: "",
+      selectedUserLoginQuestion: [],
+      userLoginQuestionItems: [],
     };
   },
   validations: {
-    form: {
-      first_name: {
-        required,
-      },
-      // user_name: {
-      //   required,
-      // },
-      email: {
-        required,
-        email,
-      },
+  //   form: {
+  //     first_name: {
+  //       required,
+  //     },
+  //     // user_name: {
+  //     //   required,
+  //     // },
+  //     email: {
+  //       required,
+  //       email,
+  //     },
     },
 
-    // add input
-    // peopleAdd: {
-    //   required,
-    //   minLength: minLength(3),
-    //   $each: {
-    //     multipleFirst Name: {
-    //       required,
-    //       minLength: minLength(5)
-    //     }
-    //   }
-    // },
-    // validationsGroup:['peopleAdd.multipleFirst Name']
-  },
+  //   // add input
+  //   // peopleAdd: {
+  //   //   required,
+  //   //   minLength: minLength(3),
+  //   //   $each: {
+  //   //     multipleFirst Name: {
+  //   //       required,
+  //   //       minLength: minLength(5)
+  //   //     }
+  //   //   }
+  //   // },
+  //   // validationsGroup:['peopleAdd.multipleFirst Name']
+  // },
   mounted() {
     // this.form.site_id = this.site.id
     this.getData();
+    this.getMasters();
   },
   methods: {
+    async getMasters() {
+      this.isLoading = true;
+      let masters = await axios.get("user_login_questions/masters");
+      masters = masters.data;
+      masters.users.forEach((user) => {
+        this.userItems.push({
+          id: user.id,
+          text: user.first_name,
+        });
+      });
+      // console.log(this.userItems);
+      masters.login_questions.forEach((ulq) => {
+        this.userLoginQuestionItems.push({
+          id: ulq.id,
+          text: ulq.description,
+        });
+      });
+      this.isLoading = false;
+    },
     //   validate form
     async submit() {
       console.log("submit!");
@@ -230,36 +194,22 @@ export default {
       } else {
         try {
           this.isLoading = true;
-          await axios.patch(`/users/${this.$route.params.id}`, this.form);
-          await this.handleFileUpload();
+          await axios.patch(
+            `/user_login_questions/${this.$route.params.id}`,
+            this.form
+          );
 
           this.isLoading = false;
-          this.$router.push("/app/users");
+          this.$router.push("/app/user-login-questions");
         } catch (e) {
           this.isLoading = false;
         }
         this.submitStatus = "PENDING";
         // setTimeout(() => {
-          this.submitStatus = "OK";
-          this.$router.push("/app/users/");
+        this.submitStatus = "OK";
+        this.$router.push("/app/user-login-questions/");
         // }, 1000);
       }
-    },
-    async handleFileUpload() {
-      let attachment = this.$refs.file?.files[0];
-      const userid = this.form.id;
-      let formData = new FormData();
-      formData.append("userid", userid);
-      formData.append("imagepath", attachment);
-      await axios
-        .post("upload_user_image", formData, {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        })
-        .catch(function () {
-          console.log("FAILURE!!");
-        });
     },
     makeToast(variant = null) {
       this.$bvToast.toast("Please fill the form correctly.", {
@@ -281,9 +231,41 @@ export default {
     },
     async getData() {
       this.isLoading = true;
-      let form = await axios.get(`/users/${this.$route.params.id}`);
-      this.form = form.data.data;
+      let form = await axios.get(
+        `/user_login_questions/${this.$route.params.id}`
+      );
+      this.form = form.data.data[0];
+      this.users = this.form.user;
+      this.login_question = this.form.login_question;
+      console.log(this.login_question);
+      this.selectedUser.push({
+        id: this.users.id,
+        text: this.users.first_name,
+      });
+      this.selectedUserLoginQuestion.push({
+        id: this.login_question.id,
+        text: this.login_question.description,
+      });
+
       this.isLoading = false;
+    },
+  },
+  computed: {
+    filteredUserItems() {
+      return this.userItems.filter((c) => {
+        return (
+          c.text.toLowerCase().indexOf(this.searchUser.toLowerCase()) !== -1
+        );
+      });
+    },
+    filteredUserLoginQuestionItems() {
+      return this.userLoginQuestionItems.filter((c) => {
+        return (
+          c.text
+            .toLowerCase()
+            .indexOf(this.searchUserLoginQuestion.toLowerCase()) !== -1
+        );
+      });
     },
   },
 };

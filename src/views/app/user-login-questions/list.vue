@@ -1,6 +1,6 @@
 <template>
   <div class="main-content">
-    <breadcumb :page="'User List'" :folder="'Users'" />
+    <breadcumb :page="'User Login Question Lists'" :folder="'User Login Questions'" />
     <!-- <div class="wrapper"> -->
     <b-card>
       <vue-good-table
@@ -15,24 +15,24 @@
           mode: 'records',
         }"
         styleClass="tableOne vgt-table"
-        :rows="users"
+        :rows="userLoginQuestins"
       >
         <div slot="table-actions" class="mb-3">
           <b-button
             variant="primary"
             class="btn-rounded d-none d-sm-block"
-            to="/app/users/create"
-            ><i class="i-Add text-white mr-2"> </i>Add User
+            to="/app/user-login-questions/create"
+            ><i class="i-Add text-white mr-2"> </i>Add User Login Question
           </b-button>
         </div>
 
         <template slot="table-row" slot-scope="props">
           <span v-if="props.column.field == 'button'">
             <router-link
-              :to="'/app/users/' + props.row.id"
+              :to="'/app/user-login-questions/' + props.row.id"
               class="btn btn-primary d-none d-sm-block mb-2 mr-2"
               v-b-tooltip.hover
-              title="Edit User Details"
+              title="Edit User Login Question Details"
             >
               <i class="i-Eraser-2"></i> EDIT
             </router-link>
@@ -51,37 +51,34 @@ import axios from "axios";
 export default {
   metaInfo: {
     // if no subcomponents specify a metaInfo.title, this title will be used
-    title: "User Lits",
+    title: "User Login Question Lits",
   },
   data() {
     return {
       columns: [
         {
           label: "First Name",
-          field: "first_name",
+          field: "user.first_name",
         },
         {
           label: "Last Name",
-          field: "last_name",
+          field: "user.last_name",
         },
         {
           label: "Middle Name",
-          field: "middle_name",
+          field: "user.middle_name",
         },
         {
-          label: "Gender",
-          field: "gender",
+          label: "Description",
+          field: "login_question.description",
         },
         {
-          label: "Email",
-          field: "email",
+          label: "Answer",
+          field: "answer",
         },
         {
-          label: "Date Of Birth",
-          field: "dob",
-          type: "date",
-          dateInputFormat: "yyyy-MM-dd",
-          dateOutputFormat: "dd-MM-yyyy",
+          label: "Selected Option",
+          field: "selected_option",
         },
         {
           label: "Action",
@@ -91,7 +88,7 @@ export default {
           thClass: "text-right",
         },
       ],
-      users: [],
+      userLoginQuestins: [],
     };
   },
   mounted() {
@@ -100,9 +97,10 @@ export default {
   methods: {
     async getData() {
       this.isLoading = true;
-      let users = await axios.get(`users`);
-      this.users = users.data.data;
-      // this.count = users.data.count;
+      let userLoginQuestins = await axios.get(`user_login_questions`);
+      // let userLoginQuestins = await axios.get(`user_login_questions?user_id=3`);
+      this.userLoginQuestins = userLoginQuestins.data.data;
+      // this.count = userLoginQuestins.data.count;
       // this.serialNoStarting = (page - 1) * this.rowsPerPage;
       this.isLoading = false;
     },
