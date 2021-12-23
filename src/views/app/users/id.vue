@@ -1,6 +1,6 @@
 <template>
   <div class="main-content">
-    <breadcumb :page="'Create User'" :folder="'Users'" />
+    <breadcumb :page="'Update User'" :folder="'Users'" />
 
     <b-row>
       <b-col md="12">
@@ -116,17 +116,41 @@
                   </b-row>
                 </b-form-group>
               </b-col>
-              
             </b-row>
             <b-row>
-              
               <b-col md="6">
-                <b-form-group label="Image">
+                <a :href='`${mediaUrl+form.selfie_image_path}`' target="_blank" >{{ mediaUrl+form.selfie_image_path ? form.selfie_image_path : '' }}</a>
+                <b-form-group label="Selfie">
                   <b-form-file
                     id="file-default"
-                    name="imagepath"
-                    ref="file"
+                    name="selfie_image_path"
+                    ref="selfie_image_path"
                     accept="image/*"
+                  ></b-form-file>
+                </b-form-group>
+              </b-col>
+              <b-col md="6">
+                <a :href='`${mediaUrl+form.gallery_image_path}`' target="_blank" >{{ mediaUrl+form.gallery_image_path ? form.gallery_image_path : '' }}</a>
+                <b-form-group label="Gallery">
+                  <b-form-file
+                    id="file-default1"
+                    name="gallery_image_path"
+                    ref="gallery_image_path"
+                    accept="image/*"
+                  ></b-form-file>
+                </b-form-group>
+              </b-col>
+            </b-row>
+            <b-row>
+              <b-col md="6">
+                <a :href='`${mediaUrl+form.voice_clip_path}`' target="_blank" >{{ mediaUrl+form.voice_clip_path ? form.voice_clip_path : '' }}</a>
+                
+                <b-form-group label="Audio">
+                  <b-form-file
+                    id="file-default2"
+                    name="voice_clip_path"
+                    ref="voice_clip_path"
+                    accept="audio/*"
                   ></b-form-file>
                 </b-form-group>
               </b-col>
@@ -240,17 +264,21 @@ export default {
         }
         this.submitStatus = "PENDING";
         // setTimeout(() => {
-          this.submitStatus = "OK";
-          this.$router.push("/app/users/");
+        this.submitStatus = "OK";
+        this.$router.push("/app/users/");
         // }, 1000);
       }
     },
     async handleFileUpload() {
-      let attachment = this.$refs.file?.files[0];
+      let selfie_image_path = this.$refs.selfie_image_path?.files[0];
+      let gallery_image_path = this.$refs.gallery_image_path?.files[0];
+      let voice_clip_path = this.$refs.voice_clip_path?.files[0];
       const userid = this.form.id;
       let formData = new FormData();
       formData.append("userid", userid);
-      formData.append("imagepath", attachment);
+      formData.append("selfie_image_path", selfie_image_path);
+      formData.append("gallery_image_path", gallery_image_path);
+      formData.append("voice_clip_path", voice_clip_path);
       await axios
         .post("upload_user_image", formData, {
           headers: {

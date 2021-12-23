@@ -1,10 +1,10 @@
 <template>
   <div class="main-content">
-    <breadcumb :page="'Create User'" :folder="'Users'" />
+    <breadcumb :page="'Create User Story'" :folder="'User Stories'" />
 
     <b-row>
       <b-col md="12">
-        <b-card title="User">
+        <b-card title="User Story">
           <b-row>
             <b-col md="12">
               <b-button
@@ -18,116 +18,68 @@
           <b-form @submit.prevent="submit">
             <b-row>
               <b-col md="6">
-                <b-form-group label="First Name">
-                  <b-form-input
-                    class="mb-2"
-                    label="First Name"
-                    placeholder="Enter First Name"
-                    v-model.trim="$v.form.first_name.$model"
-                  >
-                  </b-form-input>
-
-                  <b-alert
-                    show
-                    variant="danger"
-                    class="error mt-1"
-                    v-if="!$v.form.first_name.required"
-                    >Field is required</b-alert
-                  >
+                <b-form-group label="Select User">
+                  <vue-tags-input
+                    v-model="searchUser"
+                    :tags="selectedUser"
+                    :max-tags="1"
+                    class="tag-custom text-15 mb-2"
+                    :autocomplete-items="filteredUserItems"
+                    :add-only-from-autocomplete="true"
+                    @tags-changed="(newTags) => (selectedUser = newTags)"
+                    placeholder="Type User Name"
+                  />
                 </b-form-group>
               </b-col>
               <b-col md="6">
-                <b-form-group label="Middle Name">
-                  <b-form-input
-                    class="mb-2"
-                    label="Middle Name"
-                    placeholder="Enter Middle Name"
-                    v-model="form.middle_name"
-                  >
-                  </b-form-input>
-                </b-form-group>
-              </b-col>
-            </b-row>
-            <b-row>
-              <b-col md="6">
-                <b-form-group label="Date Of Birth">
+                <b-form-group label="Date">
                   <b-form-datepicker
-                    id="dob"
-                    v-model="form.dob"
+                    id="date"
+                    v-model="form.date"
                     class="mb-2"
-                    placeholder="Date Of Birth"
+                    placeholder="Date"
                   ></b-form-datepicker>
                 </b-form-group>
               </b-col>
-              <b-col md="6">
-                <b-form-group label="Last Name">
-                  <b-form-input
-                    class="mb-2"
-                    label="Last Name"
-                    placeholder="Enter Last Name"
-                    v-model="form.last_name"
-                  >
-                  </b-form-input>
-                </b-form-group>
-              </b-col>
             </b-row>
             <b-row>
-              <b-col md="6">
-                <b-form-group label="Email">
-                  <b-form-input
-                    class="mb-2"
-                    label="Email"
-                    placeholder="email address"
-                    v-model.trim="$v.form.email.$model"
-                  >
-                  </b-form-input>
-
-                  <b-alert
-                    show
-                    variant="danger"
-                    class="error mt-1"
-                    v-if="!$v.form.email.email"
-                  >
-                    {{ $v.form.email.$model }} is invalid.</b-alert
-                  >
-                  <b-alert
-                    show
-                    variant="danger"
-                    class="error mt-1"
-                    v-if="!$v.form.email.required"
-                    >Field is required</b-alert
-                  >
-                </b-form-group>
-              </b-col>
-              <b-col md="6">
-                <b-form-group label="Gender">
-                  <b-row>
-                    <b-col md="8">
-                      <span>Male</span>
-                      <label class="switch switch-success mr-3 ml-3">
-                        <input
-                          type="checkbox"
-                          checked="checkbox"
-                          v-model="form.gender"
-                        /><span class="slider"></span>
-                      </label>
-                      <span>Female</span>
-                    </b-col>
-                  </b-row>
-                </b-form-group>
-              </b-col>
-              
-            </b-row>
-            <b-row>
-              
               <b-col md="6">
                 <b-form-group label="Image">
                   <b-form-file
                     id="file-default"
-                    name="imagepath"
-                    ref="file"
+                    name="image_path"
+                    ref="image_path"
                     accept="image/*"
                   ></b-form-file>
+                </b-form-group>
+              </b-col>
+              <b-col md="6">
+                <b-form-group label="Video">
+                  <b-form-file
+                    id="file-default1"
+                    name="video_path"
+                    ref="video_path"
+                    accept="video/*"
+                  ></b-form-file>
+                </b-form-group>
+              </b-col>
+            </b-row>
+            <b-row>
+              <b-col md="6">
+                <b-form-group label="Active">
+                  <b-row>
+                    <b-col md="8">
+                      <span>InActive</span>
+                      <label class="switch switch-success mr-3 ml-3">
+                        <input
+                          type="checkbox"
+                          checked="checkbox"
+                          v-model="form.is_active"
+                        /><span class="slider"></span>
+                      </label>
+                      <span>Active</span>
+                    </b-col>
+                  </b-row>
                 </b-form-group>
               </b-col>
             </b-row>
@@ -158,10 +110,10 @@
 <script>
 import axios from "axios";
 import {
-  email,
+  // email,
   // numeric,
   // between,
-  required,
+  // required,
   // sameAs,
   // minLength,
   // maxLength,
@@ -169,37 +121,35 @@ import {
 export default {
   metaInfo: {
     // if no subcomponents specify a metaInfo.title, this title will be used
-    title: "User Update",
+    title: "User Story Update",
   },
   data() {
     return {
       form: {
-        first_name: "",
-        middle_name: "",
-        last_name: "",
-        user_name: "",
-        dob: "",
-        gender: "",
-        password: "",
-        email: "",
-        active: 1,
-        role_id: 4,
+        user_id: "",
+        date: "",
+        image_path: "",
+        video_path: "",
+        is_active: 1,
       },
+       searchUser: "",
+      selectedUser: [],
+      userItems: [],
       submitStatus: null,
     };
   },
   validations: {
     form: {
-      first_name: {
-        required,
-      },
+      // first_name: {
+      //   required,
+      // },
       // user_name: {
       //   required,
       // },
-      email: {
-        required,
-        email,
-      },
+      // email: {
+      //   required,
+      //   email,
+      // },
     },
 
     // add input
@@ -216,8 +166,10 @@ export default {
     // validationsGroup:['peopleAdd.multipleFirst Name']
   },
   mounted() {
-    // this.form.site_id = this.site.id
+    this.form.site_id = this.site.id
     this.getData();
+    this.getMasters();
+
   },
   methods: {
     //   validate form
@@ -230,29 +182,48 @@ export default {
       } else {
         try {
           this.isLoading = true;
-          await axios.patch(`/users/${this.$route.params.id}`, this.form);
+          if (this.selectedUser[0]) {
+            this.form.user_id = this.selectedUser[0].id;
+          }
+          await axios.patch(`/user_stories/${this.$route.params.id}`, this.form);
           await this.handleFileUpload();
 
           this.isLoading = false;
-          this.$router.push("/app/users");
+          this.$router.push("/app/user-stories");
         } catch (e) {
           this.isLoading = false;
         }
         this.submitStatus = "PENDING";
         // setTimeout(() => {
           this.submitStatus = "OK";
-          this.$router.push("/app/users/");
+          this.$router.push("/app/user-stories/");
         // }, 1000);
       }
     },
+    async getMasters() {
+      this.isLoading = true;
+       
+      let masters = await axios.get("user_stories/masters");
+      masters = masters.data;
+      masters.users.forEach((user) => {
+        this.userItems.push({
+          id: user.id,
+          text: user.first_name,
+        });
+      });
+      
+      this.isLoading = false;
+    },
     async handleFileUpload() {
-      let attachment = this.$refs.file?.files[0];
+      let image_path = this.$refs.image_path?.files[0];
+      let video_path = this.$refs.video_path?.files[0];
       const userid = this.form.id;
       let formData = new FormData();
       formData.append("userid", userid);
-      formData.append("imagepath", attachment);
+      formData.append("image_path", image_path);
+      formData.append("video_path", video_path);
       await axios
-        .post("upload_user_image", formData, {
+        .post("upload_user_story", formData, {
           headers: {
             "Content-Type": "multipart/form-data",
           },
@@ -281,9 +252,23 @@ export default {
     },
     async getData() {
       this.isLoading = true;
-      let form = await axios.get(`/users/${this.$route.params.id}`);
-      this.form = form.data.data;
+      let form = await axios.get(`/user_stories/${this.$route.params.id}`);
+      this.form = form.data.data[0];
+      this.users = this.form.user;
+      this.selectedUser.push({
+        id: this.users.id,
+        text: this.users.first_name,
+      });
       this.isLoading = false;
+    },
+  },
+  computed: {
+    filteredUserItems() {
+      return this.userItems.filter((c) => {
+        return (
+          c.text.toLowerCase().indexOf(this.searchUser.toLowerCase()) !== -1
+        );
+      });
     },
   },
 };
