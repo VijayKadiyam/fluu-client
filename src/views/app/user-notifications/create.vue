@@ -1,10 +1,10 @@
 <template>
   <div class="main-content">
-    <breadcumb :page="'Create User'" :folder="'Users'" />
+    <breadcumb :page="'Create User Notification'" :folder="'User notifications'" />
 
     <b-row>
       <b-col md="12">
-        <b-card title="User">
+        <b-card title="User notification">
           <b-row>
             <b-col md="12">
               <b-button
@@ -18,116 +18,52 @@
           <b-form @submit.prevent="submit">
             <b-row>
               <b-col md="6">
-                <b-form-group label="First Name">
-                  <b-form-input
-                    class="mb-2"
-                    label="First Name"
-                    placeholder="Enter First Name"
-                    v-model.trim="$v.form.first_name.$model"
-                  >
-                  </b-form-input>
-
-                  <b-alert
-                    show
-                    variant="danger"
-                    class="error mt-1"
-                    v-if="!$v.form.first_name.required"
-                    >Field is required</b-alert
-                  >
+                <b-form-group label="Select User">
+                  <vue-tags-input
+                    v-model="searchUser"
+                    :tags="selectedUser"
+                    :max-tags="1"
+                    class="tag-custom text-15 mb-2"
+                    :autocomplete-items="filteredUserItems"
+                    :add-only-from-autocomplete="true"
+                    @tags-changed="(newTags) => (selectedUser = newTags)"
+                    placeholder="Type User Name"
+                  />
                 </b-form-group>
               </b-col>
               <b-col md="6">
-                <b-form-group label="Middle Name">
-                  <b-form-input
-                    class="mb-2"
-                    label="Middle Name"
-                    placeholder="Enter Middle Name"
-                    v-model="form.middle_name"
-                  >
-                  </b-form-input>
-                </b-form-group>
-              </b-col>
-            </b-row>
-            <b-row>
-              <b-col md="6">
-                <b-form-group label="Date Of Birth">
-                  <b-form-datepicker
-                    id="dob"
-                    v-model="form.dob"
-                    class="mb-2"
-                    placeholder="Date Of Birth"
-                  ></b-form-datepicker>
-                </b-form-group>
-              </b-col>
-              <b-col md="6">
-                <b-form-group label="Last Name">
-                  <b-form-input
-                    class="mb-2"
-                    label="Last Name"
-                    placeholder="Enter Last Name"
-                    v-model="form.last_name"
-                  >
-                  </b-form-input>
+                <b-form-group label="Select Notification">
+                  <vue-tags-input
+                    v-model="searchNotification"
+                    :tags="selectedNotification"
+                    :max-tags="1"
+                    class="tag-custom text-15 mb-2"
+                    :autocomplete-items="filteredNotificationItems"
+                    :add-only-from-autocomplete="true"
+                    @tags-changed="
+                      (newTags) => (selectedNotification = newTags)
+                    "
+                    placeholder="Type Notification Name"
+                  />
                 </b-form-group>
               </b-col>
             </b-row>
             <b-row>
               <b-col md="6">
-                <b-form-group label="Email">
-                  <b-form-input
-                    class="mb-2"
-                    label="Email"
-                    placeholder="email address"
-                    v-model.trim="$v.form.email.$model"
-                  >
-                  </b-form-input>
-
-                  <b-alert
-                    show
-                    variant="danger"
-                    class="error mt-1"
-                    v-if="!$v.form.email.email"
-                  >
-                    {{ $v.form.email.$model }} is invalid.</b-alert
-                  >
-                  <b-alert
-                    show
-                    variant="danger"
-                    class="error mt-1"
-                    v-if="!$v.form.email.required"
-                    >Field is required</b-alert
-                  >
-                </b-form-group>
-              </b-col>
-              <b-col md="6">
-                <b-form-group label="Gender">
+                <b-form-group label="Active">
                   <b-row>
                     <b-col md="8">
-                      <span>Male</span>
+                      <span>InActive</span>
                       <label class="switch switch-success mr-3 ml-3">
                         <input
                           type="checkbox"
                           checked="checkbox"
-                          v-model="form.gender"
+                          v-model="form.is_active"
                         /><span class="slider"></span>
                       </label>
-                      <span>Female</span>
+                      <span>Active</span>
                     </b-col>
                   </b-row>
-                </b-form-group>
-              </b-col>
-              
-            </b-row>
-            <b-row>
-              
-              <b-col md="6">
-                <b-form-group label="Image">
-                  <b-form-file
-                    id="file-default"
-                    name="imagepath"
-                    ref="file"
-                    accept="image/*"
-                  ></b-form-file>
                 </b-form-group>
               </b-col>
             </b-row>
@@ -158,10 +94,10 @@
 <script>
 import axios from "axios";
 import {
-  email,
+  // email,
   // numeric,
   // between,
-  required,
+  // required,
   // sameAs,
   // minLength,
   // maxLength,
@@ -174,30 +110,31 @@ export default {
   data() {
     return {
       form: {
-        first_name: "",
-        middle_name: "",
-        last_name: "",
-        dob: "",
-        email: "",
-        gender: 0,
-        active: 1,
-        role_id: 4,
+        user_id: "",
+        notification_id: "",
+        is_active: 1,
       },
+      searchUser: "",
+      selectedUser: [],
+      userItems: [],
+      searchNotification: "",
+      selectedNotification: [],
+      userNotificationItems: [],
       submitStatus: null,
     };
   },
   validations: {
     form: {
-      first_name: {
-        required,
-      },
+      // first_name: {
+      //   required,
+      // },
       // user_name: {
       //   required,
       // },
-      email: {
-        required,
-        email,
-      },
+      // email: {
+      //   required,
+      //   email,
+      // },
     },
 
     // add input
@@ -215,6 +152,7 @@ export default {
   },
   mounted() {
     this.form.site_id = this.site.id;
+    this.getMasters();
   },
   methods: {
     //   validate form
@@ -227,8 +165,16 @@ export default {
       } else {
         try {
           this.isLoading = true;
-          this.current_user = await axios.post("/users", this.form);
-          await this.handleFileUpload();
+          if (this.selectedUser[0]) {
+            this.form.user_id = this.selectedUser[0].id;
+          }
+          if (this.selectedNotification[0]) {
+            this.form.notification_id = this.selectedNotification[0].id;
+          }
+          this.current_user = await axios.post(
+            "/user_notifications",
+            this.form
+          );
           this.isLoading = false;
         } catch (e) {
           this.isLoading = false;
@@ -236,25 +182,27 @@ export default {
         this.submitStatus = "PENDING";
         // setTimeout(() => {
         this.submitStatus = "OK";
-        this.$router.push("/app/users");
+        this.$router.push("/app/user-notifications");
         // }, 1000);
       }
     },
-    async handleFileUpload() {
-      let attachment = this.$refs.file?.files[0];
-      const userid = this.current_user.data.data.id;
-      let formData = new FormData();
-      formData.append("userid", userid);
-      formData.append("imagepath", attachment);
-      await axios
-        .post("upload_user_image", formData, {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        })
-        .catch(function () {
-          console.log("FAILURE!!");
+    async getMasters() {
+      this.isLoading = true;
+      let masters = await axios.get("user_notifications/masters");
+      masters = masters.data;
+      masters.users.forEach((user) => {
+        this.userItems.push({
+          id: user.id,
+          text: user.first_name,
         });
+      });
+      masters.notifications.forEach((notification) => {
+        this.userNotificationItems.push({
+          id: notification.id,
+          text: notification.description,
+        });
+      });
+      this.isLoading = false;
     },
     makeToast(variant = null) {
       this.$bvToast.toast("Please fill the form correctly.", {
@@ -274,6 +222,24 @@ export default {
 
     inputSubmit() {
       // this.save();
+    },
+  },
+  computed: {
+    filteredUserItems() {
+      return this.userItems.filter((c) => {
+        return (
+          c.text.toLowerCase().indexOf(this.searchUser.toLowerCase()) !== -1
+        );
+      });
+    },
+    filteredNotificationItems() {
+      return this.userNotificationItems.filter((c) => {
+        return (
+          c.text
+            .toLowerCase()
+            .indexOf(this.searchNotification.toLowerCase()) !== -1
+        );
+      });
     },
   },
 };

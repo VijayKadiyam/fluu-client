@@ -133,18 +133,18 @@ export default {
     };
   },
   validations: {
-  //   form: {
-  //     first_name: {
-  //       required,
-  //     },
-  //     // user_name: {
-  //     //   required,
-  //     // },
-  //     email: {
-  //       required,
-  //       email,
-  //     },
-    },
+    //   form: {
+    //     first_name: {
+    //       required,
+    //     },
+    //     // user_name: {
+    //     //   required,
+    //     // },
+    //     email: {
+    //       required,
+    //       email,
+    //     },
+  },
 
   //   // add input
   //   // peopleAdd: {
@@ -194,6 +194,12 @@ export default {
       } else {
         try {
           this.isLoading = true;
+          if (this.selectedUser[0]) {
+            this.form.user_id = this.selectedUser[0].id;
+          }
+          if (this.selectedUserLoginQuestion[0]) {
+            this.form.login_question_id = this.selectedUserLoginQuestion[0].id;
+          }
           await axios.patch(
             `/user_login_questions/${this.$route.params.id}`,
             this.form
