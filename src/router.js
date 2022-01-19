@@ -44,7 +44,7 @@ const routes = [
           {
             path: "dashboard.v5",
             name: "dashboard.v5",
-            component: () => import("./views/app/dashboards/dashboard.v5"),
+            component: () => import("./views/app/dashboards/dashboard.v1"),
           },
           {
             path: "dashboard.v6",
