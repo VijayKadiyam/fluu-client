@@ -30,7 +30,6 @@
           <span v-if="props.column.field == 'button'">
             <router-link
               :to="'/app/users/' + props.row.id"
-              class="btn btn-primary d-none d-sm-block mb-2 mr-2"
               v-b-tooltip.hover
               title="Edit User Details"
             >
@@ -39,6 +38,9 @@
           </span>
           <span v-else-if="props.column.field == 'gender'">
             {{ props.row.gender == 0 ? "Male" : "Female" }}
+          </span>
+          <span v-else-if="props.column.field == 'active'">
+            {{ props.row.active == 0 ? "INACTIVE" : "ACTIVE" }}
           </span>
         </template>
       </vue-good-table>
@@ -61,13 +63,14 @@ export default {
           field: "first_name",
         },
         {
-          label: "Last Name",
-          field: "last_name",
-        },
-        {
           label: "Middle Name",
           field: "middle_name",
         },
+        {
+          label: "Last Name",
+          field: "last_name",
+        },
+
         {
           label: "Gender",
           field: "gender",
@@ -82,6 +85,10 @@ export default {
           type: "date",
           dateInputFormat: "yyyy-MM-dd",
           dateOutputFormat: "dd-MM-yyyy",
+        },
+        {
+          label: "Active",
+          field: "active",
         },
         {
           label: "Action",

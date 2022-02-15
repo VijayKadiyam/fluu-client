@@ -117,7 +117,7 @@
                 </b-form-group>
               </b-col>
             </b-row>
-            <b-row>
+            <!-- <b-row>
               <b-col md="6">
                 <b-form-group label="Selfie">
                   <b-form-file
@@ -138,7 +138,7 @@
                   ></b-form-file>
                 </b-form-group>
               </b-col>
-            </b-row>
+            </b-row> -->
             <b-row>
               <b-col md="6">
                 <b-form-group label="Audio">

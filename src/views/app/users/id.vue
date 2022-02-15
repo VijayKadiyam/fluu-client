@@ -117,9 +117,17 @@
                 </b-form-group>
               </b-col>
             </b-row>
-            <b-row>
+            <!-- <b-row>
               <b-col md="6">
-                <a :href='`${mediaUrl+form.selfie_image_path}`' target="_blank" >{{ mediaUrl+form.selfie_image_path ? form.selfie_image_path : '' }}</a>
+                <a
+                  :href="`${mediaUrl + form.selfie_image_path}`"
+                  target="_blank"
+                  >{{
+                    mediaUrl + form.selfie_image_path
+                      ? form.selfie_image_path
+                      : ""
+                  }}</a
+                >
                 <b-form-group label="Selfie">
                   <b-form-file
                     id="file-default"
@@ -130,7 +138,15 @@
                 </b-form-group>
               </b-col>
               <b-col md="6">
-                <a :href='`${mediaUrl+form.gallery_image_path}`' target="_blank" >{{ mediaUrl+form.gallery_image_path ? form.gallery_image_path : '' }}</a>
+                <a
+                  :href="`${mediaUrl + form.gallery_image_path}`"
+                  target="_blank"
+                  >{{
+                    mediaUrl + form.gallery_image_path
+                      ? form.gallery_image_path
+                      : ""
+                  }}</a
+                >
                 <b-form-group label="Gallery">
                   <b-form-file
                     id="file-default1"
@@ -140,11 +156,17 @@
                   ></b-form-file>
                 </b-form-group>
               </b-col>
-            </b-row>
+            </b-row> -->
             <b-row>
               <b-col md="6">
-                <a :href='`${mediaUrl+form.voice_clip_path}`' target="_blank" >{{ mediaUrl+form.voice_clip_path ? form.voice_clip_path : '' }}</a>
-                
+                <a
+                  :href="`${mediaUrl + form.voice_clip_path}`"
+                  target="_blank"
+                  >{{
+                    mediaUrl + form.voice_clip_path ? form.voice_clip_path : ""
+                  }}</a
+                >
+
                 <b-form-group label="Audio">
                   <b-form-file
                     id="file-default2"
@@ -152,6 +174,23 @@
                     ref="voice_clip_path"
                     accept="audio/*"
                   ></b-form-file>
+                </b-form-group>
+              </b-col>
+              <b-col md="6">
+                <b-form-group label="Active">
+                  <b-row>
+                    <b-col md="8">
+                      <span>IN ACTIVE</span>
+                      <label class="switch switch-success mr-3 ml-3">
+                        <input
+                          type="checkbox"
+                          checked="checkbox"
+                          v-model="form.active"
+                        /><span class="slider"></span>
+                      </label>
+                      <span>ACTIVE</span>
+                    </b-col>
+                  </b-row>
                 </b-form-group>
               </b-col>
             </b-row>
@@ -173,6 +212,66 @@
               <div class="spinner sm spinner-primary mt-3"></div>
             </div>
           </b-form>
+          <hr />
+          <h4>User Images</h4>
+          <br />
+          <b-row>
+            <b-col md="6">
+              <b-form-group label="Add Image">
+                <b-form-file
+                  id="file-default3"
+                  name="image_path"
+                  ref="image_path"
+                  accept="image/*"
+                ></b-form-file>
+              </b-form-group>
+            </b-col>
+            <b-col md="6">
+              <br />
+              <b-button @click="saveImage" variant="primary"> Save </b-button>
+            </b-col>
+          </b-row>
+
+          <hr />
+          <b-card>
+            <vue-good-table
+              :columns="imageColumns"
+              :line-numbers="true"
+              :search-options="{
+                enabled: true,
+                placeholder: 'Search this table',
+              }"
+              :pagination-options="{
+                enabled: true,
+                mode: 'records',
+              }"
+              styleClass="tableOne vgt-table"
+              :rows="userImages"
+            >
+              <template slot="table-row" slot-scope="props">
+                <span v-if="props.column.field == 'action'">
+                  <b-button
+                    @click="deleteImage(props.row.id)"
+                    variant="primary"
+                  >
+                    Delete
+                  </b-button>
+                </span>
+                <span v-else-if="props.column.field == 'imagePath'">
+                  <a
+                    target="_blank"
+                    :href="`${mediaUrl}${props.row.imagePath}`"
+                  >
+                    <img
+                      :src="`${mediaUrl}${props.row.imagePath}`"
+                      width="50"
+                      height="50"
+                    />
+                  </a>
+                </span>
+              </template>
+            </vue-good-table>
+          </b-card>
         </b-card>
       </b-col>
     </b-row>
@@ -210,6 +309,21 @@ export default {
         role_id: 4,
       },
       submitStatus: null,
+      imageColumns: [
+        {
+          label: "Source",
+          field: "source",
+        },
+        {
+          label: "Image",
+          field: "imagePath",
+        },
+        {
+          label: "Actions",
+          field: "action",
+        },
+      ],
+      userImages: [],
     };
   },
   validations: {
@@ -225,22 +339,8 @@ export default {
         email,
       },
     },
-
-    // add input
-    // peopleAdd: {
-    //   required,
-    //   minLength: minLength(3),
-    //   $each: {
-    //     multipleFirst Name: {
-    //       required,
-    //       minLength: minLength(5)
-    //     }
-    //   }
-    // },
-    // validationsGroup:['peopleAdd.multipleFirst Name']
   },
   mounted() {
-    // this.form.site_id = this.site.id
     this.getData();
   },
   methods: {
@@ -311,8 +411,38 @@ export default {
       this.isLoading = true;
       let form = await axios.get(`/users/${this.$route.params.id}`);
       this.form = form.data.data;
+      this.userImages = []
+      this.form.user_images.forEach((userImage) => {
+        this.userImages.push({
+          id: userImage.id,
+          source: userImage.source,
+          imagePath: userImage.image_path,
+        });
+      });
       this.isLoading = false;
     },
+    async saveImage() {
+      let image_path = this.$refs.image_path?.files[0];
+      const userid = this.form.id;
+      let formData = new FormData();
+      formData.append("userid", userid);
+      formData.append("image_path", image_path);
+      await axios
+        .post("upload_user_images", formData, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        })
+        .then(function () {})
+        .catch(function () {
+          console.log("FAILURE!!");
+        });
+      this.getData();
+    },
+    async deleteImage(imageId) {
+      await axios.delete(`/user_images/${imageId}`);
+      this.getData()
+    }
   },
 };
 </script>
