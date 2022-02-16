@@ -216,7 +216,7 @@
           <h4>User Images</h4>
           <br />
           <b-row>
-            <b-col md="6">
+            <b-col md="4">
               <b-form-group label="Add Image">
                 <b-form-file
                   id="file-default3"
@@ -226,7 +226,17 @@
                 ></b-form-file>
               </b-form-group>
             </b-col>
-            <b-col md="6">
+            <b-col md="2">
+              <b-form-group label="Source">
+                <select name="" id="" v-model="source">
+                  <option value="">Select Source</option>
+                  <option value="Gallery">Gallery</option>
+                  <option value="Camera">Camera</option>
+                  <option value="Profile">Profile</option>
+                </select>
+              </b-form-group>
+            </b-col>
+            <b-col md="4">
               <br />
               <b-button @click="saveImage" variant="primary"> Save </b-button>
             </b-col>
@@ -308,6 +318,7 @@ export default {
         active: 1,
         role_id: 4,
       },
+      source: "",
       submitStatus: null,
       imageColumns: [
         {
@@ -411,7 +422,7 @@ export default {
       this.isLoading = true;
       let form = await axios.get(`/users/${this.$route.params.id}`);
       this.form = form.data.data;
-      this.userImages = []
+      this.userImages = [];
       this.form.user_images.forEach((userImage) => {
         this.userImages.push({
           id: userImage.id,
@@ -426,6 +437,7 @@ export default {
       const userid = this.form.id;
       let formData = new FormData();
       formData.append("userid", userid);
+      formData.append("source", this.source);
       formData.append("image_path", image_path);
       await axios
         .post("upload_user_images", formData, {
@@ -441,8 +453,8 @@ export default {
     },
     async deleteImage(imageId) {
       await axios.delete(`/user_images/${imageId}`);
-      this.getData()
-    }
+      this.getData();
+    },
   },
 };
 </script>
