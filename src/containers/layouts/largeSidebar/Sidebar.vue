@@ -44,20 +44,6 @@
             </router-link>
             <div class="triangle"></div>
           </li>
-          <!-- Settings -->
-          <li
-            @mouseenter="toggleSubMenu"
-            class="nav-item"
-            :class="{ active: selectedParentMenu == 'users' }"
-            :data-submenu="false"
-            v-if="this.userPermissions.indexOf(3) != -1"
-          >
-            <router-link class="nav-item-hold" to="/app/settings/list">
-              <i class="nav-icon i-File-Clipboard-File--Text"></i>
-              <span class="nav-text">Settings</span>
-            </router-link>
-            <div class="triangle"></div>
-          </li>
           <!-- Users -->
           <li
             @mouseenter="toggleSubMenu"
@@ -115,6 +101,24 @@
             <router-link class="nav-item-hold" to="/app/value-lists/list">
               <i class="nav-icon text-20 i-Diploma-2"></i>
               <span class="nav-text">Value Lists</span>
+            </router-link>
+            <div class="triangle"></div>
+          </li>
+          <!-- Selfie Photo Sample -->
+          <li
+            @mouseenter="toggleSubMenu"
+            class="nav-item"
+            :class="{ active: selectedParentMenu == 'selfie-photo-samples' }"
+            data-item="selfie-photo-samples"
+            :data-submenu="true"
+            v-if="this.userPermissions.indexOf(6) != -1"
+          >
+            <router-link
+              class="nav-item-hold"
+              to="/app/selfie-photo-samples/list"
+            >
+              <i class="nav-icon text-20 i-Diploma-2"></i>
+              <span class="nav-text">Selfie Photo Samples</span>
             </router-link>
             <div class="triangle"></div>
           </li>
@@ -319,6 +323,25 @@
             <router-link tag="a" class to="/app/value-lists/list">
               <i class="nav-icon i-File-Clipboard-Text--Image"></i>
               <span class="item-name">Listing</span>
+            </router-link>
+          </li>
+        </ul>
+        <!-- Submenu Selfie Photo Samples -->
+        <ul
+          class="childNav d-none"
+          data-parent="selfie-photo-samples"
+          :class="{ 'd-block': selectedParentMenu == 'selfie-photo-samples' }"
+        >
+          <li class="nav-item">
+            <router-link tag="a" class to="/app/selfie-photo-samples/list">
+              <i class="nav-icon i-File-Clipboard-Text--Image"></i>
+              <span class="item-name">Listing</span>
+            </router-link>
+          </li>
+          <li class="nav-item">
+            <router-link tag="a" class to="/app/selfie-photo-samples/create">
+              <i class="nav-icon i-Split-Vertical"></i>
+              <span class="item-name">Add New Selfie Photo Samples</span>
             </router-link>
           </li>
         </ul>
