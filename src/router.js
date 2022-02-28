@@ -165,6 +165,26 @@ const routes = [
           },
         ],
       },
+      // Selfie Photo Samples
+      {
+        path: "/app/selfie-photo-samples",
+        component: () => import("./views/app/selfie-photo-samples"),
+        redirect: "/app/selfie-photo-samples/list",
+        children: [
+          {
+            path: "list",
+            component: () => import("./views/app/selfie-photo-samples/list"),
+          },
+          {
+            path: "create",
+            component: () => import("./views/app/selfie-photo-samples/create"),
+          },
+          {
+            path: ":id",
+            component: () => import("./views/app/selfie-photo-samples/id"),
+          },
+        ],
+      },
       // Login Questions
       {
         path: "/app/login-questions",
