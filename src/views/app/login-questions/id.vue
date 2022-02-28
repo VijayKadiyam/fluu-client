@@ -111,6 +111,42 @@
                 </b-form-group>
               </b-col>
             </b-row>
+            <b-row>
+              <b-col md="6">
+                <b-form-group label="Option Image Path 1">
+                  <b-form-file
+                    name="option_imagepath1"
+                    ref="file1"
+                  ></b-form-file>
+                </b-form-group>
+              </b-col>
+              <b-col md="6">
+                <b-form-group label="Option Image Path 2">
+                  <b-form-file
+                    name="option_imagepath2"
+                    ref="file2"
+                  ></b-form-file>
+                </b-form-group>
+              </b-col>
+            </b-row>
+            <b-row>
+              <b-col md="6">
+                <b-form-group label="Option Image Path 3">
+                  <b-form-file
+                    name="option_imagepath3"
+                    ref="file3"
+                  ></b-form-file>
+                </b-form-group>
+              </b-col>
+              <b-col md="6">
+                <b-form-group label="Option Image Path 4">
+                  <b-form-file
+                    name="option_imagepath4"
+                    ref="file4"
+                  ></b-form-file>
+                </b-form-group>
+              </b-col>
+            </b-row>
 
             <b-button
               type="submit"
@@ -192,8 +228,11 @@ export default {
       } else {
         try {
           this.isLoading = true;
-          await axios.patch(`/login_questions/${this.$route.params.id}`, this.form);
-
+          await axios.patch(
+            `/login_questions/${this.$route.params.id}`,
+            this.form
+          );
+          this.handleFileUpload();
           this.isLoading = false;
           this.$router.push("/app/login-questions");
         } catch (e) {
@@ -228,7 +267,31 @@ export default {
       this.isLoading = true;
       let form = await axios.get(`/login_questions/${this.$route.params.id}`);
       this.form = form.data.data;
+
+      // console.log(this.form.id);
       this.isLoading = false;
+    },
+    async handleFileUpload() {
+      let attachment1 = this.$refs.file1?.files[0];
+      let attachment2 = this.$refs.file2?.files[0];
+      let attachment3 = this.$refs.file3?.files[0];
+      let attachment4 = this.$refs.file4?.files[0];
+      const login_question_id = this.$route.params.id;
+      let formData = new FormData();
+      formData.append("login_question_id", login_question_id);
+      formData.append("image_option_1", attachment1);
+      formData.append("image_option_2", attachment2);
+      formData.append("image_option_3", attachment3);
+      formData.append("image_option_4", attachment4);
+      await axios
+        .post("upload_login_questions", formData, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        })
+        .catch(function () {
+          console.log("FAILURE!!");
+        });
     },
   },
 };
