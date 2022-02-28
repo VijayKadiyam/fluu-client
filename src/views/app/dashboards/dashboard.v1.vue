@@ -1,7 +1,7 @@
 <template>
   <!-- ============ Body content start ============= -->
   <div class="main-content">
-    <breadcumb :page="'Version 3'" :folder="'Dashboard'" />
+    <breadcumb :page="'Version 1'" :folder="'Dashboard'" />
     <b-row>
       <!-- ICON BG -->
 
