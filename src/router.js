@@ -93,6 +93,26 @@ const routes = [
           },
         ],
       },
+      // Settings
+      {
+        path: "/app/settings",
+        component: () => import("./views/app/settings"),
+        redirect: "/app/settings/list",
+        children: [
+          {
+            path: "list",
+            component: () => import("./views/app/settings/list"),
+          },
+          {
+            path: "create",
+            component: () => import("./views/app/settings/create"),
+          },
+          {
+            path: ":id",
+            component: () => import("./views/app/settings/id"),
+          },
+        ],
+      },
       // Permissions
       {
         path: "/app/permissions",
@@ -295,7 +315,7 @@ router.afterEach(() => {
       store.dispatch("changeSecondarySidebarProperties");
     }
 
-    if (store.getters.getCompactSideBarToggleProperties.isSideNavOpen) {
+    if (store.getters.getComsepactSideBarToggleProperties.isSideNavOpen) {
       store.dispatch("changeCompactSidebarProperties");
     }
   } else {

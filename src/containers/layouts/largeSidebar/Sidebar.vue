@@ -44,6 +44,20 @@
             </router-link>
             <div class="triangle"></div>
           </li>
+          <!-- Settings -->
+          <li
+            @mouseenter="toggleSubMenu"
+            class="nav-item"
+            :class="{ active: selectedParentMenu == 'users' }"
+            :data-submenu="false"
+            v-if="this.userPermissions.indexOf(3) != -1"
+          >
+            <router-link class="nav-item-hold" to="/app/settings/list">
+              <i class="nav-icon i-File-Clipboard-File--Text"></i>
+              <span class="nav-text">Settings</span>
+            </router-link>
+            <div class="triangle"></div>
+          </li>
           <!-- Users -->
           <li
             @mouseenter="toggleSubMenu"
