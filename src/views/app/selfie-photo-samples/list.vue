@@ -1,6 +1,9 @@
 <template>
   <div class="main-content">
-    <breadcumb :page="'Selfie Photo Samples Lists'" :folder="'Selfie Photo Sampless'" />
+    <breadcumb
+      :page="'Selfie Photo Samples Lists'"
+      :folder="'Selfie Photo Sampless'"
+    />
     <!-- <div class="wrapper"> -->
     <b-card>
       <vue-good-table
@@ -37,6 +40,15 @@
               <i class="i-Eraser-2"></i> EDIT
             </router-link>
           </span>
+          <span v-else-if="props.column.field == 'image_path'">
+            <a target="_blank" :href="`${mediaUrl}${props.row.image_path}`">
+              <img
+                :src="`${mediaUrl}${props.row.image_path}`"
+                width="50"
+                height="50"
+              />
+            </a>
+          </span>
         </template>
       </vue-good-table>
     </b-card>
@@ -56,6 +68,10 @@ export default {
         {
           label: "Title",
           field: "title",
+        },
+        {
+          label: "Image",
+          field: "image_path",
         },
         {
           label: "Action",
