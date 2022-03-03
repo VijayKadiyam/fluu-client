@@ -60,6 +60,39 @@
                       </b-form-checkbox-group>
                     </b-form-group>
                   </b-col>
+                  <b-col md="6">
+                    <b-form-group label="Is Text">
+                      <b-form-checkbox-group
+                        v-model="form.is_text"
+                        id="checkboxes-4"
+                        :aria-describedby="ariaDescribedby"
+                      >
+                        <b-form-checkbox value="1">Is Text</b-form-checkbox>
+                      </b-form-checkbox-group>
+                    </b-form-group>
+                  </b-col>
+                  <b-col md="6">
+                    <b-form-group label="Is Voice">
+                      <b-form-checkbox-group
+                        v-model="form.is_voice"
+                        id="checkboxes-4"
+                        :aria-describedby="ariaDescribedby"
+                      >
+                        <b-form-checkbox value="1">Is Voice</b-form-checkbox>
+                      </b-form-checkbox-group>
+                    </b-form-group>
+                  </b-col>
+                  <b-col md="6">
+                    <b-form-group label="Is Video">
+                      <b-form-checkbox-group
+                        v-model="form.is_video"
+                        id="checkboxes-4"
+                        :aria-describedby="ariaDescribedby"
+                      >
+                        <b-form-checkbox value="1">Is Video</b-form-checkbox>
+                      </b-form-checkbox-group>
+                    </b-form-group>
+                  </b-col>
                 </b-row>
               </b-col>
             </b-row>
@@ -189,6 +222,9 @@ export default {
         option_4: "",
         is_active: "",
         is_mcq: "",
+        is_text:"",
+        is_voice:"",
+        is_video:""
       },
       submitStatus: null,
     };
