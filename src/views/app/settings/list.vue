@@ -150,28 +150,19 @@
           <b-row>
             <b-col md="4">
               <b-form-group label="Intro Page Create Button Text">
-                <b-form-input
-                  class="mb-2"
-                  v-model="form.intro_p_create_b"
-                >
+                <b-form-input class="mb-2" v-model="form.intro_p_create_b">
                 </b-form-input>
               </b-form-group>
             </b-col>
             <b-col md="4">
               <b-form-group label="Intro Page Already Signin Text">
-                <b-form-input
-                  class="mb-2"
-                  v-model="form.intro_p_already_t"
-                >
+                <b-form-input class="mb-2" v-model="form.intro_p_already_t">
                 </b-form-input>
               </b-form-group>
             </b-col>
             <b-col md="4">
               <b-form-group label="Intro Page Signin Button Text">
-                <b-form-input
-                  class="mb-2"
-                  v-model="form.intro_p_signin_b"
-                >
+                <b-form-input class="mb-2" v-model="form.intro_p_signin_b">
                 </b-form-input>
               </b-form-group>
             </b-col>
@@ -180,10 +171,7 @@
           <b-row>
             <b-col md="4">
               <b-form-group label="Sign In By Phone Text">
-                <b-form-input
-                  class="mb-2"
-                  v-model="form.signinbyphone_b"
-                >
+                <b-form-input class="mb-2" v-model="form.signinbyphone_b">
                 </b-form-input>
               </b-form-group>
             </b-col>
@@ -192,19 +180,13 @@
           <b-row>
             <b-col md="4">
               <b-form-group label="Terms Text">
-                <b-form-input
-                  class="mb-2"
-                  v-model="form.terms_t"
-                >
+                <b-form-input class="mb-2" v-model="form.terms_t">
                 </b-form-input>
               </b-form-group>
             </b-col>
             <b-col md="4">
               <b-form-group label="Privacy Text">
-                <b-form-input
-                  class="mb-2"
-                  v-model="form.privacy_t"
-                >
+                <b-form-input class="mb-2" v-model="form.privacy_t">
                 </b-form-input>
               </b-form-group>
             </b-col>
@@ -213,10 +195,7 @@
           <b-row>
             <b-col md="4">
               <b-form-group label="Sign In By Phone Title">
-                <b-form-input
-                  class="mb-2"
-                  v-model="form.siginphone_p_title"
-                >
+                <b-form-input class="mb-2" v-model="form.siginphone_p_title">
                 </b-form-input>
               </b-form-group>
             </b-col>
@@ -234,10 +213,7 @@
           <b-row>
             <b-col md="4">
               <b-form-group label="OTP Page Title">
-                <b-form-input
-                  class="mb-2"
-                  v-model="form.otp_p_title"
-                >
+                <b-form-input class="mb-2" v-model="form.otp_p_title">
                 </b-form-input>
               </b-form-group>
             </b-col>
@@ -246,10 +222,7 @@
           <b-row>
             <b-col md="4">
               <b-form-group label="Gender Page Title">
-                <b-form-input
-                  class="mb-2"
-                  v-model="form.gender_p_title"
-                >
+                <b-form-input class="mb-2" v-model="form.gender_p_title">
                 </b-form-input>
               </b-form-group>
             </b-col>
@@ -258,28 +231,19 @@
           <b-row>
             <b-col md="4">
               <b-form-group label="Woman Text">
-                <b-form-input
-                  class="mb-2"
-                  v-model="form.woman_text"
-                >
+                <b-form-input class="mb-2" v-model="form.woman_text">
                 </b-form-input>
               </b-form-group>
             </b-col>
             <b-col md="4">
               <b-form-group label="Man Text">
-                <b-form-input
-                  class="mb-2"
-                  v-model="form.man_text"
-                >
+                <b-form-input class="mb-2" v-model="form.man_text">
                 </b-form-input>
               </b-form-group>
             </b-col>
             <b-col md="4">
               <b-form-group label="Other Text">
-                <b-form-input
-                  class="mb-2"
-                  v-model="form.other_text"
-                >
+                <b-form-input class="mb-2" v-model="form.other_text">
                 </b-form-input>
               </b-form-group>
             </b-col>
@@ -288,19 +252,13 @@
           <b-row>
             <b-col md="4">
               <b-form-group label="Gallery Page Title">
-                <b-form-input
-                  class="mb-2"
-                  v-model="form.gallery_p_title"
-                >
+                <b-form-input class="mb-2" v-model="form.gallery_p_title">
                 </b-form-input>
               </b-form-group>
             </b-col>
             <b-col md="4">
               <b-form-group label="Gallery Page Description">
-                <b-form-input
-                  class="mb-2"
-                  v-model="form.gallery_p_description"
-                >
+                <b-form-input class="mb-2" v-model="form.gallery_p_description">
                 </b-form-input>
               </b-form-group>
             </b-col>
@@ -309,19 +267,43 @@
           <b-row>
             <b-col md="4">
               <b-form-group label="Selfie Page Title">
-                <b-form-input
-                  class="mb-2"
-                  v-model="form.selfie_p_title"
-                >
+                <b-form-input class="mb-2" v-model="form.selfie_p_title">
                 </b-form-input>
               </b-form-group>
             </b-col>
             <b-col md="4">
               <b-form-group label="Selfie Page Description">
-                <b-form-input
-                  class="mb-2"
-                  v-model="form.selfie_p_description"
-                >
+                <b-form-input class="mb-2" v-model="form.selfie_p_description">
+                </b-form-input>
+              </b-form-group>
+            </b-col>
+          </b-row>
+
+          <b-row>
+            <b-col md="4">
+              <b-form-group label="Voice Clip Page Title">
+                <b-form-input class="mb-2" v-model="form.audio_p_title">
+                </b-form-input>
+              </b-form-group>
+            </b-col>
+            <b-col md="4">
+              <b-form-group label="Voice Clip Page Description">
+                <b-form-input class="mb-2" v-model="form.audio_p_description">
+                </b-form-input>
+              </b-form-group>
+            </b-col>
+          </b-row>
+
+          <b-row>
+            <b-col md="4">
+              <b-form-group label="Primary Color">
+                <b-form-input class="mb-2" v-model="form.primary_color">
+                </b-form-input>
+              </b-form-group>
+            </b-col>
+            <b-col md="4">
+              <b-form-group label="Accent color">
+                <b-form-input class="mb-2" v-model="form.accent_color">
                 </b-form-input>
               </b-form-group>
             </b-col>
