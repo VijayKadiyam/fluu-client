@@ -88,6 +88,18 @@ export default {
           field: "is_mcq",
         },
         {
+          label: "Is Text",
+          field: "is_text",
+        },
+        {
+          label: "Is Voice",
+          field: "is_voice",
+        },
+        {
+          label: "Is Video",
+          field: "is_video",
+        },
+        {
           label: "Action",
           field: "button",
           html: true,
