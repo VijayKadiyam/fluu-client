@@ -43,6 +43,15 @@
           <span v-else-if="props.column.field == 'is_mcq'">
             {{ props.row.is_mcq == 1 ? "Yes" : "No" }}
           </span>
+          <span v-else-if="props.column.field == 'is_text'">
+            {{ props.row.is_text == 1 ? "Yes" : "No" }}
+          </span>
+          <span v-else-if="props.column.field == 'is_voice'">
+            {{ props.row.is_voice == 1 ? "Yes" : "No" }}
+          </span>
+          <span v-else-if="props.column.field == 'is_video'">
+            {{ props.row.is_video == 1 ? "Yes" : "No" }}
+          </span>
         </template>
       </vue-good-table>
     </b-card>
@@ -86,6 +95,18 @@ export default {
         {
           label: "Is MCQ",
           field: "is_mcq",
+        },
+        {
+          label: "Is Text",
+          field: "is_text",
+        },
+        {
+          label: "Is Voice",
+          field: "is_voice",
+        },
+        {
+          label: "Is Video",
+          field: "is_video",
         },
         {
           label: "Action",
