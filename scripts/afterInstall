@@ -2,6 +2,7 @@
 export PATH="$PATH:"/usr/local/bin/
 cd /var/www/vhosts/fluu/fluu-client
 
+nvm use 14
 npm run build
 
 
