@@ -60,6 +60,23 @@
                       </b-form-checkbox-group>
                     </b-form-group>
                   </b-col>
+                </b-row>
+              </b-col>
+            </b-row>
+            <b-row>
+              <b-col md="6">
+                <b-form-group label="Sub Description">
+                  <b-form-input
+                    class="mb-2"
+                    label="Sub Description"
+                    placeholder="Enter Sub Description"
+                    v-model="form.sub_description"
+                  >
+                  </b-form-input>
+                </b-form-group>
+              </b-col>
+              <b-col md="6">
+                <b-row>
                   <b-col md="6">
                     <b-form-group label="Is Text">
                       <b-form-checkbox-group
@@ -222,9 +239,10 @@ export default {
         option_4: "",
         is_active: "",
         is_mcq: "",
-        is_text:"",
-        is_voice:"",
-        is_video:""
+        sub_description: "",
+        is_text: "",
+        is_voice: "",
+        is_video: "",
       },
       submitStatus: null,
     };

@@ -202,6 +202,66 @@
             </router-link>
             <div class="triangle"></div>
           </li>
+          <!-- user SuperLike -->
+          <li
+            @mouseenter="toggleSubMenu"
+            class="nav-item"
+            :class="{ active: selectedParentMenu == 'user-superlikes' }"
+            data-item="user-superlikes"
+            :data-submenu="true"
+            v-if="this.userPermissions.indexOf(6) != -1"
+          >
+            <router-link class="nav-item-hold" to="/app/user-superlikes/list">
+              <i class="nav-icon text-20 i-Diploma-2"></i>
+              <span class="nav-text">User Superlikes</span>
+            </router-link>
+            <div class="triangle"></div>
+          </li>
+          <!-- user Swipe -->
+          <li
+            @mouseenter="toggleSubMenu"
+            class="nav-item"
+            :class="{ active: selectedParentMenu == 'user-swipes' }"
+            data-item="user-swipes"
+            :data-submenu="true"
+            v-if="this.userPermissions.indexOf(6) != -1"
+          >
+            <router-link class="nav-item-hold" to="/app/user-swipes/list">
+              <i class="nav-icon text-20 i-Diploma-2"></i>
+              <span class="nav-text">User Swipes</span>
+            </router-link>
+            <div class="triangle"></div>
+          </li>
+          <!-- user Match -->
+          <li
+            @mouseenter="toggleSubMenu"
+            class="nav-item"
+            :class="{ active: selectedParentMenu == 'user-matches' }"
+            data-item="user-matches"
+            :data-submenu="true"
+            v-if="this.userPermissions.indexOf(6) != -1"
+          >
+            <router-link class="nav-item-hold" to="/app/user-matches/list">
+              <i class="nav-icon text-20 i-Diploma-2"></i>
+              <span class="nav-text">User Matches</span>
+            </router-link>
+            <div class="triangle"></div>
+          </li>
+          <!-- user Subscription -->
+          <li
+            @mouseenter="toggleSubMenu"
+            class="nav-item"
+            :class="{ active: selectedParentMenu == 'user-subscriptions' }"
+            data-item="user-subscriptions"
+            :data-submenu="true"
+            v-if="this.userPermissions.indexOf(6) != -1"
+          >
+            <router-link class="nav-item-hold" to="/app/user-subscriptions/list">
+              <i class="nav-icon text-20 i-Diploma-2"></i>
+              <span class="nav-text">User Subscriptions</span>
+            </router-link>
+            <div class="triangle"></div>
+          </li>
         </ul>
       </div>
     </vue-perfect-scrollbar>
@@ -432,6 +492,82 @@
             <router-link tag="a" class to="/app/user-stories/create">
               <i class="nav-icon i-Split-Vertical"></i>
               <span class="item-name">Add New User Story</span>
+            </router-link>
+          </li>
+        </ul>
+        <!-- Submenu User Superlikes -->
+        <ul
+          class="childNav d-none"
+          data-parent="user-superlikes"
+          :class="{ 'd-block': selectedParentMenu == 'user-superlikes' }"
+        >
+          <li class="nav-item">
+            <router-link tag="a" class to="/app/user-superlikes/list">
+              <i class="nav-icon i-File-Clipboard-Text--Image"></i>
+              <span class="item-name">Listing</span>
+            </router-link>
+          </li>
+          <li class="nav-item">
+            <router-link tag="a" class to="/app/user-superlikes/create">
+              <i class="nav-icon i-Split-Vertical"></i>
+              <span class="item-name">Add New User Superlike</span>
+            </router-link>
+          </li>
+        </ul>
+        <!-- Submenu User Swipes -->
+        <ul
+          class="childNav d-none"
+          data-parent="user-swipes"
+          :class="{ 'd-block': selectedParentMenu == 'user-swipes' }"
+        >
+          <li class="nav-item">
+            <router-link tag="a" class to="/app/user-swipes/list">
+              <i class="nav-icon i-File-Clipboard-Text--Image"></i>
+              <span class="item-name">Listing</span>
+            </router-link>
+          </li>
+          <li class="nav-item">
+            <router-link tag="a" class to="/app/user-swipes/create">
+              <i class="nav-icon i-Split-Vertical"></i>
+              <span class="item-name">Add New User Swipe</span>
+            </router-link>
+          </li>
+        </ul>
+        <!-- Submenu User matches -->
+        <ul
+          class="childNav d-none"
+          data-parent="user-matches"
+          :class="{ 'd-block': selectedParentMenu == 'user-matches' }"
+        >
+          <li class="nav-item">
+            <router-link tag="a" class to="/app/user-matches/list">
+              <i class="nav-icon i-File-Clipboard-Text--Image"></i>
+              <span class="item-name">Listing</span>
+            </router-link>
+          </li>
+          <li class="nav-item">
+            <router-link tag="a" class to="/app/user-matches/create">
+              <i class="nav-icon i-Split-Vertical"></i>
+              <span class="item-name">Add New User Matches</span>
+            </router-link>
+          </li>
+        </ul>
+        <!-- Submenu User Subscriptions -->
+        <ul
+          class="childNav d-none"
+          data-parent="user-subscriptions"
+          :class="{ 'd-block': selectedParentMenu == 'user-subscriptions' }"
+        >
+          <li class="nav-item">
+            <router-link tag="a" class to="/app/user-subscriptions/list">
+              <i class="nav-icon i-File-Clipboard-Text--Image"></i>
+              <span class="item-name">Listing</span>
+            </router-link>
+          </li>
+          <li class="nav-item">
+            <router-link tag="a" class to="/app/user-subscriptions/create">
+              <i class="nav-icon i-Split-Vertical"></i>
+              <span class="item-name">Add New User Subscription</span>
             </router-link>
           </li>
         </ul>

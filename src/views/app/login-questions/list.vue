@@ -73,6 +73,10 @@ export default {
           field: "description",
         },
         {
+          label: "Sub Description",
+          field: "sub_description",
+        },
+        {
           label: "Option 1",
           field: "option_1",
         },
