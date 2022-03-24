@@ -265,6 +265,86 @@ const routes = [
           },
         ],
       },
+      // User Superlikes
+      {
+        path: "/app/user-superlikes",
+        component: () => import("./views/app/user-superlikes"),
+        redirect: "/app/user-superlikes/list",
+        children: [
+          {
+            path: "list",
+            component: () => import("./views/app/user-superlikes/list"),
+          },
+          {
+            path: "create",
+            component: () => import("./views/app/user-superlikes/create"),
+          },
+          {
+            path: ":id",
+            component: () => import("./views/app/user-superlikes/id"),
+          },
+        ],
+      },
+      // User Swipes
+      {
+        path: "/app/user-swipes",
+        component: () => import("./views/app/user-swipes"),
+        redirect: "/app/user-swipes/list",
+        children: [
+          {
+            path: "list",
+            component: () => import("./views/app/user-swipes/list"),
+          },
+          {
+            path: "create",
+            component: () => import("./views/app/user-swipes/create"),
+          },
+          {
+            path: ":id",
+            component: () => import("./views/app/user-swipes/id"),
+          },
+        ],
+      },
+      // User Matches
+      {
+        path: "/app/user-matches",
+        component: () => import("./views/app/user-matches"),
+        redirect: "/app/user-matches/list",
+        children: [
+          {
+            path: "list",
+            component: () => import("./views/app/user-matches/list"),
+          },
+          {
+            path: "create",
+            component: () => import("./views/app/user-matches/create"),
+          },
+          {
+            path: ":id",
+            component: () => import("./views/app/user-matches/id"),
+          },
+        ],
+      },
+      // User Subscriptions
+      {
+        path: "/app/user-subscriptions",
+        component: () => import("./views/app/user-subscriptions"),
+        redirect: "/app/user-subscriptions/list",
+        children: [
+          {
+            path: "list",
+            component: () => import("./views/app/user-subscriptions/list"),
+          },
+          {
+            path: "create",
+            component: () => import("./views/app/user-subscriptions/create"),
+          },
+          {
+            path: ":id",
+            component: () => import("./views/app/user-subscriptions/id"),
+          },
+        ],
+      },
     ],
   },
   // sessions
