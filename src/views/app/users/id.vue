@@ -202,7 +202,7 @@
                         <input
                           type="checkbox"
                           checked="checkbox"
-                          v-model="form.active"
+                          v-model="form.is_verified"
                         /><span class="slider"></span>
                       </label>
                       <span>Yes</span>
