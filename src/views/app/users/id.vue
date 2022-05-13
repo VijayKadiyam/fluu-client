@@ -202,7 +202,7 @@
                         <input
                           type="checkbox"
                           checked="checkbox"
-                          v-model="form.active"
+                          v-model="form.is_verified"
                         /><span class="slider"></span>
                       </label>
                       <span>Yes</span>
@@ -334,6 +334,7 @@ export default {
         email: "",
         active: 1,
         role_id: 4,
+        is_verified:0
       },
       source: "",
       submitStatus: null,
