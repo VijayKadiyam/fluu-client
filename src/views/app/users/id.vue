@@ -334,6 +334,7 @@ export default {
         email: "",
         active: 1,
         role_id: 4,
+        is_verified:0
       },
       source: "",
       submitStatus: null,
