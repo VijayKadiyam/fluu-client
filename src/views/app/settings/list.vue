@@ -190,6 +190,12 @@
                 </b-form-input>
               </b-form-group>
             </b-col>
+            <b-col md="4">
+              <b-form-group label="Privacy Note">
+                <b-form-input class="mb-2" v-model="form.terms_description">
+                </b-form-input>
+              </b-form-group>
+            </b-col>
           </b-row>
 
           <b-row>
@@ -208,6 +214,12 @@
                 </b-form-input>
               </b-form-group>
             </b-col>
+            <b-col md="4">
+              <b-form-group label="Sign In By Phone Note">
+                <b-form-input class="mb-2" v-model="form.sign_in_by_phone_description">
+                </b-form-input>
+              </b-form-group>
+            </b-col>
           </b-row>
 
           <b-row>
@@ -217,12 +229,24 @@
                 </b-form-input>
               </b-form-group>
             </b-col>
+            <b-col md="4">
+              <b-form-group label="OTP Page Note">
+                <b-form-input class="mb-2" v-model="form.otp_description">
+                </b-form-input>
+              </b-form-group>
+            </b-col>
           </b-row>
 
           <b-row>
             <b-col md="4">
               <b-form-group label="Gender Page Title">
                 <b-form-input class="mb-2" v-model="form.gender_p_title">
+                </b-form-input>
+              </b-form-group>
+            </b-col>
+            <b-col md="4">
+              <b-form-group label="Gender Page Note">
+                <b-form-input class="mb-2" v-model="form.gender_description">
                 </b-form-input>
               </b-form-group>
             </b-col>
@@ -262,6 +286,12 @@
                 </b-form-input>
               </b-form-group>
             </b-col>
+            <b-col md="4">
+              <b-form-group label="Gallery Page Note">
+                <b-form-input class="mb-2" v-model="form.gallery_page_description">
+                </b-form-input>
+              </b-form-group>
+            </b-col>
           </b-row>
 
           <b-row>
@@ -274,6 +304,12 @@
             <b-col md="4">
               <b-form-group label="Selfie Page Description">
                 <b-form-input class="mb-2" v-model="form.selfie_p_description">
+                </b-form-input>
+              </b-form-group>
+            </b-col>
+            <b-col md="4">
+              <b-form-group label="Selfie Page Note">
+                <b-form-input class="mb-2" v-model="form.selfie_page_description">
                 </b-form-input>
               </b-form-group>
             </b-col>
@@ -292,6 +328,12 @@
                 </b-form-input>
               </b-form-group>
             </b-col>
+            <b-col md="4">
+              <b-form-group label="Voice Clip Page Note">
+                <b-form-input class="mb-2" v-model="form.video_clip_page_description">
+                </b-form-input>
+              </b-form-group>
+            </b-col>
           </b-row>
 
           <b-row>
@@ -304,6 +346,12 @@
             <b-col md="4">
               <b-form-group label="Accent color">
                 <b-form-input class="mb-2" v-model="form.accent_color">
+                </b-form-input>
+              </b-form-group>
+            </b-col>
+            <b-col md="4">
+              <b-form-group label="Voice Note Page Note">
+                <b-form-input class="mb-2" v-model="form.questions_page_description">
                 </b-form-input>
               </b-form-group>
             </b-col>

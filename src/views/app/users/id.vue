@@ -37,12 +37,12 @@
                 </b-form-group>
               </b-col>
               <b-col md="6">
-                <b-form-group label="Middle Name">
+                <b-form-group label="Short BIO">
                   <b-form-input
                     class="mb-2"
-                    label="Middle Name"
-                    placeholder="Enter Middle Name"
-                    v-model="form.middle_name"
+                    label="Short BIO"
+                    placeholder="Enter Short BIO"
+                    v-model="form.short_bio"
                   >
                   </b-form-input>
                 </b-form-group>
@@ -60,12 +60,12 @@
                 </b-form-group>
               </b-col>
               <b-col md="6">
-                <b-form-group label="Last Name">
+                <b-form-group label="Phone">
                   <b-form-input
                     class="mb-2"
-                    label="Last Name"
-                    placeholder="Enter Last Name"
-                    v-model="form.last_name"
+                    label="Phone"
+                    placeholder="Enter Phone"
+                    v-model="form.phone"
                   >
                   </b-form-input>
                 </b-form-group>

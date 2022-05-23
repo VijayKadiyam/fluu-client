@@ -147,6 +147,7 @@
             <b-row>
               <b-col md="6">
                 <b-form-group label="Option Image Path 1">
+                  <a href="">{{ form.image_option_1 }}</a>
                   <b-form-file
                     name="option_imagepath1"
                     ref="file1"
@@ -155,6 +156,7 @@
               </b-col>
               <b-col md="6">
                 <b-form-group label="Option Image Path 2">
+                   <a target="_blank" :href="`${mediaUrl}${form.image_option_2}`">{{ form.image_option_2 }}</a>
                   <b-form-file
                     name="option_imagepath2"
                     ref="file2"
@@ -165,6 +167,7 @@
             <b-row>
               <b-col md="6">
                 <b-form-group label="Option Image Path 3">
+                  <a target="_blank" :href="`${mediaUrl}${form.image_option_3}`">{{ form.image_option_3 }}</a>
                   <b-form-file
                     name="option_imagepath3"
                     ref="file3"
@@ -173,6 +176,7 @@
               </b-col>
               <b-col md="6">
                 <b-form-group label="Option Image Path 4">
+                  <a target="_blank" :href="`${mediaUrl}${form.image_option_3}`">{{ form.image_option_3 }}</a>
                   <b-form-file
                     name="option_imagepath4"
                     ref="file4"

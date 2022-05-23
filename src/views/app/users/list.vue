@@ -63,17 +63,12 @@ export default {
           field: "first_name",
         },
         {
-          label: "Middle Name",
-          field: "middle_name",
-        },
-        {
-          label: "Last Name",
-          field: "last_name",
-        },
-
-        {
           label: "Gender",
           field: "gender",
+        },
+        {
+          label: "Phone",
+          field: "phone",
         },
         {
           label: "Email",

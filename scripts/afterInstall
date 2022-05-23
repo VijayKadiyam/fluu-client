@@ -4,7 +4,3 @@ cd /var/www/vhosts/fluu/fluu-client
 
 nvm use 14
 npm run build
-
-
-pm2 delete fluu 
-pm2 start npm --name fluu -- start
