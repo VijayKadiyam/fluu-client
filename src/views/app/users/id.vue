@@ -176,7 +176,7 @@
                   ></b-form-file>
                 </b-form-group>
               </b-col>
-              <b-col md="6">
+              <b-col md="3">
                 <b-form-group label="Active">
                   <b-row>
                     <b-col md="8">
@@ -189,6 +189,23 @@
                         /><span class="slider"></span>
                       </label>
                       <span>ACTIVE</span>
+                    </b-col>
+                  </b-row>
+                </b-form-group>
+              </b-col>
+              <b-col md="3">
+                <b-form-group label="is Verified">
+                  <b-row>
+                    <b-col md="8">
+                      <span>No </span>
+                      <label class="switch switch-success mr-3 ml-3">
+                        <input
+                          type="checkbox"
+                          checked="checkbox"
+                          v-model="form.is_verified"
+                        /><span class="slider"></span>
+                      </label>
+                      <span>Yes</span>
                     </b-col>
                   </b-row>
                 </b-form-group>
@@ -317,6 +334,7 @@ export default {
         email: "",
         active: 1,
         role_id: 4,
+        is_verified:0
       },
       source: "",
       submitStatus: null,
